@@ -10,16 +10,20 @@
 
 
 // TODO
-// + show debug zones geometries
-// + serialize parameters
-// - add +,- buttons to add/remove dynamic inputs for nodes with lists (emitters, groups)
-// - graph widget
-// - complete all spark nodes
-// - interact with scene (camera move)
-// - multiple scenes managment
-// - attach effect to a scene node for different testing (node static, node in motion, trow bullet, ...)
-// - add pliable paramaters button to show/hide parameters widgets
-// - stylesheet
+/*
+- [x] implement base nodes classes
+- [x] show 3D debug zones geometries
+- [x] serialize node widget's parameters
+- [ ] add +,- buttons to add/remove dynamic inputs on some nodes using lists (emitters, groups)
+- [ ] graph plot editor widget for spark graph interpolators
+- [ ] complete all spark nodes
+- [ ] interact with 3D view (camera move...)
+- [ ] multiple scenes managment
+- [ ] possibility to attach result effect to scene nodes (static node, node in motion, trow bullet, ...)
+- [ ] add pliable parameters button to show/hide parameters widgets
+- [ ] comments items on node view
+- [ ] set styles
+*/
 
 #include <thirdparty/splines/Splines.hh>
 #include "benchmark.h"
