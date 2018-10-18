@@ -418,7 +418,17 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
             }
             else if(zone->getClassName() == "Cylinder")
             {
+                const SPK::Cylinder* cylinder = dynamic_cast<SPK::Cylinder*>(zone.get());
+                GP_ASSERT(cylinder);
 
+                const SPK::Vector3D axis = cylinder->getAxis();
+                float height = cylinder->getHeight();
+                float radius = cylinder->getRadius();
+
+                // todo: fix rotation
+                Matrix matrix;
+                Matrix::createTranslation(ToGplayVector3(pos), &matrix);
+                _debugDraw->drawCylinder(radius, height/2.0f, 1, matrix, Vector3(1,1,1));
             }
             else if(zone->getClassName() == "Ring")
             {

@@ -71,4 +71,18 @@ public:
     NodeSparkZoneBox();
 };
 
+//------------------------------------------------------------------------------------------------------------------------------
+// cylinder zone node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkZoneCylinder : public NodeSparkZoneBase
+{
+private:
+    const QString Name() const override { return QString("CylinderZone"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkZone>(_zone); }
+    void process() override;
+public:
+    NodeSparkZoneCylinder();
+};
+
+
 #endif // ZONENODE_H

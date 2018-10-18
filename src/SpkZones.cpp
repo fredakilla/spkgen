@@ -127,3 +127,30 @@ void NodeSparkZoneBox::process()
     setResult(zoneBox);
 }
 
+
+//------------------------------------------------------------------------------------------------------------------------------
+// cylinder zone node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkZoneCylinder::NodeSparkZoneCylinder()
+{
+    OUT_PORT(EPT_ZONE, "zone");
+
+    createBaseZoneParams("CylinderZone");
+    PARAM_FLOAT("Height", 0.0f, eF32_MAX, 1.0f);
+    PARAM_FLOAT("Radius", 0.0f, eF32_MAX, 1.0f);
+    PARAM_FXYZ("Axis", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
+}
+
+void NodeSparkZoneCylinder::process()
+{
+    float height = getParameter("Height")->getValueAsFloat();
+    float radius = getParameter("Radius")->getValueAsFloat();
+    SPK::Vector3D axis = ToSpkVector3D(getParameter("Axis")->getValueAsFXYZ());
+
+    SPK::Ref<SPK::Cylinder> zoneCylinder = SPK::Cylinder::create();
+    zoneCylinder->setDimensions(height, radius);
+    zoneCylinder->setAxis(axis);
+    setBaseZoneParams(zoneCylinder);
+    setResult(zoneCylinder);
+}
