@@ -20,6 +20,7 @@ QMAKE_CLEAN += $$DESTDIR/$$TARGET
 
 CONFIG(debug, debug|release):
     DEFINES += _DEBUG QT_NO_KEYWORDS
+    #DEFINES += GP_USE_MEM_LEAK_DETECTION
 
 INCLUDEPATH += $$GPLAY_OUTPUT_DIR/include/gplayengine/
 INCLUDEPATH += $$GPLAY_OUTPUT_DIR/include/gplayengine/thirdparty

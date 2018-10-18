@@ -57,4 +57,18 @@ public:
     NodeSparkZoneSphere();
 };
 
+
+//------------------------------------------------------------------------------------------------------------------------------
+// box zone node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkZoneBox : public NodeSparkZoneBase
+{
+private:
+    const QString Name() const override { return QString("BoxZone"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkZone>(_zone); }
+    void process() override;
+public:
+    NodeSparkZoneBox();
+};
+
 #endif // ZONENODE_H

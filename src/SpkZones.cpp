@@ -98,3 +98,32 @@ void NodeSparkZoneSphere::process()
     setBaseZoneParams(zoneSphere);
     setResult(zoneSphere);
 }
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// box zone node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkZoneBox::NodeSparkZoneBox()
+{
+    OUT_PORT(EPT_ZONE, "zone");
+
+    createBaseZoneParams("BoxZone");
+    PARAM_FXYZ("Dimensions", eF32_MIN, eF32_MAX, 1.0f, 1.0f, 1.0f);
+    PARAM_FXYZ("Front", eF32_MIN, eF32_MAX, 0.0f, 0.0f, 1.0f);
+    PARAM_FXYZ("Up", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
+}
+
+void NodeSparkZoneBox::process()
+{
+    SPK::Vector3D dimensions = ToSpkVector3D(getParameter("Dimensions")->getValueAsFXYZ());
+    SPK::Vector3D front = ToSpkVector3D(getParameter("Front")->getValueAsFXYZ());
+    SPK::Vector3D up = ToSpkVector3D(getParameter("Up")->getValueAsFXYZ());
+
+    SPK::Ref<SPK::Box> zoneBox = SPK::Box::create();
+    zoneBox->setDimensions(dimensions);
+    zoneBox->setAxis(front, up);
+    setBaseZoneParams(zoneBox);
+    setResult(zoneBox);
+}
+

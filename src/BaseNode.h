@@ -6,7 +6,7 @@
 #include "Parameter.h"
 #include "Types.h"
 #include <spark/SPARK.h>
-
+#include <gplay-engine.h>
 
 using QtNodes::NodeDataModel;
 using QtNodes::NodeDataType;
@@ -248,5 +248,10 @@ static inline SPK::Color ToSpkColor(const eColor& c)
     return SPK::Color(c.r, c.g, c.b, c.a);
 }*/
 
+
+static inline gplay::Vector3 ToGplayVector3(const SPK::Vector3D& v)
+{
+    return gplay::Vector3(v.x, v.y, v.z);
+}
 
 #endif // BASENODE_H

@@ -293,7 +293,7 @@ void GPDevice::createRenderWindow(void* hwnd)
 
     _platform->start();
 
-    gplay::Renderer::getInstance().toggleDebugStats();
+    //gplay::Renderer::getInstance().toggleDebugStats();
 
     View::create(0, Rectangle(200, 200), View::ClearFlags::COLOR_DEPTH, 0x556677ff, 1.0f, 0);
 }
@@ -406,7 +406,15 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
             }
             else if(zone->getClassName() == "Box")
             {
-
+                const SPK::Box* box = dynamic_cast<SPK::Box*>(zone.get());
+                GP_ASSERT(box);
+                Vector3 scale = ToGplayVector3(box->getDimensions());
+                Matrix matrix;
+                // todo: fix rotation
+                Matrix::createTranslation(ToGplayVector3(pos), &matrix);
+                BoundingBox bbox(-scale/2.0f, scale/2.0f);
+                bbox *= matrix;
+                _debugDraw->drawBox(bbox.min, bbox.max, Vector3(1,1,1));
             }
             else if(zone->getClassName() == "Cylinder")
             {
