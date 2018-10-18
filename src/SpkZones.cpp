@@ -154,3 +154,29 @@ void NodeSparkZoneCylinder::process()
     setBaseZoneParams(zoneCylinder);
     setResult(zoneCylinder);
 }
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// ring zone node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkZoneRing::NodeSparkZoneRing()
+{
+    OUT_PORT(EPT_ZONE, "zone");
+
+    createBaseZoneParams("RingZone");
+    PARAM_FXY("Radius", 0.0f, eF32_MAX, 0.0f, 1.0f);
+    PARAM_FXYZ("Normal", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
+}
+
+void NodeSparkZoneRing::process()
+{
+    eFXY radius = getParameter("Radius")->getValueAsFXY();
+    SPK::Vector3D normal = ToSpkVector3D(getParameter("Normal")->getValueAsFXYZ());
+
+    SPK::Ref<SPK::Ring> zoneRing = SPK::Ring::create();
+    zoneRing->setNormal(normal);
+    zoneRing->setRadius(radius.x, radius.y);
+    setBaseZoneParams(zoneRing);
+    setResult(zoneRing);
+}

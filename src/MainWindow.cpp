@@ -28,7 +28,7 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkZoneSphere>("zones");
     ret->registerModel<NodeSparkZoneBox>("zones");
     ret->registerModel<NodeSparkZoneCylinder>("zones");
-
+    ret->registerModel<NodeSparkZoneRing>("zones");
 
 
     ret->registerModel<NodeSparkGroup>("system");

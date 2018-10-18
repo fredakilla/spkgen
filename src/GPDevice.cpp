@@ -432,7 +432,16 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
             }
             else if(zone->getClassName() == "Ring")
             {
+                const SPK::Ring* ring = dynamic_cast<SPK::Ring*>(zone.get());
+                GP_ASSERT(ring);
 
+                float minRadius = ring->getMinRadius();
+                float maxRadius = ring->getMaxRadius();
+
+                // todo: fix rotation
+
+                _debugDraw->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), minRadius, minRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
+                _debugDraw->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), maxRadius, maxRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
             }
         }
 
