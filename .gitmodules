@@ -1,0 +1,3 @@
+[submodule "3rdparty/nodeeditor"]
+	path = 3rdparty/nodeeditor
+	url = https://github.com/fredakilla/nodeeditor.git
