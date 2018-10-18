@@ -46,6 +46,7 @@ class BaseNode : public NodeDataModel
 
 public:
     BaseNode();
+    virtual ~BaseNode();
     virtual void process() {}
     virtual void init() { process(); }
     unsigned int getParameterCount();

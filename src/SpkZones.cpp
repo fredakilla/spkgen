@@ -44,15 +44,12 @@ NodeSparkZonePoint::NodeSparkZonePoint()
     OUT_PORT(EPT_ZONE, "zone");
 
     createBaseZoneParams("PointZone");
-    createParamWidgets();
 }
 
 void NodeSparkZonePoint::process()
 {
     SPK::Ref<SPK::Point> zonePoint = SPK::Point::create();
-
     setBaseZoneParams(zonePoint);
-
     setResult(zonePoint);
 }
 
@@ -67,7 +64,6 @@ NodeSparkZonePlane::NodeSparkZonePlane()
 
     createBaseZoneParams("PlaneZone");
     PARAM_FXYZ("Normal", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
-    createParamWidgets();
 }
 
 void NodeSparkZonePlane::process()
@@ -76,9 +72,7 @@ void NodeSparkZonePlane::process()
 
     SPK::Ref<SPK::Plane> zonePlane = SPK::Plane::create();
     zonePlane->setNormal(normal);
-
     setBaseZoneParams(zonePlane);
-
     setResult(zonePlane);
 }
 
@@ -93,19 +87,14 @@ NodeSparkZoneSphere::NodeSparkZoneSphere()
 
     createBaseZoneParams("SphereZone");
     PARAM_FLOAT("Radius", 0.0f, eF32_MAX, 1.0f);
-    createParamWidgets();
 }
 
 void NodeSparkZoneSphere::process()
 {
-    SPK::Vector3D position = ToSpkVector3D(getParameter("Position")->getValueAsFXYZ());
     float radius = getParameter("Radius")->getValueAsFloat();
 
     SPK::Ref<SPK::Sphere> zoneSphere = SPK::Sphere::create();
-    zoneSphere->setPosition(position);
     zoneSphere->setRadius(radius);
-
     setBaseZoneParams(zoneSphere);
-
     setResult(zoneSphere);
 }

@@ -93,9 +93,6 @@ NodeSparkEmitterStatic::NodeSparkEmitterStatic()
     OUT_PORT(EPT_EMITTER, "emitter");
 
     createBaseEmitterParams("StaticEmit");
-    createParamWidgets();
-
-    //process();
 }
 
 void NodeSparkEmitterStatic::process()
@@ -132,9 +129,6 @@ NodeSparkEmitterSpheric::NodeSparkEmitterSpheric()
     createBaseEmitterParams("SphericEmit");
     PARAM_FXYZ("Direction", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
     PARAM_FXY("Angles", 0, 2, 0.0f, 0.0f);
-    createParamWidgets();
-
-    //process();
 }
 
 void NodeSparkEmitterSpheric::process()

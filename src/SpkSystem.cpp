@@ -56,7 +56,6 @@ NodeSparkGroup::NodeSparkGroup()
     PARAM_FLOAT("GraphicalRadius", 0, eF32_MAX, 1.0f);
     PARAM_FLOAT("PhysicalRadius", 0, eF32_MAX, 0.0f);
     PARAM_BOOL("Sorted", false);
-    createParamWidgets();
 }
 
 void NodeSparkGroup::process()
@@ -143,7 +142,6 @@ NodeSparkSystem::NodeSparkSystem()
     IN_PORT(EPT_GROUP, "groups");
 
     PARAM_FLOAT("Myssytem", eF32_MIN, eF32_MAX, 0.0f);
-    createParamWidgets();
 }
 
 void NodeSparkSystem::process()
@@ -205,9 +203,6 @@ NodeSparkQuadRenderer::NodeSparkQuadRenderer()
                               "|AROUND_AXIS"
                               "|TOWARDS_POINT"
                               "|FIXED_ORIENTATION", 0);
-    createParamWidgets();
-
-    //process();
 }
 
 void NodeSparkQuadRenderer::process()
@@ -273,7 +268,6 @@ NodeSparkTest::NodeSparkTest()
     PARAM_FILE("file", "res/data/textures");
     PARAM_FLAGS("flags", "flag1|flag2|flag3|flag4|flag5", 2)
     PARAM_RGBA("rgba", 100, 50, 50, 255);
-    createParamWidgets();
 }
 
 void NodeSparkTest::process()

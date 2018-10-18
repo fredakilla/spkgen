@@ -4,6 +4,10 @@ BaseNode::BaseNode() : _paramWidget(nullptr)
 {
 }
 
+BaseNode::~BaseNode()
+{
+}
+
 unsigned int BaseNode::nPorts(PortType portType) const
 {
     if(portType == PortType::In)
