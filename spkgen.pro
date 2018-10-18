@@ -28,7 +28,7 @@ INCLUDEPATH += $$GPLAY_OUTPUT_DIR/include/gplayengine/thirdparty
 # build nodeeditor with : cmake .. -DCMAKE_PREFIX_PATH=/opt/Qt5.11.1/5.11.1/gcc_64
 DEFINES += NODE_EDITOR_STATIC
 INCLUDEPATH += 3rdparty/nodeeditor/include
-LIBS += -L3rdparty/BUILD/lib/ -lnodes
+LIBS += -L$$PWD/3rdparty/nodeeditor/BUILD/lib -lnodes
 
 #--------------------------------------------------------------------
 # platform specific
