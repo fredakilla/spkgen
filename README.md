@@ -27,7 +27,7 @@ TODO
 - [ ] interact with 3D view (camera move...)
 - [ ] multiple scenes managment
 - [ ] possibility to attach result effect to scene nodes (static node, node in motion, trow bullet, ...)
-- ~~[ ] add pliable parameters button to show/hide parameters widgets~~
+- [ ] ~~add pliable parameters button to show/hide parameters widgets~~
 - [ ] comments items on node view
 - [ ] set styles
 - [ ] add shortcuts on node view : copy/paste nodes, repeat last created node,...
