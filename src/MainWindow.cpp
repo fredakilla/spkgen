@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QMenuBar>
 
-#include <nodes/DataModelRegistry>
+
 
 #include "Nodestyle.h"
 #include "SpkZones.h"
@@ -15,7 +15,11 @@
 #include "SpkModifiers.h"
 #include "GraphView.h"
 
+#include <nodes/DataModelRegistry>
 using QtNodes::DataModelRegistry;
+
+
+
 
 
 static std::shared_ptr<DataModelRegistry> registerDataModels()
@@ -73,12 +77,13 @@ MainWindow::MainWindow(QWidget* parent)
 
     GPDevice::get().createRenderWindow((void*)_renderView->winId());
 
-    _nodeScene = new FlowScene(registerDataModels());
+    _nodeScene = new CustomFlowScene(registerDataModels());
     _nodeView = new FlowView(_nodeScene);
     _nodeView->setWindowTitle("Node-based flow editor");
     _nodeView->resize(800, 600);
     _nodeView->show();
     _nodeView->scale(0.9, 0.9);
+
 
     _dockNodeGraph = new QDockWidget("NodeGraph", this);
     _dockNodeGraph->setWidget(_nodeView);
@@ -135,6 +140,7 @@ void MainWindow::createMenus()
 void MainWindow::newFile()
 {
     _nodeScene->clearScene();
+    _nodeScene->clearComments();
 }
 
 void MainWindow::open()

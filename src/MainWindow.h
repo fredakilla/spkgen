@@ -4,15 +4,8 @@
 #include <QMainWindow>
 #include <QDockWidget>
 
-#include <nodes/Node>
-#include <nodes/FlowScene>
-#include <nodes/FlowView>
-
 #include "RenderViewWidget.h"
-
-using QtNodes::Node;
-using QtNodes::FlowView;
-using QtNodes::FlowScene;
+#include "CustomFlowScene.h"
 
 class MainWindow : public QMainWindow
 {
@@ -42,7 +35,7 @@ private:
     QAction *openAct;
     QAction *saveAct;
 
-    FlowScene* _nodeScene;
+    CustomFlowScene* _nodeScene;
     FlowView* _nodeView;
     RenderViewWidget* _renderView;
     QDockWidget* _dockView;
