@@ -381,8 +381,6 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
         {
             const SPK::Ref<SPK::Zone> zone = spkSystem->getGroup(nGroup)->getEmitter(nEmitter)->getZone();
 
-            print("zone = %s\n", zone->getClassName().c_str());
-
             // every zone has a position
             const SPK::Vector3D pos = zone->getPosition();
 

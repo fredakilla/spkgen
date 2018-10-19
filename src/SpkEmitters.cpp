@@ -231,3 +231,44 @@ void NodeSparkEmitterStraight::process()
     // trigger nodes connections
     dataUpdated(0);
 }
+
+
+//--------------------------------------------------------------------------------------------
+// normal emitter node
+//--------------------------------------------------------------------------------------------
+
+NodeSparkEmitterNormal::NodeSparkEmitterNormal()
+{
+    IN_PORT(EPT_ZONE, "zone");
+    OUT_PORT(EPT_EMITTER, "emitter");
+
+    createBaseEmitterParams("NormalEmit");
+    PARAM_BOOL("InvertedNormals", eFALSE);
+}
+
+void NodeSparkEmitterNormal::process()
+{
+    // get parameters
+    bool inverted = getParameter("InvertedNormals")->getValueAsBool();
+
+    // create new emitter
+    SPK::Ref<SPK::NormalEmitter> normalEmitter = SPK::NormalEmitter::create();
+    normalEmitter->setInverted(inverted);
+
+    // set base emitter parameters
+    setBaseEmitterParams(normalEmitter);
+
+    // set zone if exists
+    std::shared_ptr<NodeDataSparkZone> inZone = getInput<NodeDataSparkZone>(0);
+    if(inZone && inZone->_result.get())
+    {
+        normalEmitter->setZone(inZone->_result);
+    }
+
+    // set new emitter as node result
+    setResult(normalEmitter);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+

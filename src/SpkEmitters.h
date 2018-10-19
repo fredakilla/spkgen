@@ -84,4 +84,19 @@ public:
     NodeSparkEmitterStraight();
 };
 
+
+//------------------------------------------------------------------------------------------------------------------------------
+// normal emitter node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkEmitterNormal : public NodeSparkEmitterBase
+{
+private:
+    const QString Name() const override { return QString("NormalEmitter"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkEmitterList>(_emitters); }
+    void process() override;
+public:
+    NodeSparkEmitterNormal();
+};
+
+
 #endif // SPKEMITTERS_H
