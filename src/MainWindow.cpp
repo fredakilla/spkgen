@@ -40,6 +40,8 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkEmitterStatic>("emitters");
     ret->registerModel<NodeSparkEmitterSpheric>("emitters");
     ret->registerModel<NodeSparkEmitterRandom>("emitters");
+    ret->registerModel<NodeSparkEmitterStraight>("emitters");
+
 
 
     return ret;

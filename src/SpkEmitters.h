@@ -70,4 +70,18 @@ public:
     NodeSparkEmitterRandom();
 };
 
+
+//------------------------------------------------------------------------------------------------------------------------------
+// straight emitter node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkEmitterStraight : public NodeSparkEmitterBase
+{
+private:
+    const QString Name() const override { return QString("StraightEmitter"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkEmitterList>(_emitters); }
+    void process() override;
+public:
+    NodeSparkEmitterStraight();
+};
+
 #endif // SPKEMITTERS_H

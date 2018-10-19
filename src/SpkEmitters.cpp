@@ -159,7 +159,6 @@ void NodeSparkEmitterSpheric::process()
     dataUpdated(0);
 }
 
-
 //--------------------------------------------------------------------------------------------
 // random emitter node
 //--------------------------------------------------------------------------------------------
@@ -194,3 +193,41 @@ void NodeSparkEmitterRandom::process()
     dataUpdated(0);
 }
 
+//--------------------------------------------------------------------------------------------
+// straight emitter node
+//--------------------------------------------------------------------------------------------
+
+NodeSparkEmitterStraight::NodeSparkEmitterStraight()
+{
+    IN_PORT(EPT_ZONE, "zone");
+    OUT_PORT(EPT_EMITTER, "emitter");
+
+    createBaseEmitterParams("RandomEmit");
+    PARAM_FXYZ("Direction", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
+}
+
+void NodeSparkEmitterStraight::process()
+{
+    // get parameters
+    eFXYZ direction = getParameter("Direction")->getValueAsFXYZ();
+
+    // create new emitter
+    SPK::Ref<SPK::StraightEmitter> straightEmitter = SPK::StraightEmitter::create();
+    straightEmitter->setDirection(ToSpkVector3D(direction));
+
+    // set base emitter parameters
+    setBaseEmitterParams(straightEmitter);
+
+    // set zone if exists
+    std::shared_ptr<NodeDataSparkZone> inZone = getInput<NodeDataSparkZone>(0);
+    if(inZone && inZone->_result.get())
+    {
+        straightEmitter->setZone(inZone->_result);
+    }
+
+    // set new emitter as node result
+    setResult(straightEmitter);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
