@@ -31,4 +31,17 @@ public:
 };
 
 
+//------------------------------------------------------------------------------------------------------------------------------
+// gravity modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierGravity : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("Gravity"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierGravity();
+};
+
 #endif // SPKMODIFIERS_H

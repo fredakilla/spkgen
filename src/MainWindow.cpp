@@ -45,6 +45,8 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkEmitterNormal>("emitters");
 
     ret->registerModel<NodeSparkModifierList>("modifiers");
+    ret->registerModel<NodeSparkModifierGravity>("modifiers");
+
 
 
 
