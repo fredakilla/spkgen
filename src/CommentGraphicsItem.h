@@ -4,8 +4,7 @@
 #include "Types.h"
 #include <QGraphicsTextItem>
 
-#define TYPE_ID_OPERATOR    0xFFFF + 1
-#define TYPE_ID_COMMENT     0xFFFF + 2
+#define TYPE_ID_COMMENT     0xFFFF + 1701
 
 //-----------------------------------------------------------------------------------------
 //! eCommentItem
@@ -20,6 +19,7 @@ public:
     enum { Type = TYPE_ID_COMMENT };
     int type() const { return Type; }
     eInt _getTextLength() { return m_realText.length(); }
+    bool isEdited() { return m_edited; }
 
     //void saveToXml(QDomElement &node) const;
     //void loadFromXml(const QDomElement &node);

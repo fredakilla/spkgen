@@ -35,6 +35,16 @@ CustomFlowScene::~CustomFlowScene()
 
 void CustomFlowScene::keyPressEvent(QKeyEvent *event)
 {
+    // if a comment is being editing bypass event
+    Q_FOREACH(eCommentItem* ci, _commentList)
+    {
+        if(ci->isEdited())
+        {
+            FlowScene::keyPressEvent(event);
+            return;
+        }
+    }
+
     switch (event->key())
     {
     case Qt::Key_O:
