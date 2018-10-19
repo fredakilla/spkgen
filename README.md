@@ -18,20 +18,26 @@ Building on another system is not tested but final release should be cross-platf
 
 TODO
 - [x] implement base nodes classes
+- [x] automatic node's parameters widgets creation from simple declaration
 - [x] show 3D debug zones geometries
 - [x] serialize node widget's parameters
 - [ ] add +,- buttons to add/remove dynamic inputs on some nodes using lists (emitters, groups)
-- [ ] graph plot editor widget for spark graph interpolators
+- [x] graph plot editor widget for spark graph interpolators
 - [ ] complete all spark nodes
 - [ ] interact with 3D view (camera move...)
 - [ ] multiple scenes managment
 - [ ] possibility to attach result effect to scene nodes (static node, node in motion, trow bullet, ...)
-- [ ] add pliable parameters button to show/hide parameters widgets
+- ~~[ ] add pliable parameters button to show/hide parameters widgets~~
 - [ ] comments items on node view
 - [ ] set styles
+- [ ] add shortcuts on node view : copy/paste nodes, repeat last created node,...
 
 
 ## Build
+
+Spkgen developpement is done with Qt 5.11.1 + QtCharts module (for the graph plot editor)     
+warning : Do not use Qt 5.11.2, I experienced some bugs with FileDialogs on linux...
+
 
 ##### 1. Place the Spkgen directory at same top level of gplay engine :
 ```bash
