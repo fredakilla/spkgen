@@ -83,15 +83,14 @@ void NodeSparkModifierGravity::process()
     // get parameters
     eFXYZ gravity = getParameter("Gravity")->getValueAsFXYZ();
 
-
-    // create new emitter
+    // create new modifier
     SPK::Ref<SPK::Gravity> gravityModifier = SPK::Gravity::create();
     gravityModifier->setValue(ToSpkVector3D(gravity));
 
-    // set base emitter parameters
+    // set base modifier parameters
     setBaseModifierParams(gravityModifier);
 
-    // set new emitter as node result
+    // set new modifier as node result
     setResult(gravityModifier);
 
     // trigger nodes connections
