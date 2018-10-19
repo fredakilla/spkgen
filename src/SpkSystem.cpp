@@ -47,6 +47,7 @@ NodeSparkGroup::NodeSparkGroup()
 {
     IN_PORT(EPT_RENDERER, "renderer");
     IN_PORT(EPT_EMITTER, "emitters");
+    IN_PORT(EPT_MODIFIER, "modifiers");
     OUT_PORT(EPT_GROUP, "group");
 
     createBaseObjectParams("Group");
@@ -60,6 +61,10 @@ NodeSparkGroup::NodeSparkGroup()
 
 void NodeSparkGroup::process()
 {
+    const unsigned int INPUT_RENDERER_INDEX = 0;
+    const unsigned int INPUT_EMITTERS_INDEX = 1;
+    const unsigned int INPUT_MODIFIERS_INDEX = 2;
+
     // get parameters
     eInt capacity = getParameter("Capacity")->getValueAsInt();
     eFXY lifetime = getParameter("Lifetime")->getValueAsFXY();
@@ -78,7 +83,7 @@ void NodeSparkGroup::process()
     group->enableSorting(sorted);
 
     // set renderer
-    std::shared_ptr<NodeDataSparkRenderer> inRenderer = getInput<NodeDataSparkRenderer>(0);
+    std::shared_ptr<NodeDataSparkRenderer> inRenderer = getInput<NodeDataSparkRenderer>(INPUT_RENDERER_INDEX);
     if(inRenderer && inRenderer->_result.get())
     {
         group->setRenderer(inRenderer->_result);
@@ -90,13 +95,24 @@ void NodeSparkGroup::process()
     }
 
     // add emitters
-    std::shared_ptr<NodeDataSparkEmitterList> in0 = getInput<NodeDataSparkEmitterList>(1);
-    if(in0)
+    std::shared_ptr<NodeDataSparkEmitterList> inEmitters = getInput<NodeDataSparkEmitterList>(INPUT_EMITTERS_INDEX);
+    if(inEmitters)
     {
-        for(size_t i=0; i<in0->_result.size(); i++)
+        for(size_t i=0; i<inEmitters->_result.size(); i++)
         {
-            if(in0->_result[i].get())
-                group->addEmitter(in0->_result[i]);
+            if(inEmitters->_result[i].get())
+                group->addEmitter(inEmitters->_result[i]);
+        }
+    }
+
+    // add modifiers
+    std::shared_ptr<NodeDataSparkModifierList> inModifiers = getInput<NodeDataSparkModifierList>(INPUT_MODIFIERS_INDEX);
+    if(inModifiers)
+    {
+        for(size_t i=0; i<inModifiers->_result.size(); i++)
+        {
+            if(inModifiers->_result[i].get())
+                group->addModifier(inModifiers->_result[i]);
         }
     }
 
@@ -113,9 +129,9 @@ void NodeSparkGroup::process()
     obstacle->setFriction(1.0f);
 
     //_group->addEmitter(particleEmitter);
-    group->addModifier(obstacle);
+    //group->addModifier(obstacle);
     //group->setRenderer(renderer);
-    group->addModifier(SPK::Gravity::create(SPK::Vector3D(0,-5,0)));
+    //group->addModifier(SPK::Gravity::create(SPK::Vector3D(0,-5,0)));
     group->setColorInterpolator(SPK::ColorSimpleInterpolator::create(0x445588ff,0x995577ff));
 
 
