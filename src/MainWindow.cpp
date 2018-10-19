@@ -12,6 +12,7 @@
 #include "SpkZones.h"
 #include "SpkSystem.h"
 #include "SpkEmitters.h"
+#include "SpkModifiers.h"
 #include "GraphView.h"
 
 using QtNodes::DataModelRegistry;
@@ -42,6 +43,9 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkEmitterRandom>("emitters");
     ret->registerModel<NodeSparkEmitterStraight>("emitters");
     ret->registerModel<NodeSparkEmitterNormal>("emitters");
+
+    ret->registerModel<NodeSparkModifierList>("modifiers");
+
 
 
 

@@ -72,7 +72,8 @@ SOURCES += \
     src/Parameter.cpp \
     src/Color.cpp \
     src/path.cpp \
-    src/GraphView.cpp
+    src/GraphView.cpp \
+    src/SpkModifiers.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -91,6 +92,7 @@ HEADERS += \
     src/benchmark.h \
     src/path.hpp \
     src/GraphView.h \
-    src/Nodestyle.h
+    src/Nodestyle.h \
+    src/SpkModifiers.h
 
 

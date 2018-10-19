@@ -37,7 +37,8 @@ enum ParamType
     EPT_GROUP       = 18,
     EPT_EMITTER     = 19,
     EPT_ZONE        = 20,
-    EPT_RENDERER    = 21
+    EPT_RENDERER    = 21,
+    EPT_MODIFIER    = 22
 };
 
 static const NodeDataType NODE_DATA_TYPE[] =
@@ -67,6 +68,7 @@ static const NodeDataType NODE_DATA_TYPE[] =
     { "emitter"     , "emitter"     },  // 19
     { "zone"        , "zone"        },  // 20
     { "renderer"    , "renderer"    },  // 21
+    { "modifier"    , "modifier"    },  // 22
 };
 
 

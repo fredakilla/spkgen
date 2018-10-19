@@ -230,7 +230,7 @@ typedef MyNodeData<std::vector<SPK::Ref<SPK::Group>>, EPT_GROUP>        NodeData
 typedef MyNodeData<std::vector<SPK::Ref<SPK::Emitter>>, EPT_EMITTER>    NodeDataSparkEmitterList;
 typedef MyNodeData<SPK::Ref<SPK::Renderer>, EPT_RENDERER>               NodeDataSparkRenderer;
 typedef MyNodeData<SPK::Ref<SPK::Zone>, EPT_ZONE>                       NodeDataSparkZone;
-
+typedef MyNodeData<std::vector<SPK::Ref<SPK::Modifier>>, EPT_MODIFIER>  NodeDataSparkModifierList;
 
 
 //----------------------------------------------------------------------------------------------
