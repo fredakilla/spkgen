@@ -57,4 +57,17 @@ public:
 };
 
 
+//------------------------------------------------------------------------------------------------------------------------------
+// random emitter node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkEmitterRandom : public NodeSparkEmitterBase
+{
+private:
+    const QString Name() const override { return QString("RandomEmitter"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkEmitterList>(_emitters); }
+    void process() override;
+public:
+    NodeSparkEmitterRandom();
+};
+
 #endif // SPKEMITTERS_H

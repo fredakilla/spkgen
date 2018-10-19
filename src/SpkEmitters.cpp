@@ -57,7 +57,7 @@ void NodeSparkEmitterBase::setResult(SPK::Ref<SPK::Emitter> emitter)
 }
 
 //--------------------------------------------------------------------------------------------
-// emitters list
+// emitters list node
 //--------------------------------------------------------------------------------------------
 
 NodeSparkEmitterList::NodeSparkEmitterList()
@@ -84,7 +84,7 @@ void NodeSparkEmitterList::process()
 }
 
 //--------------------------------------------------------------------------------------------
-// static emitter
+// static emitter node
 //--------------------------------------------------------------------------------------------
 
 NodeSparkEmitterStatic::NodeSparkEmitterStatic()
@@ -118,7 +118,7 @@ void NodeSparkEmitterStatic::process()
 }
 
 //--------------------------------------------------------------------------------------------
-// spheric emitter
+// spheric emitter node
 //--------------------------------------------------------------------------------------------
 
 NodeSparkEmitterSpheric::NodeSparkEmitterSpheric()
@@ -158,3 +158,39 @@ void NodeSparkEmitterSpheric::process()
     // trigger nodes connections
     dataUpdated(0);
 }
+
+
+//--------------------------------------------------------------------------------------------
+// random emitter node
+//--------------------------------------------------------------------------------------------
+
+NodeSparkEmitterRandom::NodeSparkEmitterRandom()
+{
+    IN_PORT(EPT_ZONE, "zone");
+    OUT_PORT(EPT_EMITTER, "emitter");
+
+    createBaseEmitterParams("RandomEmit");
+}
+
+void NodeSparkEmitterRandom::process()
+{
+    // create new emitter
+    SPK::Ref<SPK::RandomEmitter> randomEmitter = SPK::RandomEmitter::create();
+
+    // set base emitter parameters
+    setBaseEmitterParams(randomEmitter);
+
+    // set zone if exists
+    std::shared_ptr<NodeDataSparkZone> inZone = getInput<NodeDataSparkZone>(0);
+    if(inZone && inZone->_result.get())
+    {
+        randomEmitter->setZone(inZone->_result);
+    }
+
+    // set new emitter as node result
+    setResult(randomEmitter);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
