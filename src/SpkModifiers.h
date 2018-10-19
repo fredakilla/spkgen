@@ -44,4 +44,19 @@ public:
     NodeSparkModifierGravity();
 };
 
+
+//------------------------------------------------------------------------------------------------------------------------------
+// friction modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierFriction : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("Friction"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierFriction();
+};
+
+
 #endif // SPKMODIFIERS_H

@@ -46,6 +46,8 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
 
     ret->registerModel<NodeSparkModifierList>("modifiers");
     ret->registerModel<NodeSparkModifierGravity>("modifiers");
+    ret->registerModel<NodeSparkModifierFriction>("modifiers");
+
 
 
 

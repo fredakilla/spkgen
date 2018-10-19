@@ -98,3 +98,34 @@ void NodeSparkModifierGravity::process()
     dataUpdated(0);
 }
 
+
+//------------------------------------------------------------------------------------------------------------------------------
+// friction modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkModifierFriction::NodeSparkModifierFriction()
+{
+    OUT_PORT(EPT_MODIFIER, "modifier");
+
+    createBaseModifierParams("Friction");
+    PARAM_FLOAT("Friction", eF32_MIN, eF32_MAX, 0.0f);
+}
+
+void NodeSparkModifierFriction::process()
+{
+    // get parameters
+    float friction = getParameter("Friction")->getValueAsFloat();
+
+    // create new modifier
+    SPK::Ref<SPK::Friction> frictionModifier = SPK::Friction::create(friction);
+
+    // set base modifier parameters
+    setBaseModifierParams(frictionModifier);
+
+    // set new modifier as node result
+    setResult(frictionModifier);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
