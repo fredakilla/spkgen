@@ -15,9 +15,8 @@
 #define COMMENT_MODE_TEXT 0
 #define COMMENT_MODE_HTML 1
 
-#define Z_LAYER_COMMENT  0
-#define Z_LAYER_OPERATOR 1
-#define Z_LAYER_SELECTED 2
+#define Z_LAYER_COMMENT    -10
+#define Z_LAYER_SELECTED    10
 
 
 //-----------------------------------------------------------------------------------------
