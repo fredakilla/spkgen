@@ -251,6 +251,7 @@ void ParamWidget::save(QJsonObject& json)
         case EPT_NONE:
             Q_ASSERT(0);
             break;
+        case EPT_BUTTON:
         case EPT_STRING:
         case EPT_FILE:
             param[key] = p->getValueAsString();
@@ -340,6 +341,7 @@ void ParamWidget::save(QJsonObject& json)
             break;
 
         default:
+            // parameter type is not yet implemented ?
             Q_ASSERT(0);
         }
         paraArray.append(param);
@@ -374,6 +376,7 @@ void ParamWidget::restore(QJsonObject const &json)
         case EPT_NONE:
             Q_ASSERT(0);
             break;
+        case EPT_BUTTON:
         case EPT_STRING:
         case EPT_FILE:
             p->baseValue = paraObject.begin().value().toString();

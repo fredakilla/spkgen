@@ -96,7 +96,7 @@ eButton::eButton(Parameter &param, QWidget *parent) : QPushButton(parent),
 {
     Q_ASSERT(param.getType() == EPT_BUTTON);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    setText(m_param.getBaseValue().get<QString>());
+    setText(m_param.getValueAsString());
     connect(this, SIGNAL(clicked()), this, SLOT(_onClicked()));
     param.setUserData(0, (QObjectUserData *)this);
 }

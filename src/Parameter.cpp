@@ -128,7 +128,7 @@ unsigned char Parameter::getValueAsFlags() const
 
 QString Parameter::getValueAsString() const
 {
-    Q_ASSERT(type == EPT_STRING || type == EPT_FILE);
+    Q_ASSERT(type == EPT_STRING || type == EPT_FILE || type == EPT_BUTTON);
     return baseValue.get<QString>();
 }
 
