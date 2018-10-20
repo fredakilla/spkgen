@@ -369,6 +369,70 @@ bool GPDevice::drawScene(Node* node)
     return true;
 }
 
+void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone)
+{
+    // every zone has a position
+    const SPK::Vector3D pos = zone->getPosition();
+
+    if(zone->getClassName() == "Point")
+    {
+        _debugDraw->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.1f, Vector3(1,1,1));
+    }
+    else if(zone->getClassName() == "Sphere")
+    {
+        const SPK::Sphere* sphere = dynamic_cast<SPK::Sphere*>(zone.get());
+        GP_ASSERT(sphere);
+        float radius = sphere->getRadius();
+        _debugDraw->drawSphere(Vector3(pos.x, pos.y, pos.z), radius, Vector3(1,1,1));
+    }
+    else if(zone->getClassName() == "Plane")
+    {
+        const SPK::Plane* plane = dynamic_cast<SPK::Plane*>(zone.get());
+        GP_ASSERT(plane);
+        const SPK::Vector3D normal = plane->getNormal();
+        _debugDraw->drawPlane(Vector3(normal.x, normal.y, normal.z), 0.0f, Matrix::identity(), Vector3(1,1,1));
+    }
+    else if(zone->getClassName() == "Box")
+    {
+        const SPK::Box* box = dynamic_cast<SPK::Box*>(zone.get());
+        GP_ASSERT(box);
+        Vector3 scale = ToGplayVector3(box->getDimensions());
+        Matrix matrix;
+        // todo: fix rotation
+        Matrix::createTranslation(ToGplayVector3(pos), &matrix);
+        BoundingBox bbox(-scale/2.0f, scale/2.0f);
+        bbox *= matrix;
+        _debugDraw->drawBox(bbox.min, bbox.max, Vector3(1,1,1));
+    }
+    else if(zone->getClassName() == "Cylinder")
+    {
+        const SPK::Cylinder* cylinder = dynamic_cast<SPK::Cylinder*>(zone.get());
+        GP_ASSERT(cylinder);
+
+        const SPK::Vector3D axis = cylinder->getAxis();
+        float height = cylinder->getHeight();
+        float radius = cylinder->getRadius();
+
+        // todo: fix rotation
+        Matrix matrix;
+        Matrix::createTranslation(ToGplayVector3(pos), &matrix);
+        _debugDraw->drawCylinder(radius, height/2.0f, 1, matrix, Vector3(1,1,1));
+    }
+    else if(zone->getClassName() == "Ring")
+    {
+        const SPK::Ring* ring = dynamic_cast<SPK::Ring*>(zone.get());
+        GP_ASSERT(ring);
+
+        float minRadius = ring->getMinRadius();
+        float maxRadius = ring->getMaxRadius();
+
+        // todo: fix rotation
+
+        _debugDraw->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), minRadius, minRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
+        _debugDraw->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), maxRadius, maxRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
+    }
+}
+
 void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
 {
     _debugDraw->begin(scene->getActiveCamera()->getViewProjectionMatrix());
@@ -380,67 +444,7 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
         for(size_t nEmitter = 0; nEmitter < spkSystem->getGroup(nGroup)->getNbEmitters(); nEmitter++)
         {
             const SPK::Ref<SPK::Zone> zone = spkSystem->getGroup(nGroup)->getEmitter(nEmitter)->getZone();
-
-            // every zone has a position
-            const SPK::Vector3D pos = zone->getPosition();
-
-            if(zone->getClassName() == "Point")
-            {
-                _debugDraw->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.1f, Vector3(1,1,1));
-            }
-            else if(zone->getClassName() == "Sphere")
-            {
-                const SPK::Sphere* sphere = dynamic_cast<SPK::Sphere*>(zone.get());
-                GP_ASSERT(sphere);
-                float radius = sphere->getRadius();
-                _debugDraw->drawSphere(Vector3(pos.x, pos.y, pos.z), radius, Vector3(1,1,1));
-            }
-            else if(zone->getClassName() == "Plane")
-            {
-                const SPK::Plane* plane = dynamic_cast<SPK::Plane*>(zone.get());
-                GP_ASSERT(plane);
-                const SPK::Vector3D normal = plane->getNormal();
-                _debugDraw->drawPlane(Vector3(normal.x, normal.y, normal.z), 0.0f, Matrix::identity(), Vector3(1,1,1));
-            }
-            else if(zone->getClassName() == "Box")
-            {
-                const SPK::Box* box = dynamic_cast<SPK::Box*>(zone.get());
-                GP_ASSERT(box);
-                Vector3 scale = ToGplayVector3(box->getDimensions());
-                Matrix matrix;
-                // todo: fix rotation
-                Matrix::createTranslation(ToGplayVector3(pos), &matrix);
-                BoundingBox bbox(-scale/2.0f, scale/2.0f);
-                bbox *= matrix;
-                _debugDraw->drawBox(bbox.min, bbox.max, Vector3(1,1,1));
-            }
-            else if(zone->getClassName() == "Cylinder")
-            {
-                const SPK::Cylinder* cylinder = dynamic_cast<SPK::Cylinder*>(zone.get());
-                GP_ASSERT(cylinder);
-
-                const SPK::Vector3D axis = cylinder->getAxis();
-                float height = cylinder->getHeight();
-                float radius = cylinder->getRadius();
-
-                // todo: fix rotation
-                Matrix matrix;
-                Matrix::createTranslation(ToGplayVector3(pos), &matrix);
-                _debugDraw->drawCylinder(radius, height/2.0f, 1, matrix, Vector3(1,1,1));
-            }
-            else if(zone->getClassName() == "Ring")
-            {
-                const SPK::Ring* ring = dynamic_cast<SPK::Ring*>(zone.get());
-                GP_ASSERT(ring);
-
-                float minRadius = ring->getMinRadius();
-                float maxRadius = ring->getMaxRadius();
-
-                // todo: fix rotation
-
-                _debugDraw->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), minRadius, minRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
-                _debugDraw->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), maxRadius, maxRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
-            }
+            createDebugGeomteriesFromZone(zone);
         }
 
         // show modifiers zones
@@ -454,6 +458,13 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
                 GP_ASSERT(pointMass);
                 const SPK::Vector3D pos = pointMass->getPosition();
                 _debugDraw->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.25f, Vector3(0,1,0));
+            }
+
+            if(modifier->getClassName() == "Destroyer")
+            {
+                const SPK::Destroyer* destroyer = dynamic_cast<SPK::Destroyer*>(modifier.get());
+                GP_ASSERT(destroyer);
+                createDebugGeomteriesFromZone(destroyer->getZone());
             }
         }
     }

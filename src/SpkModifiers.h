@@ -59,4 +59,32 @@ public:
 };
 
 
+//------------------------------------------------------------------------------------------------------------------------------
+// collider modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierCollider : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("Collider"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierCollider();
+};
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// destroyer modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierDestroyer : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("Destroyer"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierDestroyer();
+};
+
+
 #endif // SPKMODIFIERS_H
