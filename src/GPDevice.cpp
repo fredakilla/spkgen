@@ -459,12 +459,17 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
                 const SPK::Vector3D pos = pointMass->getPosition();
                 _debugDraw->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.25f, Vector3(0,1,0));
             }
-
-            if(modifier->getClassName() == "Destroyer")
+            else if(modifier->getClassName() == "Destroyer")
             {
                 const SPK::Destroyer* destroyer = dynamic_cast<SPK::Destroyer*>(modifier.get());
                 GP_ASSERT(destroyer);
                 createDebugGeomteriesFromZone(destroyer->getZone());
+            }
+            else if(modifier->getClassName() == "Obstacle")
+            {
+                const SPK::Obstacle* obstacle = dynamic_cast<SPK::Obstacle*>(modifier.get());
+                GP_ASSERT(obstacle);
+                createDebugGeomteriesFromZone(obstacle->getZone());
             }
         }
     }

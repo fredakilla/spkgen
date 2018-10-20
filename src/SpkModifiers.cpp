@@ -214,3 +214,202 @@ void NodeSparkModifierDestroyer::process()
     // trigger nodes connections
     dataUpdated(0);
 }
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// obstacle modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkModifierObstacle::NodeSparkModifierObstacle()
+{
+    IN_PORT(ENC_ZONE, "zone");
+    OUT_PORT(ENC_MODIFIER, "modifier");
+
+    createBaseModifierParams("Obstacle");
+    PARAM_FLOAT("BouncingRatio", eF32_MIN, eF32_MAX, 1.0f);
+    PARAM_FLOAT("Friction", eF32_MIN, eF32_MAX, 1.0f);
+    PARAM_ENUM("ZoneTest", "INSIDE|OUTSIDE|INTERSECT|ENTER|LEAVE|ALWAYS", 2);
+}
+
+void NodeSparkModifierObstacle::process()
+{
+    // get parameters
+    float bouncingRatio = getParameter("BouncingRatio")->getValueAsFloat();
+    float friction = getParameter("Friction")->getValueAsFloat();
+    SPK::ZoneTest zoneTest = TABLE_ZONE_TEST[ getParameter("ZoneTest")->getValueAsEnum() ];
+
+    // create new modifier
+    SPK::Ref<SPK::Obstacle> obstacleModifier = SPK::Obstacle::create();
+    obstacleModifier->setBouncingRatio(bouncingRatio);
+    obstacleModifier->setFriction(friction);
+
+    // get input zone
+    std::shared_ptr<NodeDataSparkZone> inZone = getInput<NodeDataSparkZone>(0);
+    if(inZone && inZone->_result.get())
+    {
+        obstacleModifier->setZone(inZone->_result);
+        obstacleModifier->setZoneTest(zoneTest);
+    }
+
+    // set base modifier parameters
+    setBaseModifierParams(obstacleModifier);
+
+    // set new modifier as node result
+    setResult(obstacleModifier);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// pointmass modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkModifierPointMass::NodeSparkModifierPointMass()
+{
+    OUT_PORT(ENC_MODIFIER, "modifier");
+
+    createBaseModifierParams("PointMass");
+    PARAM_FXYZ("Position", eF32_MIN, eF32_MAX, 0.0f, 0.0f, 0.0f);
+    PARAM_FLOAT("Mass", eF32_MIN, eF32_MAX, 1.0f);
+    PARAM_FLOAT("Offset", eF32_MIN, eF32_MAX, 0.01f);
+}
+
+void NodeSparkModifierPointMass::process()
+{
+    // get parameters
+    eFXYZ position = getParameter("Position")->getValueAsFXYZ();
+    float mass = getParameter("Mass")->getValueAsFloat();
+    float offset = getParameter("Offset")->getValueAsFloat();
+
+    // create new modifier
+    SPK::Ref<SPK::PointMass> pointMassModifier = SPK::PointMass::create();
+    pointMassModifier->setPosition(ToSpkVector3D(position));
+    pointMassModifier->setMass(mass);
+    pointMassModifier->setOffset(offset);
+
+    // set base modifier parameters
+    setBaseModifierParams(pointMassModifier);
+
+    // set new modifier as node result
+    setResult(pointMassModifier);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random force modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkModifierRandomForce::NodeSparkModifierRandomForce()
+{
+    OUT_PORT(ENC_MODIFIER, "modifier");
+
+    createBaseModifierParams(Name());
+    PARAM_FXYZ("MinVector", eF32_MIN, eF32_MAX, 0.0f, 0.0f, 0.0f);
+    PARAM_FXYZ("MaxVector", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
+    PARAM_FXY("Periods", 0.0f, eF32_MAX, 1.0f, 1.0f);
+}
+
+void NodeSparkModifierRandomForce::process()
+{
+    // get parameters
+    eFXYZ minVector = getParameter("MinVector")->getValueAsFXYZ();
+    eFXYZ maxVector = getParameter("MaxVector")->getValueAsFXYZ();
+    eFXY periods = getParameter("Periods")->getValueAsFXY();
+
+    // create new modifier
+    SPK::Ref<SPK::RandomForce> randForceModifier = SPK::RandomForce::create();
+    randForceModifier->setVectors(ToSpkVector3D(minVector), ToSpkVector3D(maxVector));
+    randForceModifier->setPeriods(periods.x, periods.y);
+
+    // set base modifier parameters
+    setBaseModifierParams(randForceModifier);
+
+    // set new modifier as node result
+    setResult(randForceModifier);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// rotator modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkModifierRotator::NodeSparkModifierRotator()
+{
+    OUT_PORT(ENC_MODIFIER, "modifier");
+
+    createBaseModifierParams(Name());
+}
+
+void NodeSparkModifierRotator::process()
+{
+    // create new modifier
+    SPK::Ref<SPK::Rotator> rotatorModifier = SPK::Rotator::create();
+
+    // set base modifier parameters
+    setBaseModifierParams(rotatorModifier);
+
+    // set new modifier as node result
+    setResult(rotatorModifier);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// vortex modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkModifierVortex::NodeSparkModifierVortex()
+{
+    OUT_PORT(ENC_MODIFIER, "modifier");
+
+    createBaseModifierParams(Name());
+    PARAM_FXYZ("Position", eF32_MIN, eF32_MAX, 0.0f, 0.0f, 0.0f);
+    PARAM_FXYZ("Direction", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
+    PARAM_FLOAT("RotationSpeed", eF32_MIN, eF32_MAX, 1.0f);
+    PARAM_FLOAT("AttractionSpeed", eF32_MIN, eF32_MAX, 0.0f);
+    PARAM_BOOL("AngularSpeed", eFALSE);
+    PARAM_BOOL("LinearSpeed", eFALSE);
+    PARAM_FLOAT("EyeRadius", eF32_MIN, eF32_MAX, 0.0f);
+    PARAM_BOOL("KillingParticles", eFALSE);
+}
+
+void NodeSparkModifierVortex::process()
+{
+    // get parameters
+    eFXYZ position = getParameter("Position")->getValueAsFXYZ();
+    eFXYZ direction = getParameter("Direction")->getValueAsFXYZ();
+    float rotationSpeed = getParameter("RotationSpeed")->getValueAsFloat();
+    float attractionSpeed = getParameter("AttractionSpeed")->getValueAsFloat();
+    bool angularSpeed = getParameter("AngularSpeed")->getValueAsBool();
+    bool linearSpeed = getParameter("LinearSpeed")->getValueAsBool();
+    float eyeRadius = getParameter("EyeRadius")->getValueAsFloat();
+    bool killingParticles = getParameter("KillingParticles")->getValueAsBool();
+
+    // create new modifier
+    SPK::Ref<SPK::Vortex> vortexModifier = SPK::Vortex::create();
+    vortexModifier->setPosition( ToSpkVector3D(position) );
+    vortexModifier->setDirection( ToSpkVector3D(direction) );
+    vortexModifier->setRotationSpeed(rotationSpeed, angularSpeed);
+    vortexModifier->setAttractionSpeed(attractionSpeed, linearSpeed);
+    vortexModifier->setEyeRadius(eyeRadius);
+    vortexModifier->enableParticleKilling(killingParticles);
+
+    // set base modifier parameters
+    setBaseModifierParams(vortexModifier);
+
+    // set new modifier as node result
+    setResult(vortexModifier);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}

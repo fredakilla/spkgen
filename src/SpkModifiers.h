@@ -87,4 +87,74 @@ public:
 };
 
 
+//------------------------------------------------------------------------------------------------------------------------------
+// obstacle modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierObstacle : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("Obstacle"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierObstacle();
+};
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// pointmass modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierPointMass : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("PointMass"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierPointMass();
+};
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random force modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierRandomForce : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("RandomForce"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierRandomForce();
+};
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// rotator modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierRotator : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("Rotator"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierRotator();
+};
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// vortex modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierVortex : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("Vortex"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierVortex();
+};
+
+
 #endif // SPKMODIFIERS_H
