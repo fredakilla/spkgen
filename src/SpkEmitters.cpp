@@ -64,6 +64,9 @@ NodeSparkEmitterList::NodeSparkEmitterList()
 {
     IN_PORT(ENC_EMITTER, "emitter");
     IN_PORT(ENC_EMITTER, "emitter");
+    IN_PORT(ENC_EMITTER, "emitter");
+    IN_PORT(ENC_EMITTER, "emitter");
+    IN_PORT(ENC_EMITTER, "emitter");
     OUT_PORT(ENC_EMITTER, "emitters");
 }
 

@@ -19,6 +19,9 @@ NodeSparkGroupList::NodeSparkGroupList()
 {
     IN_PORT(ENC_GROUP, "group");
     IN_PORT(ENC_GROUP, "group");
+    IN_PORT(ENC_GROUP, "group");
+    IN_PORT(ENC_GROUP, "group");
+    IN_PORT(ENC_GROUP, "group");
     OUT_PORT(ENC_GROUP, "groups");
 }
 

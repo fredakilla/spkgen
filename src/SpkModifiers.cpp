@@ -47,6 +47,9 @@ NodeSparkModifierList::NodeSparkModifierList()
 {
     IN_PORT(ENC_MODIFIER, "modifier");
     IN_PORT(ENC_MODIFIER, "modifier");
+    IN_PORT(ENC_MODIFIER, "modifier");
+    IN_PORT(ENC_MODIFIER, "modifier");
+    IN_PORT(ENC_MODIFIER, "modifier");
     OUT_PORT(ENC_MODIFIER, "modifiers");
 }
 
