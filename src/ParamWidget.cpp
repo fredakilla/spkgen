@@ -52,6 +52,10 @@ void ParamWidget::createWidgets()
         switch(p->type)
         {
 
+        case EPT_BUTTON:
+            createParamButton(p, hbl);
+            break;
+
         case EPT_FILE:
             createParamFile(p, hbl);
             break;
@@ -109,6 +113,13 @@ void ParamWidget::createWidgets()
             break;
         }
     }
+}
+
+void ParamWidget::createParamButton(Parameter* p, QHBoxLayout* hbl)
+{
+    eButton* simpleButton = new eButton(*p);
+    hbl->addWidget(simpleButton);
+    connect(simpleButton, &eButton::onParameterChanged, _node, &BaseNode::onParameterChanged);
 }
 
 void ParamWidget::createParamRGBA(Parameter* p, QHBoxLayout* hbl)

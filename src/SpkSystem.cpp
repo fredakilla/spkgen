@@ -265,6 +265,9 @@ void NodeSparkQuadRenderer::process()
 // test node
 //------------------------------------------------------------------------------------------------------------------------------
 
+#include <QMessageBox>
+#include "CustomWidgets.h"
+
 NodeSparkTest::NodeSparkTest()
 {
     OUT_PORT(ENC_RENDERER, "renderer");
@@ -284,9 +287,27 @@ NodeSparkTest::NodeSparkTest()
     PARAM_FILE("file", "res/data/textures");
     PARAM_FLAGS("flags", "flag1|flag2|flag3|flag4|flag5", 2)
     PARAM_RGBA("rgba", 100, 50, 50, 255);
+    PARAM_BUTTON("button", "Simple Button");
+
+
+
+    // force parameters widget creation  immediately to get acess to pushbutton ptr
+    createParamWidgets();
+
+    // connect push button to a slot
+    eButton* button = (eButton*)getParameter("button")->userData(0);
+    Q_ASSERT(button);
+    connect(button, &QPushButton::clicked, this, &NodeSparkTest::onTestButtonClick);
 }
 
 void NodeSparkTest::process()
 {
 
+}
+
+void NodeSparkTest::onTestButtonClick()
+{
+    QMessageBox msgBox;
+    msgBox.setText("The button has been clicked.");
+    msgBox.exec();
 }

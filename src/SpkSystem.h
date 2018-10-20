@@ -72,6 +72,9 @@ private:
     void process() override;
 public:
     NodeSparkTest();
+
+private Q_SLOTS:
+    void onTestButtonClick();
 };
 
 #endif // SPKSYSTEMNODE_H

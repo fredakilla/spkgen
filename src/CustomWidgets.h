@@ -6,6 +6,7 @@
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QToolButton>
+#include <QtWidgets/QPushButton>
 
 #include "Parameter.h"
 #include "Trackedit.h"
@@ -36,6 +37,24 @@ private:
     QColor m_indCol;
     bool m_indEnabled;
 };
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// push button
+//------------------------------------------------------------------------------------------------------------------------------
+class eButton : public QPushButton
+{
+    Q_OBJECT
+public:
+    eButton(Parameter &param, QWidget *parent=nullptr);
+Q_SIGNALS:
+    void onParameterChanged(const Parameter &param);
+private Q_SLOTS:
+    void _onClicked();
+private:
+    Parameter& m_param;
+};
+
 
 //------------------------------------------------------------------------------------------------------------------------------
 // boolean button

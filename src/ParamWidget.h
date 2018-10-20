@@ -30,7 +30,7 @@ private:
     void createParamFile(Parameter* p, QHBoxLayout* hbl);
     void createParamFlags(Parameter* p, QHBoxLayout* hbl);
     void createParamRGBA(Parameter* p, QHBoxLayout* hbl);
-
+    void createParamButton(Parameter* p, QHBoxLayout* hbl);
 
     QVBoxLayout* _layout;
     BaseNode* _node;

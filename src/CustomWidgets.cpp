@@ -88,6 +88,27 @@ void eParamTrackEdit::paintEvent(QPaintEvent *pe)
     }
 }
 
+//------------------------------------------------------------------------------------------------------------------------------
+// push button
+//------------------------------------------------------------------------------------------------------------------------------
+eButton::eButton(Parameter &param, QWidget *parent) : QPushButton(parent),
+    m_param(param)
+{
+    Q_ASSERT(param.getType() == EPT_BUTTON);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    setText(m_param.getBaseValue().get<QString>());
+    connect(this, SIGNAL(clicked()), this, SLOT(_onClicked()));
+    param.setUserData(0, (QObjectUserData *)this);
+}
+
+void eButton::_onClicked()
+{
+    //m_param.getBaseValue().get<bool>() = !m_param.getBaseValue().get<bool>();
+    //m_param.setChanged();
+    Q_EMIT onParameterChanged(m_param);
+}
+
+
 
 //------------------------------------------------------------------------------------------------------------------------------
 // boolean button

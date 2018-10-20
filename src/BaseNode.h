@@ -207,6 +207,9 @@ public Q_SLOTS:
 #define PARAM_RGBA(name, r, g, b, a) \
     addParameter<eColor>(EPT_RGBA, name, 0, 255, eColor(r,g,b,a));
 
+#define PARAM_BUTTON(name, label) \
+    addParameter<QString>(EPT_BUTTON, name, 0, 0, QString(label))
+
 //----------------------------------------------------------------------------------------------
 // base class for every spark nodes
 //----------------------------------------------------------------------------------------------
