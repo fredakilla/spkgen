@@ -69,13 +69,25 @@ void CustomFlowScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 eCommentItem* CustomFlowScene::_addComment(const QPointF &pos)
 {
     eCommentItem* comment = new eCommentItem(_commentLayer);
-    addItem(comment);
-
     comment->setPos(_mousePos);
+    addItem(comment);
 
     _commentList.append(comment);
 
     return comment;
+}
+
+void CustomFlowScene::deleteSelectedComments()
+{
+    for (QGraphicsItem* item : selectedItems())
+    {
+        if (auto c = qgraphicsitem_cast<eCommentItem*>(item))
+        {
+            removeItem(c);
+            _commentList.removeAll(c);
+            delete c;
+        }
+    }
 }
 
 void CustomFlowScene::save() const
@@ -142,7 +154,10 @@ void CustomFlowScene::load()
 void CustomFlowScene::clearComments()
 {
     Q_FOREACH(eCommentItem * i, _commentList)
+    {
         removeItem(i);
+        delete i;
+    }
     _commentList.clear();
 }
 

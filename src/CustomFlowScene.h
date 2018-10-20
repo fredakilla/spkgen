@@ -41,6 +41,9 @@ public:
     void saveCommentsToJson(QJsonObject &json) const;
     void loadCommentsFromMemory(const QByteArray& data);
 
+public Q_SLOTS:
+    void deleteSelectedComments();
+
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;

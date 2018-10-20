@@ -84,7 +84,6 @@ MainWindow::MainWindow(QWidget* parent)
     _nodeView->show();
     _nodeView->scale(0.9, 0.9);
 
-
     _dockNodeGraph = new QDockWidget("NodeGraph", this);
     _dockNodeGraph->setWidget(_nodeView);
     _dockNodeGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
@@ -98,6 +97,10 @@ MainWindow::MainWindow(QWidget* parent)
     connect(_nodeScene, &FlowScene::nodeDoubleClicked, this, &MainWindow::showNode);
     connect(_nodeScene, &FlowScene::nodeCreated, this, &MainWindow::initNode);
     connect(_renderView, &RenderViewWidget::windowResized, this, &MainWindow::resizeRenderView);
+
+    // connect to FlowView deleteSelectionAction a method to delete comments graphics items.
+    QAction* deleteAction = _nodeView->deleteSelectionAction();
+    connect(deleteAction, &QAction::triggered, _nodeScene, &CustomFlowScene::deleteSelectedComments);
 
     _gameLoopTimerId = startTimer(0);
 }
