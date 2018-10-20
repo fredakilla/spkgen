@@ -45,9 +45,9 @@ void NodeSparkModifierBase::setResult(SPK::Ref<SPK::Modifier> modifier)
 
 NodeSparkModifierList::NodeSparkModifierList()
 {
-    IN_PORT(EPT_MODIFIER, "modifier");
-    IN_PORT(EPT_MODIFIER, "modifier");
-    OUT_PORT(EPT_MODIFIER, "modifiers");
+    IN_PORT(ENC_MODIFIER, "modifier");
+    IN_PORT(ENC_MODIFIER, "modifier");
+    OUT_PORT(ENC_MODIFIER, "modifiers");
 }
 
 void NodeSparkModifierList::process()
@@ -72,7 +72,7 @@ void NodeSparkModifierList::process()
 
 NodeSparkModifierGravity::NodeSparkModifierGravity()
 {
-    OUT_PORT(EPT_MODIFIER, "modifier");
+    OUT_PORT(ENC_MODIFIER, "modifier");
 
     createBaseModifierParams("Gravity");
     PARAM_FXYZ("Gravity", eF32_MIN, eF32_MAX, 0.0f, -9.0f, 0.0f);
@@ -104,7 +104,7 @@ void NodeSparkModifierGravity::process()
 
 NodeSparkModifierFriction::NodeSparkModifierFriction()
 {
-    OUT_PORT(EPT_MODIFIER, "modifier");
+    OUT_PORT(ENC_MODIFIER, "modifier");
 
     createBaseModifierParams("Friction");
     PARAM_FLOAT("Friction", eF32_MIN, eF32_MAX, 0.0f);

@@ -50,7 +50,6 @@ Parameter::Parameter(ParamType type, QString name, float min, float max, BaseNod
   , min(min)
   , max(max)
   , node(node)
-  , nodeDataType(NODE_DATA_TYPE[type])
   , isConnected(false)
 {
 

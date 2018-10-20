@@ -62,9 +62,9 @@ void NodeSparkEmitterBase::setResult(SPK::Ref<SPK::Emitter> emitter)
 
 NodeSparkEmitterList::NodeSparkEmitterList()
 {
-    IN_PORT(EPT_EMITTER, "emitter");
-    IN_PORT(EPT_EMITTER, "emitter");
-    OUT_PORT(EPT_EMITTER, "emitters");
+    IN_PORT(ENC_EMITTER, "emitter");
+    IN_PORT(ENC_EMITTER, "emitter");
+    OUT_PORT(ENC_EMITTER, "emitters");
 }
 
 void NodeSparkEmitterList::process()
@@ -89,8 +89,8 @@ void NodeSparkEmitterList::process()
 
 NodeSparkEmitterStatic::NodeSparkEmitterStatic()
 {
-    IN_PORT(EPT_ZONE, "zone");
-    OUT_PORT(EPT_EMITTER, "emitter");
+    IN_PORT(ENC_ZONE, "zone");
+    OUT_PORT(ENC_EMITTER, "emitter");
 
     createBaseEmitterParams("StaticEmit");
 }
@@ -123,8 +123,8 @@ void NodeSparkEmitterStatic::process()
 
 NodeSparkEmitterSpheric::NodeSparkEmitterSpheric()
 {
-    IN_PORT(EPT_ZONE, "zone");
-    OUT_PORT(EPT_EMITTER, "emitter");
+    IN_PORT(ENC_ZONE, "zone");
+    OUT_PORT(ENC_EMITTER, "emitter");
 
     createBaseEmitterParams("SphericEmit");
     PARAM_FXYZ("Direction", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
@@ -165,8 +165,8 @@ void NodeSparkEmitterSpheric::process()
 
 NodeSparkEmitterRandom::NodeSparkEmitterRandom()
 {
-    IN_PORT(EPT_ZONE, "zone");
-    OUT_PORT(EPT_EMITTER, "emitter");
+    IN_PORT(ENC_ZONE, "zone");
+    OUT_PORT(ENC_EMITTER, "emitter");
 
     createBaseEmitterParams("RandomEmit");
 }
@@ -199,8 +199,8 @@ void NodeSparkEmitterRandom::process()
 
 NodeSparkEmitterStraight::NodeSparkEmitterStraight()
 {
-    IN_PORT(EPT_ZONE, "zone");
-    OUT_PORT(EPT_EMITTER, "emitter");
+    IN_PORT(ENC_ZONE, "zone");
+    OUT_PORT(ENC_EMITTER, "emitter");
 
     createBaseEmitterParams("RandomEmit");
     PARAM_FXYZ("Direction", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
@@ -239,8 +239,8 @@ void NodeSparkEmitterStraight::process()
 
 NodeSparkEmitterNormal::NodeSparkEmitterNormal()
 {
-    IN_PORT(EPT_ZONE, "zone");
-    OUT_PORT(EPT_EMITTER, "emitter");
+    IN_PORT(ENC_ZONE, "zone");
+    OUT_PORT(ENC_EMITTER, "emitter");
 
     createBaseEmitterParams("NormalEmit");
     PARAM_BOOL("InvertedNormals", eFALSE);

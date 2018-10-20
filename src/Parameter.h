@@ -13,7 +13,6 @@ class BaseNode;
 
 enum ParamType
 {
-    // data types
     EPT_NONE        = 0,
     EPT_STRING      = 1,
     EPT_BOOL        = 2,
@@ -31,17 +30,9 @@ enum ParamType
     EPT_TEXT        = 14,
     EPT_RGB         = 15,
     EPT_RGBA        = 16,
-
-    // spark type
-    EPT_SYSTEM      = 17,
-    EPT_GROUP       = 18,
-    EPT_EMITTER     = 19,
-    EPT_ZONE        = 20,
-    EPT_RENDERER    = 21,
-    EPT_MODIFIER    = 22
 };
-
-static const NodeDataType NODE_DATA_TYPE[] =
+/*
+static const NodeDataType PARAM_TYPE[] =
 {
     // data types
     { "none"    , "none"        },  // 0
@@ -61,16 +52,8 @@ static const NodeDataType NODE_DATA_TYPE[] =
     { "text"    , "text"        },  // 14
     { "rgb"     , "rgb"         },  // 15
     { "rgba"    , "rgba"        },  // 16
-
-    // spark type
-    { "system"      , "system"      },  // 17
-    { "group"       , "group"       },  // 18
-    { "emitter"     , "emitter"     },  // 19
-    { "zone"        , "zone"        },  // 20
-    { "renderer"    , "renderer"    },  // 21
-    { "modifier"    , "modifier"    },  // 22
 };
-
+*/
 
 
 // possible variant type for parameters
@@ -99,7 +82,6 @@ public:
     float min;
     float max;
     BaseNode* node;
-    NodeDataType nodeDataType;
     bool isConnected;
     eParamValue baseValue;
     const eParamValue defVal;

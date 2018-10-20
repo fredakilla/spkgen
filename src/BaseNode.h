@@ -16,6 +16,28 @@ using QtNodes::PortIndex;
 using QtNodes::Port;
 using QtNodes::NodeValidationState;
 
+
+enum NodeClass
+{
+    ENC_SYSTEM      = 0,
+    ENC_GROUP       = 1,
+    ENC_EMITTER     = 2,
+    ENC_ZONE        = 3,
+    ENC_RENDERER    = 4,
+    ENC_MODIFIER    = 5
+};
+
+static const NodeDataType NODE_DATA_TYPE[] =
+{
+    { "system"      , "system"      },  // 0
+    { "group"       , "group"       },  // 1
+    { "emitter"     , "emitter"     },  // 2
+    { "zone"        , "zone"        },  // 3
+    { "renderer"    , "renderer"    },  // 4
+    { "modifier"    , "modifier"    },  // 5
+};
+
+
 //----------------------------------------------------------------------------------------------
 // ePort
 //----------------------------------------------------------------------------------------------
@@ -25,17 +47,16 @@ struct ePort
     NodeDataType dataType;
     QString name;
     std::shared_ptr<NodeData> data;
-    ParamType paramType;
+    NodeClass nodeClass;
 
     ePort() {}
 
-    ePort(PortType type, NodeDataType dataType, QString name, ParamType paramType) :
-        type(type), dataType(dataType), name(name), paramType(paramType)
+    ePort(PortType type, NodeDataType dataType, QString name, NodeClass nodeClass) :
+        type(type), dataType(dataType), name(name), nodeClass(nodeClass)
     {
         //dataType = NODE_DATA_TYPE[paramType];
     }
 };
-
 
 //----------------------------------------------------------------------------------------------
 // Base class for nodes
@@ -78,7 +99,7 @@ protected:
     std::shared_ptr<T> getInput(unsigned int portIndex)
     {
         Q_ASSERT(portIndex < _inputs.size());
-        Q_ASSERT(_inputs[portIndex]->paramType == T::metatype());
+        Q_ASSERT(_inputs[portIndex]->nodeClass == T::metatype());
         std::shared_ptr<T> ptr = std::dynamic_pointer_cast<T>(_inputs[portIndex]->data);
         return ptr;
     }
@@ -209,28 +230,28 @@ protected:
 //----------------------------------------------------------------------------------------------
 // NodeData template
 //----------------------------------------------------------------------------------------------
-template <class T, ParamType P>
+template <class T, NodeClass C>
 class MyNodeData : public NodeData
 {
 public:
     MyNodeData() {}
     MyNodeData(T result) : _result(result) {}
-    NodeDataType type() const override { return NODE_DATA_TYPE[P]; }
-    static ParamType metatype() { return P; }
+    NodeDataType type() const override { return NODE_DATA_TYPE[C]; }
+    static NodeClass metatype() { return C; }
     T _result;
 };
 
 //----------------------------------------------------------------------------------------------
 // specialize template NodeData
 //----------------------------------------------------------------------------------------------
-///typedef MyNodeData<SPK::Ref<SPK::Emitter>, EPT_EMITTER>              NodeDataSparkEmitter;
-///typedef MyNodeData<SPK::Ref<SPK::Group>, EPT_GROUP>                  NodeDataSparkGroup;
-typedef MyNodeData<SPK::Ref<SPK::System>, EPT_SYSTEM>                   NodeDataSparkSystem;
-typedef MyNodeData<std::vector<SPK::Ref<SPK::Group>>, EPT_GROUP>        NodeDataSparkGroupList;
-typedef MyNodeData<std::vector<SPK::Ref<SPK::Emitter>>, EPT_EMITTER>    NodeDataSparkEmitterList;
-typedef MyNodeData<SPK::Ref<SPK::Renderer>, EPT_RENDERER>               NodeDataSparkRenderer;
-typedef MyNodeData<SPK::Ref<SPK::Zone>, EPT_ZONE>                       NodeDataSparkZone;
-typedef MyNodeData<std::vector<SPK::Ref<SPK::Modifier>>, EPT_MODIFIER>  NodeDataSparkModifierList;
+///typedef MyNodeData<SPK::Ref<SPK::Emitter>, ENC_EMITTER>              NodeDataSparkEmitter;
+///typedef MyNodeData<SPK::Ref<SPK::Group>, ENC_GROUP>                  NodeDataSparkGroup;
+typedef MyNodeData<SPK::Ref<SPK::System>, ENC_SYSTEM>                   NodeDataSparkSystem;
+typedef MyNodeData<std::vector<SPK::Ref<SPK::Group>>, ENC_GROUP>        NodeDataSparkGroupList;
+typedef MyNodeData<std::vector<SPK::Ref<SPK::Emitter>>, ENC_EMITTER>    NodeDataSparkEmitterList;
+typedef MyNodeData<SPK::Ref<SPK::Renderer>, ENC_RENDERER>               NodeDataSparkRenderer;
+typedef MyNodeData<SPK::Ref<SPK::Zone>, ENC_ZONE>                       NodeDataSparkZone;
+typedef MyNodeData<std::vector<SPK::Ref<SPK::Modifier>>, ENC_MODIFIER>  NodeDataSparkModifierList;
 
 
 //----------------------------------------------------------------------------------------------

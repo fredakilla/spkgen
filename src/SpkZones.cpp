@@ -41,7 +41,7 @@ void NodeSparkZoneBase::setResult(SPK::Ref<SPK::Zone> zone)
 
 NodeSparkZonePoint::NodeSparkZonePoint()
 {
-    OUT_PORT(EPT_ZONE, "zone");
+    OUT_PORT(ENC_ZONE, "zone");
 
     createBaseZoneParams("PointZone");
 }
@@ -60,7 +60,7 @@ void NodeSparkZonePoint::process()
 
 NodeSparkZonePlane::NodeSparkZonePlane()
 {
-    OUT_PORT(EPT_ZONE, "zone");
+    OUT_PORT(ENC_ZONE, "zone");
 
     createBaseZoneParams("PlaneZone");
     PARAM_FXYZ("Normal", eF32_MIN, eF32_MAX, 0.0f, 1.0f, 0.0f);
@@ -83,7 +83,7 @@ void NodeSparkZonePlane::process()
 
 NodeSparkZoneSphere::NodeSparkZoneSphere()
 {
-    OUT_PORT(EPT_ZONE, "zone");
+    OUT_PORT(ENC_ZONE, "zone");
 
     createBaseZoneParams("SphereZone");
     PARAM_FLOAT("Radius", 0.0f, eF32_MAX, 1.0f);
@@ -106,7 +106,7 @@ void NodeSparkZoneSphere::process()
 
 NodeSparkZoneBox::NodeSparkZoneBox()
 {
-    OUT_PORT(EPT_ZONE, "zone");
+    OUT_PORT(ENC_ZONE, "zone");
 
     createBaseZoneParams("BoxZone");
     PARAM_FXYZ("Dimensions", eF32_MIN, eF32_MAX, 1.0f, 1.0f, 1.0f);
@@ -134,7 +134,7 @@ void NodeSparkZoneBox::process()
 
 NodeSparkZoneCylinder::NodeSparkZoneCylinder()
 {
-    OUT_PORT(EPT_ZONE, "zone");
+    OUT_PORT(ENC_ZONE, "zone");
 
     createBaseZoneParams("CylinderZone");
     PARAM_FLOAT("Height", 0.0f, eF32_MAX, 1.0f);
@@ -162,7 +162,7 @@ void NodeSparkZoneCylinder::process()
 
 NodeSparkZoneRing::NodeSparkZoneRing()
 {
-    OUT_PORT(EPT_ZONE, "zone");
+    OUT_PORT(ENC_ZONE, "zone");
 
     createBaseZoneParams("RingZone");
     PARAM_FXY("Radius", 0.0f, eF32_MAX, 0.0f, 1.0f);

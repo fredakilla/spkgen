@@ -17,9 +17,9 @@
 
 NodeSparkGroupList::NodeSparkGroupList()
 {
-    IN_PORT(EPT_GROUP, "group");
-    IN_PORT(EPT_GROUP, "group");
-    OUT_PORT(EPT_GROUP, "groups");
+    IN_PORT(ENC_GROUP, "group");
+    IN_PORT(ENC_GROUP, "group");
+    OUT_PORT(ENC_GROUP, "groups");
 }
 
 void NodeSparkGroupList::process()
@@ -45,10 +45,10 @@ void NodeSparkGroupList::process()
 
 NodeSparkGroup::NodeSparkGroup()
 {
-    IN_PORT(EPT_RENDERER, "renderer");
-    IN_PORT(EPT_EMITTER, "emitters");
-    IN_PORT(EPT_MODIFIER, "modifiers");
-    OUT_PORT(EPT_GROUP, "group");
+    IN_PORT(ENC_RENDERER, "renderer");
+    IN_PORT(ENC_EMITTER, "emitters");
+    IN_PORT(ENC_MODIFIER, "modifiers");
+    OUT_PORT(ENC_GROUP, "group");
 
     createBaseObjectParams("Group");
     PARAM_INT("Capacity", 1, 500000, 100);
@@ -155,7 +155,7 @@ void NodeSparkGroup::process()
 
 NodeSparkSystem::NodeSparkSystem()
 {
-    IN_PORT(EPT_GROUP, "groups");
+    IN_PORT(ENC_GROUP, "groups");
 
     PARAM_FLOAT("Myssytem", eF32_MIN, eF32_MAX, 0.0f);
 }
@@ -169,7 +169,7 @@ void NodeSparkSystem::process()
    //
 
     // dynamic add input test
-    //_inputs.push_back(new ePort(PortType::In, NODE_DATA_TYPE[EPT_GROUP], QString("dsqdqs")));
+    //_inputs.push_back(new ePort(PortType::In, NODE_DATA_TYPE[ENC_GROUP], QString("dsqdqs")));
    // Q_EMIT(interfaceChanged());
 
 
@@ -206,7 +206,7 @@ void NodeSparkSystem::process()
 
 NodeSparkQuadRenderer::NodeSparkQuadRenderer()
 {
-    OUT_PORT(EPT_RENDERER, "renderer");
+    OUT_PORT(ENC_RENDERER, "renderer");
 
     createBaseObjectParams("Renderer");
     PARAM_FILE("Material", "Materials/Particle.xml");
@@ -267,7 +267,7 @@ void NodeSparkQuadRenderer::process()
 
 NodeSparkTest::NodeSparkTest()
 {
-    OUT_PORT(EPT_RENDERER, "renderer");
+    OUT_PORT(ENC_RENDERER, "renderer");
 
     PARAM_TEXT("text", "Bonjour");
     PARAM_STRING("string", "Hello");
