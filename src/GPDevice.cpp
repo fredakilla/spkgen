@@ -471,6 +471,12 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
                 GP_ASSERT(obstacle);
                 createDebugGeomteriesFromZone(obstacle->getZone());
             }
+            else if(modifier->getClassName() == "LinearForce")
+            {
+                const SPK::LinearForce* linearForce = dynamic_cast<SPK::LinearForce*>(modifier.get());
+                GP_ASSERT(linearForce);
+                createDebugGeomteriesFromZone(linearForce->getZone());
+            }
         }
     }
 

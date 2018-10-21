@@ -170,4 +170,17 @@ public:
     NodeSparkModifierEmitterAttacher();
 };
 
+
+//------------------------------------------------------------------------------------------------------------------------------
+// linearForce modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierLinearForce : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("LinearForce"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierLinearForce();
+};
 #endif // SPKMODIFIERS_H

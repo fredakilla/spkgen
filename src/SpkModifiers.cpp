@@ -495,3 +495,73 @@ void NodeSparkModifierEmitterAttacher::process()
     // trigger nodes connections
     dataUpdated(0);
 }
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// linearForce modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+
+static const SPK::Param TABLE_PARAM[] = { SPK::PARAM_SCALE, SPK::PARAM_MASS, SPK::PARAM_ANGLE, SPK::PARAM_TEXTURE_INDEX, SPK::PARAM_ROTATION_SPEED };
+static const SPK::Factor TABLE_FACTOR[] = { SPK::FACTOR_CONSTANT, SPK::FACTOR_LINEAR, SPK::FACTOR_QUADRATIC, SPK::FACTOR_CUBIC };
+
+NodeSparkModifierLinearForce::NodeSparkModifierLinearForce()
+{
+    IN_PORT(ENC_ZONE, "zone");
+    OUT_PORT(ENC_MODIFIER, "modifier");
+
+    createBaseModifierParams(Name());
+    PARAM_ENUM("ZoneTest", "INSIDE|OUTSIDE|INTERSECT|ENTER|LEAVE|ALWAYS", 0);
+    PARAM_FXYZ("Value", eF32_MIN, eF32_MAX, 0.0f, 0.0f, 0.0f);
+    PARAM_BOOL("RelativeValue", eFALSE);
+    PARAM_BOOL("SquaredSpeed", eFALSE);
+    PARAM_BOOL("UseParam", eFALSE);
+    PARAM_ENUM("Parameter", "Scale|Mass|Angle|TextureIndex|RotationSpeed", 0);
+    PARAM_ENUM("Factor", "Constant|Linear|Quadratic|Cubic", 0);
+    PARAM_FLOAT("Coefficient", eF32_MIN, eF32_MAX, 1.0f);
+}
+
+void NodeSparkModifierLinearForce::process()
+{
+    // get parameters
+    SPK::ZoneTest zoneTest = TABLE_ZONE_TEST[ getParameter("ZoneTest")->getValueAsEnum() ];
+    SPK::Vector3D value = ToSpkVector3D( getParameter("Value")->getValueAsFXYZ() );
+    bool relative = getParameter("RelativeValue")->getValueAsBool();
+    bool squaredSpeed = getParameter("SquaredSpeed")->getValueAsBool();
+    bool useParam = getParameter("UseParam")->getValueAsBool();
+    SPK::Param parameter =  TABLE_PARAM[ getParameter("Parameter")->getValueAsEnum() ];
+    SPK::Factor factorType = TABLE_FACTOR[ getParameter("Factor")->getValueAsEnum() ];
+    float coefficient = getParameter("Coefficient")->getValueAsFloat();
+
+    // get input zone
+    std::shared_ptr<NodeDataSparkZone> inZone = getInput<NodeDataSparkZone>(0);
+    if(!inZone || !inZone->_result.get())
+    {
+        setValidationState(NodeValidationState::Warning, "Missing zone input");
+        return;
+    }
+    else
+    {
+        setValidationState(NodeValidationState::Valid);
+    }
+
+    // create new modifier
+    SPK::Ref<SPK::LinearForce> linearForceModifier = SPK::LinearForce::create();
+    linearForceModifier->setValue(value);
+    linearForceModifier->setRelative(relative, squaredSpeed);
+    linearForceModifier->setCoef(coefficient);
+    if(useParam)
+        linearForceModifier->setParam(parameter, factorType);
+    else
+        linearForceModifier->setNoParam();
+    linearForceModifier->setZone(inZone->_result);
+    linearForceModifier->setZoneTest(zoneTest);
+
+    // set base modifier parameters
+    setBaseModifierParams(linearForceModifier);
+
+    // set new modifier as node result
+    setResult(linearForceModifier);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
