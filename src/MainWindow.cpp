@@ -58,6 +58,8 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkModifierRandomForce>("modifiers");
     ret->registerModel<NodeSparkModifierRotator>("modifiers");
     ret->registerModel<NodeSparkModifierVortex>("modifiers");
+    ret->registerModel<NodeSparkModifierEmitterAttacher>("modifiers");
+
 
 
 

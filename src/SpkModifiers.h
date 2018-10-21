@@ -157,4 +157,17 @@ public:
 };
 
 
+//------------------------------------------------------------------------------------------------------------------------------
+// emitterAttacher modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkModifierEmitterAttacher : public NodeSparkModifierBase
+{
+private:
+    const QString Name() const override { return QString("EmitterAttacher"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkModifierList>(_modifiers); }
+    void process() override;
+public:
+    NodeSparkModifierEmitterAttacher();
+};
+
 #endif // SPKMODIFIERS_H

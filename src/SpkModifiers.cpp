@@ -413,3 +413,85 @@ void NodeSparkModifierVortex::process()
     // trigger nodes connections
     dataUpdated(0);
 }
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// emitterAttacher modifier node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkModifierEmitterAttacher::NodeSparkModifierEmitterAttacher()
+{
+    IN_PORT(ENC_EMITTER, "emitter");
+    IN_PORT(ENC_GROUP, "group");
+    OUT_PORT(ENC_MODIFIER, "modifier");
+
+    createBaseModifierParams(Name());
+    PARAM_BOOL("Orientation", eFALSE);
+    PARAM_BOOL("Rotation", eFALSE);
+}
+
+void NodeSparkModifierEmitterAttacher::process()
+{
+    // get parameters
+    bool orientate = getParameter("Orientation")->getValueAsBool();
+    bool rotate = getParameter("Rotation")->getValueAsBool();
+
+
+    // get input emitter
+    std::shared_ptr<NodeDataSparkEmitterList> inEmitter = getInput<NodeDataSparkEmitterList>(0);
+    if(!inEmitter)
+    {
+        setValidationState(NodeValidationState::Warning, "Missing emitter input");
+        return;
+    }
+
+    // get input group
+    std::shared_ptr<NodeDataSparkGroupList> inGroup = getInput<NodeDataSparkGroupList>(1);
+    if(!inGroup)
+    {
+        setValidationState(NodeValidationState::Warning, "Missing group input");
+        return;
+    }
+
+    // check for errors
+
+    if(inEmitter->_result.size() > 1)
+    {
+        setValidationState(NodeValidationState::Error, "Wainting single emitter not a list");
+        return;
+    }
+    else if(inEmitter->_result.size() == 0)
+    {
+        setValidationState(NodeValidationState::Warning, "Emitter is empty");
+        return;
+    }
+
+    if(inGroup->_result.size() > 1)
+    {
+        setValidationState(NodeValidationState::Error, "Wainting single group not a list");
+        return;
+    }
+    else if(inGroup->_result.size() == 0)
+    {
+        setValidationState(NodeValidationState::Warning, "Group is empty");
+        return;
+    }
+
+    setValidationState(NodeValidationState::Valid);
+
+
+    // create new modifier
+    SPK::Ref<SPK::EmitterAttacher> emitterAttacherModifier = SPK::EmitterAttacher::create();
+    emitterAttacherModifier->setEmitter(inEmitter->_result.at(0));
+    emitterAttacherModifier->setTargetGroup(inGroup->_result.at(0));
+    emitterAttacherModifier->enableEmitterOrientation(orientate, rotate);
+
+    // set base modifier parameters
+    setBaseModifierParams(emitterAttacherModifier);
+
+    // set new modifier as node result
+    setResult(emitterAttacherModifier);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
