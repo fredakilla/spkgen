@@ -213,8 +213,8 @@ NodeSparkQuadRenderer::NodeSparkQuadRenderer()
     OUT_PORT(ENC_RENDERER, "renderer");
 
     createBaseObjectParams("Renderer");
-    PARAM_FILE("Material", "Materials/Particle.xml");
-    PARAM_FILE("Texture", "Textures/Flare.dds");
+    PARAM_FILE("Material", "res/data/materials/particle.material");
+    PARAM_FILE("Texture", "res/data/textures/flare.png");
     PARAM_IXY("AtlasDimension", 1, 1000, 1, 1);
     PARAM_FXY("Scale", 0.0f, eF32_MAX, 1.0f, 1.0f);
     PARAM_ENUM("Orientation", "CAMERA_PLANE_ALIGNED"
@@ -223,6 +223,22 @@ NodeSparkQuadRenderer::NodeSparkQuadRenderer()
                               "|AROUND_AXIS"
                               "|TOWARDS_POINT"
                               "|FIXED_ORIENTATION", 0);
+}
+
+Material* createDefaultMaterial()
+{
+    // Create a material for particles
+    Material* material = Material::create("res/core/shaders/particle.vert", "res/core/shaders/particle.frag");
+    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/data/textures/flare.png", true);
+    sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
+    material->getStateBlock()->setCullFace(true);
+    material->getStateBlock()->setDepthTest(true);
+    material->getStateBlock()->setDepthWrite(false);
+    material->getStateBlock()->setBlend(true);
+    material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
+    material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE);
+
+    return material;
 }
 
 void NodeSparkQuadRenderer::process()
@@ -234,18 +250,11 @@ void NodeSparkQuadRenderer::process()
     eFXY scale = getParameter("Scale")->getValueAsFXY();
     SPK::OrientationPreset orientation = SPK::OrientationPreset(getParameter("Orientation")->getValueAsEnum());
 
+    bool isMaterialFileExists = gplay::FileSystem::fileExists(materialFile.c_str());
+    bool isTextureFileExists = gplay::FileSystem::fileExists(textureFile.c_str());
 
-    // Create a material for particles
-    Material* material = Material::create("res/core/shaders/particle.vert", "res/core/shaders/particle.frag");
-    Texture::Sampler* sampler2 = material->getParameter("u_diffuseTexture")->setValue("res/data/textures/flare.png", true);
-    sampler2->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
-    material->getStateBlock()->setCullFace(true);
-    material->getStateBlock()->setDepthTest(true);
-    material->getStateBlock()->setDepthWrite(false);
-    material->getStateBlock()->setBlend(true);
-    material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
-    material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE);
-
+    Material* material = createDefaultMaterial();
+    material->getParameter("u_diffuseTexture")->setValue(textureFile.c_str(), true);
 
     // Renderer
     SPK::Ref<SPK::GP3D::SparkQuadRenderer> renderer = SPK::GP3D::SparkQuadRenderer::create();
