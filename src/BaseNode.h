@@ -19,22 +19,24 @@ using QtNodes::NodeValidationState;
 
 enum NodeClass
 {
-    ENC_SYSTEM      = 0,
-    ENC_GROUP       = 1,
-    ENC_EMITTER     = 2,
-    ENC_ZONE        = 3,
-    ENC_RENDERER    = 4,
-    ENC_MODIFIER    = 5
+    ENC_SYSTEM,
+    ENC_GROUP,
+    ENC_EMITTER,
+    ENC_ZONE,
+    ENC_RENDERER,
+    ENC_MODIFIER,
+    ENC_INTERPOLATOR
 };
 
 static const NodeDataType NODE_DATA_TYPE[] =
 {
-    { "system"      , "system"      },  // 0
-    { "group"       , "group"       },  // 1
-    { "emitter"     , "emitter"     },  // 2
-    { "zone"        , "zone"        },  // 3
-    { "renderer"    , "renderer"    },  // 4
-    { "modifier"    , "modifier"    },  // 5
+    { "system"          , "system"          },
+    { "group"           , "group"           },
+    { "emitter"         , "emitter"         },
+    { "zone"            , "zone"            },
+    { "renderer"        , "renderer"        },
+    { "modifier"        , "modifier"        },
+    { "interpolator"    , "interpolator"    },
 };
 
 
@@ -247,14 +249,13 @@ public:
 //----------------------------------------------------------------------------------------------
 // specialize template NodeData
 //----------------------------------------------------------------------------------------------
-///typedef MyNodeData<SPK::Ref<SPK::Emitter>, ENC_EMITTER>              NodeDataSparkEmitter;
-///typedef MyNodeData<SPK::Ref<SPK::Group>, ENC_GROUP>                  NodeDataSparkGroup;
-typedef MyNodeData<SPK::Ref<SPK::System>, ENC_SYSTEM>                   NodeDataSparkSystem;
-typedef MyNodeData<std::vector<SPK::Ref<SPK::Group>>, ENC_GROUP>        NodeDataSparkGroupList;
-typedef MyNodeData<std::vector<SPK::Ref<SPK::Emitter>>, ENC_EMITTER>    NodeDataSparkEmitterList;
-typedef MyNodeData<SPK::Ref<SPK::Renderer>, ENC_RENDERER>               NodeDataSparkRenderer;
-typedef MyNodeData<SPK::Ref<SPK::Zone>, ENC_ZONE>                       NodeDataSparkZone;
-typedef MyNodeData<std::vector<SPK::Ref<SPK::Modifier>>, ENC_MODIFIER>  NodeDataSparkModifierList;
+typedef MyNodeData<SPK::Ref<SPK::System>, ENC_SYSTEM>                           NodeDataSparkSystem;
+typedef MyNodeData<std::vector<SPK::Ref<SPK::Group>>, ENC_GROUP>                NodeDataSparkGroupList;
+typedef MyNodeData<std::vector<SPK::Ref<SPK::Emitter>>, ENC_EMITTER>            NodeDataSparkEmitterList;
+typedef MyNodeData<SPK::Ref<SPK::Renderer>, ENC_RENDERER>                       NodeDataSparkRenderer;
+typedef MyNodeData<SPK::Ref<SPK::Zone>, ENC_ZONE>                               NodeDataSparkZone;
+typedef MyNodeData<std::vector<SPK::Ref<SPK::Modifier>>, ENC_MODIFIER>          NodeDataSparkModifierList;
+
 
 
 //----------------------------------------------------------------------------------------------
@@ -266,16 +267,14 @@ static inline SPK::Vector3D ToSpkVector3D(const eFXYZ& v)
     return SPK::Vector3D(v.x, v.y, v.z);
 }
 
-/*
-static inline SPK::Color ToSpkColor(const eColor& c)
-{
-    return SPK::Color(c.r, c.g, c.b, c.a);
-}*/
-
-
 static inline gplay::Vector3 ToGplayVector3(const SPK::Vector3D& v)
 {
     return gplay::Vector3(v.x, v.y, v.z);
+}
+
+static inline SPK::Color ToSpkColor(const eColor& c)
+{
+    return SPK::Color(c.r, c.g, c.b, c.a);
 }
 
 #endif // BASENODE_H

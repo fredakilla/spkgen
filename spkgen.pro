@@ -75,7 +75,8 @@ SOURCES += \
     src/GraphView.cpp \
     src/SpkModifiers.cpp \
     src/CommentGraphicsItem.cpp \
-    src/CustomFlowScene.cpp
+    src/CustomFlowScene.cpp \
+    src/SpkInterpolators.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -97,6 +98,7 @@ HEADERS += \
     src/Nodestyle.h \
     src/SpkModifiers.h \
     src/CommentGraphicsItem.h \
-    src/CustomFlowScene.h
+    src/CustomFlowScene.h \
+    src/SpkInterpolators.h
 
 
