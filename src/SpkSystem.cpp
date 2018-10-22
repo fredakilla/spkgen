@@ -5,7 +5,6 @@
 
 #include "SpkSystem.h"
 #include "GPDevice.h"
-#include "SpkInterpolators.h"
 
 #include <QEvent>
 #include <QKeyEvent>
@@ -125,34 +124,6 @@ void NodeSparkGroup::process()
         }
     }
 
-
-    /*
-    // set interpolators
-    std::shared_ptr<NodeDataSparkInterpolatorList> inInterpolators = getInput<NodeDataSparkInterpolatorList>(INPUT_INTERPOLATORS_INDEX);
-    if(inInterpolators)
-    {
-        for(size_t i=0; i<inInterpolators->_result.size(); i++)
-        {
-            // color interpolator
-            if(inInterpolators->_result[i].interpolatorColor.get())
-            {
-                group->setColorInterpolator( inInterpolators->_result[i].interpolatorColor );
-            }
-
-            // param interpolators
-            if(inInterpolators->_result[i].paramInterpolators.size() > 0)
-            {
-                SPK::Param param = inInterpolators->_result[i].paramInterpolators[i].param;
-                SPK::Ref<SPK::Interpolator<float>> floatInterpolator = inInterpolators->_result[i].paramInterpolators[i].interpolatorFloat;
-
-                group->setParamInterpolator(param, floatInterpolator);
-            }
-        }
-    }
-*/
-
-
-
     // set color interpolator
     std::shared_ptr<NodeDataSparkColorInterpolator> inColors = getInput<NodeDataSparkColorInterpolator>(INPUT_COLORINTERPOLATOR_INDEX);
     if(inColors)
@@ -164,44 +135,12 @@ void NodeSparkGroup::process()
     std::shared_ptr<NodeDataSparkParamInterpolatorList> inParams = getInput<NodeDataSparkParamInterpolatorList>(INPUT_PARAMSINTERPOLATOR_INDEX);
     if(inParams && inParams.get())
     {
-        /*for(size_t i=0; i<inParams->_result.size(); i++)
-        {
-            std::vector<ParamFloatInterpolator>& paramInterpolators = inParams->_result[i];
-            for(size_t j=0; j<inParams->_result[i]..size(); j++)
-            {
-                group->setParamInterpolator(paramInterpolators[j].param, paramInterpolators[j].interpolatorFloat);
-            }
-        }*/
-
         for(size_t i=0; i<inParams->_result.size(); i++)
         {
             if(inParams->_result[i].interpolatorFloat)
                 group->setParamInterpolator(inParams->_result[i].param, inParams->_result[i].interpolatorFloat);
         }
-
     }
-
-
-
-
-
-
-
-    // Zone
-    /*SPK::Ref<SPK::Point> point = SPK::Point::create(SPK::Vector3D(0,0,0));
-
-    // Obstacle
-    SPK::Ref<SPK::Plane> groundPlane = SPK::Plane::create();
-    SPK::Ref<SPK::Obstacle> obstacle = SPK::Obstacle::create(groundPlane,0.9f,1.0f);
-    obstacle->setBouncingRatio(0.6f);
-    obstacle->setFriction(1.0f);*/
-
-    //_group->addEmitter(particleEmitter);
-    //group->addModifier(obstacle);
-    //group->setRenderer(renderer);
-    //group->addModifier(SPK::Gravity::create(SPK::Vector3D(0,-5,0)));
-    //group->setColorInterpolator(SPK::ColorSimpleInterpolator::create(0x445588ff,0x995577ff));
-
 
     // store result
     if(_groups.size() > 1)
@@ -209,13 +148,10 @@ void NodeSparkGroup::process()
     _groups.clear();
     _groups.push_back(group);
 
-
     setValidationState(NodeValidationState::Valid);
 
     dataUpdated(0);
 }
-
-
 
 //--------------------------------------------------------------------------------------------
 // system

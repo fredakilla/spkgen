@@ -258,6 +258,16 @@ typedef MyNodeData<SPK::Ref<SPK::Renderer>, ENC_RENDERER>                       
 typedef MyNodeData<SPK::Ref<SPK::Zone>, ENC_ZONE>                               NodeDataSparkZone;
 typedef MyNodeData<std::vector<SPK::Ref<SPK::Modifier>>, ENC_MODIFIER>          NodeDataSparkModifierList;
 
+struct ParamFloatInterpolator
+{
+    SPK::Param param;
+    SPK::Ref<SPK::Interpolator<float>> interpolatorFloat;
+};
+
+typedef MyNodeData<SPK::Ref<SPK::Interpolator<SPK::Color>>, ENC_COLORINTERPOLATOR>  NodeDataSparkColorInterpolator;
+typedef MyNodeData<std::vector<ParamFloatInterpolator>, ENC_PARAMINTERPOLATOR>      NodeDataSparkParamInterpolatorList;
+
+
 
 
 //----------------------------------------------------------------------------------------------

@@ -9,18 +9,12 @@ SPK::Param TABLE_PARAM[] =
     SPK::PARAM_ROTATION_SPEED
 };
 
-
 //------------------------------------------------------------------------------------------------------------------------------
 // base spark interpolator class
 //------------------------------------------------------------------------------------------------------------------------------
 
 void NodeSparkColorInterpolatorBase::setResult(const SPK::Ref<SPK::Interpolator<SPK::Color>> &colorInterpolator)
 {
-   /* if(_paramInterpolators.size() > 1)
-        _paramInterpolators.back().interpolatorFloat.reset();
-    _paramInterpolators.clear();
-    _paramInterpolators.push_back(interpolator);*/
-
     _colorInterpolator.reset();
     _colorInterpolator = colorInterpolator;
 }
@@ -64,24 +58,7 @@ void NodeSparkInterpolator_ColorDefaultInitializer::process()
     setBaseObjectParams(defaultInitialiser);
 
     // set new interpolator as node result
-   /// _interpolators.interpolatorColor.reset();
-   /// _interpolators.interpolatorColor = defaultInitialiser;
-    //setResult(defaultInitialiser);
-
-
-   /* ResultInterpolator result;
-    result.interpolatorColor = defaultInitialiser;
-
-    if(_interpolators.size() > 1)
-        _interpolators.back().interpolatorColor.reset();
-    _interpolators.clear();
-    _interpolators.push_back(result);*/
-
-    ///_colorInterpolator.reset();
-    ///_colorInterpolator = defaultInitialiser;
     setResult(defaultInitialiser);
-
-
 
     // trigger nodes connections
     dataUpdated(0);

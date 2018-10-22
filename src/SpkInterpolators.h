@@ -3,16 +3,6 @@
 
 #include "BaseNode.h"
 
-struct ParamFloatInterpolator
-{
-    SPK::Param param;
-    SPK::Ref<SPK::Interpolator<float>> interpolatorFloat;
-};
-
-typedef MyNodeData<SPK::Ref<SPK::Interpolator<SPK::Color>>, ENC_COLORINTERPOLATOR>  NodeDataSparkColorInterpolator;
-typedef MyNodeData<std::vector<ParamFloatInterpolator>, ENC_PARAMINTERPOLATOR>  NodeDataSparkParamInterpolatorList;
-
-
 //------------------------------------------------------------------------------------------------------------------------------
 // base spark color interpolator class
 //------------------------------------------------------------------------------------------------------------------------------
@@ -38,7 +28,6 @@ protected:
 //------------------------------------------------------------------------------------------------------------------------------
 class NodeSparkInterpolator_ColorDefaultInitializer : public NodeSparkColorInterpolatorBase
 {
-    ///SPK::Ref<SPK::Interpolator<SPK::Color>> _colorInterpolator;
 private:
     const QString Name() const override { return QString("ColorInit"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
