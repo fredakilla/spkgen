@@ -5,6 +5,7 @@
 
 #include "SpkSystem.h"
 #include "GPDevice.h"
+#include "SpkInterpolators.h"
 
 #include <QEvent>
 #include <QKeyEvent>
@@ -51,6 +52,7 @@ NodeSparkGroup::NodeSparkGroup()
     IN_PORT(ENC_RENDERER, "renderer");
     IN_PORT(ENC_EMITTER, "emitters");
     IN_PORT(ENC_MODIFIER, "modifiers");
+    IN_PORT(ENC_INTERPOLATOR, "interpolators");
     OUT_PORT(ENC_GROUP, "group");
 
     createBaseObjectParams("Group");
@@ -67,6 +69,7 @@ void NodeSparkGroup::process()
     const unsigned int INPUT_RENDERER_INDEX = 0;
     const unsigned int INPUT_EMITTERS_INDEX = 1;
     const unsigned int INPUT_MODIFIERS_INDEX = 2;
+    const unsigned int INPUT_INTERPOLATORS_INDEX = 3;
 
     // get parameters
     eInt capacity = getParameter("Capacity")->getValueAsInt();
@@ -119,23 +122,44 @@ void NodeSparkGroup::process()
         }
     }
 
+    // set interpolators
+    std::shared_ptr<NodeDataSparkInterpolatorList> inInterpolators = getInput<NodeDataSparkInterpolatorList>(INPUT_INTERPOLATORS_INDEX);
+    if(inInterpolators)
+    {
+        for(size_t i=0; i<inInterpolators->_result.size(); i++)
+        {
+            // color interpolator
+            if(inInterpolators->_result[i].interpolatorColor.get())
+            {
+                group->setColorInterpolator( inInterpolators->_result[i].interpolatorColor );
+            }
 
+            // param interpolators
+            if(inInterpolators->_result[i].paramInterpolators.size() > 0)
+            {
+                SPK::Param param = inInterpolators->_result[i].paramInterpolators[i].param;
+                SPK::Ref<SPK::Interpolator<float>> floatInterpolator = inInterpolators->_result[i].paramInterpolators[i].interpolatorFloat;
+
+                group->setParamInterpolator(param, floatInterpolator);
+            }
+        }
+    }
 
 
     // Zone
-    SPK::Ref<SPK::Point> point = SPK::Point::create(SPK::Vector3D(0,0,0));
+    /*SPK::Ref<SPK::Point> point = SPK::Point::create(SPK::Vector3D(0,0,0));
 
     // Obstacle
     SPK::Ref<SPK::Plane> groundPlane = SPK::Plane::create();
     SPK::Ref<SPK::Obstacle> obstacle = SPK::Obstacle::create(groundPlane,0.9f,1.0f);
     obstacle->setBouncingRatio(0.6f);
-    obstacle->setFriction(1.0f);
+    obstacle->setFriction(1.0f);*/
 
     //_group->addEmitter(particleEmitter);
     //group->addModifier(obstacle);
     //group->setRenderer(renderer);
     //group->addModifier(SPK::Gravity::create(SPK::Vector3D(0,-5,0)));
-    group->setColorInterpolator(SPK::ColorSimpleInterpolator::create(0x445588ff,0x995577ff));
+    //group->setColorInterpolator(SPK::ColorSimpleInterpolator::create(0x445588ff,0x995577ff));
 
 
     // store result

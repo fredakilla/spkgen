@@ -3,14 +3,15 @@
 
 #include "BaseNode.h"
 
+
+struct ParamFloatInterpolator
+{
+    SPK::Param param;
+    SPK::Ref<SPK::Interpolator<float>> interpolatorFloat;
+};
+
 struct ResultInterpolator
 {
-    struct ParamFloatInterpolator
-    {
-        SPK::Param param;
-        SPK::Ref<SPK::Interpolator<float>> interpolatorFloat;
-    };
-
     // param interpolator
     ParamFloatInterpolator paramInterpolator;
     std::vector<ParamFloatInterpolator> paramInterpolators;
