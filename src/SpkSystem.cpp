@@ -50,13 +50,12 @@ NodeSparkGroup::NodeSparkGroup()
 {
     IN_PORT(ENC_RENDERER, "renderer");
     IN_PORT(ENC_EMITTER, "emitters");
-    IN_PORT(ENC_MODIFIER, "modifiers");
-    //IN_PORT(ENC_INTERPOLATOR, "interpolators");
     IN_PORT(ENC_COLORINTERPOLATOR, "colors");
     IN_PORT(ENC_PARAMINTERPOLATOR, "params");
+    IN_PORT(ENC_MODIFIER, "modifiers");
     OUT_PORT(ENC_GROUP, "group");
 
-    createBaseObjectParams("Group");
+    //createBaseObjectParams("Group");
     PARAM_INT("Capacity", 1, 500000, 100);
     PARAM_FXY("Lifetime", 0.000001, eF32_MAX, 1.0f, 1.0f);
     PARAM_BOOL("Immortal", false);
@@ -69,9 +68,9 @@ void NodeSparkGroup::process()
 {
     const unsigned int INPUT_RENDERER_INDEX = 0;
     const unsigned int INPUT_EMITTERS_INDEX = 1;
-    const unsigned int INPUT_MODIFIERS_INDEX = 2;
-    const unsigned int INPUT_COLORINTERPOLATOR_INDEX = 3;
-    const unsigned int INPUT_PARAMSINTERPOLATOR_INDEX = 4;
+    const unsigned int INPUT_COLORINTERPOLATOR_INDEX = 2;
+    const unsigned int INPUT_PARAMSINTERPOLATOR_INDEX = 3;
+    const unsigned int INPUT_MODIFIERS_INDEX = 4;
 
     // get parameters
     eInt capacity = getParameter("Capacity")->getValueAsInt();
@@ -83,7 +82,7 @@ void NodeSparkGroup::process()
 
     // create new group
     SPK::Ref<SPK::Group> group = SPK::Group::create(capacity);
-    setBaseObjectParams(group);
+    //setBaseObjectParams(group);
     group->setLifeTime(lifetime.x, lifetime.y);
     group->setImmortal(immortal);
     group->setGraphicalRadius(graphicalRadius);
@@ -161,31 +160,24 @@ NodeSparkSystem::NodeSparkSystem()
 {
     IN_PORT(ENC_GROUP, "groups");
 
-    PARAM_FLOAT("Myssytem", eF32_MIN, eF32_MAX, 0.0f);
+    PARAM_STRING("Name", "System");
+    PARAM_BOOL("Initialized", eTRUE);
 }
 
 void NodeSparkSystem::process()
 {
-   // if(!_system.get())
-   //     _system = SPK::System::create(true);
-   // else
-   //     _system->removeAllGroups();
-   //
+    QString name = getParameter("Name")->getValueAsString();
+    bool initialized = getParameter("Initialized")->getValueAsBool();
 
-    // dynamic add input test
-    //_inputs.push_back(new ePort(PortType::In, NODE_DATA_TYPE[ENC_GROUP], QString("dsqdqs")));
-   // Q_EMIT(interfaceChanged());
+    /*if(!_system.get())
+        _system = SPK::System::create(true);
+    else
+        _system->removeAllGroups();*/
 
+    _system = SPK::System::create(initialized);
+    _system->setName(name.toStdString());
 
-    _system = SPK::System::create(true);
-    _system->setName("mySystem");
-
-    // get group from input 0
-
-   /*std::shared_ptr<NodeDataSparkGroup> in0 = getInput<NodeDataSparkGroup>(0);
-    if(in0)
-        _system->addGroup(in0->_result);*/
-
+    // add groups
     std::shared_ptr<NodeDataSparkGroupList> in0 = getInput<NodeDataSparkGroupList>(0);
     if(in0)
     {
@@ -195,10 +187,6 @@ void NodeSparkSystem::process()
                 _system->addGroup(in0->_result[i]);
         }
     }
-
-
-    ///Q_EMIT(systemUpdated(_system));
-    ///
 
     GPDevice::get().setCurentParticleSystem(_system);
 }
