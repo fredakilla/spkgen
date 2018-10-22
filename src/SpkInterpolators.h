@@ -26,15 +26,57 @@ protected:
 //------------------------------------------------------------------------------------------------------------------------------
 // default color initializer node
 //------------------------------------------------------------------------------------------------------------------------------
-class NodeSparkInterpolator_ColorDefaultInitializer : public NodeSparkColorInterpolatorBase
+class NodeSparkInterpolator_ColorInitializerDefault : public NodeSparkColorInterpolatorBase
 {
 private:
     const QString Name() const override { return QString("ColorInitializer"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
     void process() override;
 public:
-    NodeSparkInterpolator_ColorDefaultInitializer();
+    NodeSparkInterpolator_ColorInitializerDefault();
 };
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random color initializer node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkInterpolator_ColorInitializerRandom : public NodeSparkColorInterpolatorBase
+{
+private:
+    const QString Name() const override { return QString("ColorRandomInitializer"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
+    void process() override;
+public:
+    NodeSparkInterpolator_ColorInitializerRandom();
+};
+
+//------------------------------------------------------------------------------------------------------------------------------
+// simple color interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkInterpolator_ColorInterpolatorSimple : public NodeSparkColorInterpolatorBase
+{
+private:
+    const QString Name() const override { return QString("ColorSimpleInterpolator"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
+    void process() override;
+public:
+    NodeSparkInterpolator_ColorInterpolatorSimple();
+};
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random color interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkInterpolator_ColorInterpolatorRandom : public NodeSparkColorInterpolatorBase
+{
+private:
+    const QString Name() const override { return QString("ColorRandomInterpolator"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
+    void process() override;
+public:
+    NodeSparkInterpolator_ColorInterpolatorRandom();
+};
+
+
+
 
 //------------------------------------------------------------------------------------------------------------------------------
 // param interpolator list node

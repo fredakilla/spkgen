@@ -37,7 +37,7 @@ void NodeSparkParamInterpolatorBase::setResult(const ParamFloatInterpolator &int
 // default color initializer node
 //------------------------------------------------------------------------------------------------------------------------------
 
-NodeSparkInterpolator_ColorDefaultInitializer::NodeSparkInterpolator_ColorDefaultInitializer()
+NodeSparkInterpolator_ColorInitializerDefault::NodeSparkInterpolator_ColorInitializerDefault()
 {
     OUT_PORT(ENC_COLORINTERPOLATOR, "colors");
 
@@ -45,7 +45,7 @@ NodeSparkInterpolator_ColorDefaultInitializer::NodeSparkInterpolator_ColorDefaul
     PARAM_RGBA("DefaultValue", 255, 0, 0, 255);
 }
 
-void NodeSparkInterpolator_ColorDefaultInitializer::process()
+void NodeSparkInterpolator_ColorInitializerDefault::process()
 {
      // get parameters
     SPK::Color color = ToSpkColor( getParameter("DefaultValue")->getValueAsColor() );
@@ -63,6 +63,115 @@ void NodeSparkInterpolator_ColorDefaultInitializer::process()
     // trigger nodes connections
     dataUpdated(0);
 }
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random color initializer node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkInterpolator_ColorInitializerRandom::NodeSparkInterpolator_ColorInitializerRandom()
+{
+    OUT_PORT(ENC_COLORINTERPOLATOR, "colors");
+
+    createBaseObjectParams(Name());
+    PARAM_RGBA("MinColor", 255, 0, 0, 255);
+    PARAM_RGBA("MaxColor", 255, 255, 0, 255);
+}
+
+void NodeSparkInterpolator_ColorInitializerRandom::process()
+{
+     // get parameters
+    SPK::Color minColor = ToSpkColor( getParameter("MinColor")->getValueAsColor() );
+    SPK::Color maxColor = ToSpkColor( getParameter("MaxColor")->getValueAsColor() );
+
+    // create new interpolator
+    SPK::Ref<SPK::RandomInitializer<SPK::Color>> randomInitializer;
+    randomInitializer = SPK::RandomInitializer<SPK::Color>::create(minColor, maxColor);
+
+    // set base spark object parameters
+    setBaseObjectParams(randomInitializer);
+
+    // set new interpolator as node result
+    setResult(randomInitializer);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// simple color interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkInterpolator_ColorInterpolatorSimple::NodeSparkInterpolator_ColorInterpolatorSimple()
+{
+    OUT_PORT(ENC_COLORINTERPOLATOR, "colors");
+
+    createBaseObjectParams(Name());
+    PARAM_RGBA("BirthColor", 255, 0, 0, 255);
+    PARAM_RGBA("DeathColor", 255, 255, 0, 255);
+}
+
+void NodeSparkInterpolator_ColorInterpolatorSimple::process()
+{
+     // get parameters
+    SPK::Color birthColor = ToSpkColor( getParameter("BirthColor")->getValueAsColor() );
+    SPK::Color deathColor = ToSpkColor( getParameter("DeathColor")->getValueAsColor() );
+
+    // create new interpolator
+    SPK::Ref<SPK::SimpleInterpolator<SPK::Color>> simpleInterpolator;
+    simpleInterpolator =  SPK::SimpleInterpolator<SPK::Color>::create(birthColor, deathColor);
+
+    // set base spark object parameters
+    setBaseObjectParams(simpleInterpolator);
+
+    // set new interpolator as node result
+    setResult(simpleInterpolator);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random color interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkInterpolator_ColorInterpolatorRandom::NodeSparkInterpolator_ColorInterpolatorRandom()
+{
+    OUT_PORT(ENC_COLORINTERPOLATOR, "colors");
+
+    createBaseObjectParams(Name());
+    PARAM_RGBA("MinBirthColor", 255, 0, 0, 255);
+    PARAM_RGBA("MaxBirthColor", 255, 255, 0, 255);
+    PARAM_RGBA("MinDeathColor", 0, 255, 255, 255);
+    PARAM_RGBA("MaxDeathColor", 0, 255, 0, 255);
+}
+
+void NodeSparkInterpolator_ColorInterpolatorRandom::process()
+{
+     // get parameters
+    SPK::Color minBirthColor = ToSpkColor( getParameter("MinBirthColor")->getValueAsColor() );
+    SPK::Color maxBirthColor = ToSpkColor( getParameter("MaxBirthColor")->getValueAsColor() );
+    SPK::Color minDeathColor = ToSpkColor( getParameter("MinDeathColor")->getValueAsColor() );
+    SPK::Color maxDeathColor = ToSpkColor( getParameter("MaxDeathColor")->getValueAsColor() );
+
+    // create new interpolator
+    SPK::Ref<SPK::RandomInterpolator<SPK::Color>> randomInterpolator;
+    randomInterpolator =  SPK::RandomInterpolator<SPK::Color>::create(minBirthColor, maxBirthColor, minDeathColor, maxDeathColor);
+
+    // set base spark object parameters
+    setBaseObjectParams(randomInterpolator);
+
+    // set new interpolator as node result
+    setResult(randomInterpolator);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+
 
 
 //------------------------------------------------------------------------------------------------------------------------------
