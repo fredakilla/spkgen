@@ -9,19 +9,35 @@ SPK::Param TABLE_PARAM[] =
     SPK::PARAM_ROTATION_SPEED
 };
 
+
 //------------------------------------------------------------------------------------------------------------------------------
 // base spark interpolator class
 //------------------------------------------------------------------------------------------------------------------------------
 
-/*
-void NodeSparkInterpolatorBase::setResult(ResultInterpolator interpolator)
+void NodeSparkColorInterpolatorBase::setResult(const SPK::Ref<SPK::Interpolator<SPK::Color>> &colorInterpolator)
 {
-    if(_emitters.size() > 1)
-        _emitters.back().reset();
-    _emitters.clear();
-    _emitters.push_back(emitter);
+   /* if(_paramInterpolators.size() > 1)
+        _paramInterpolators.back().interpolatorFloat.reset();
+    _paramInterpolators.clear();
+    _paramInterpolators.push_back(interpolator);*/
+
+    _colorInterpolator.reset();
+    _colorInterpolator = colorInterpolator;
 }
-*/
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// base spark interpolator class
+//------------------------------------------------------------------------------------------------------------------------------
+
+void NodeSparkParamInterpolatorBase::setResult(const ParamFloatInterpolator &interpolator)
+{
+    if(_paramInterpolators.size() > 1)
+        _paramInterpolators.back().interpolatorFloat.reset();
+    _paramInterpolators.clear();
+    _paramInterpolators.push_back(interpolator);
+}
+
 
 //------------------------------------------------------------------------------------------------------------------------------
 // default color initializer node
@@ -61,8 +77,9 @@ void NodeSparkInterpolator_ColorDefaultInitializer::process()
     _interpolators.clear();
     _interpolators.push_back(result);*/
 
-    _colorInterpolator.reset();
-    _colorInterpolator = defaultInitialiser;
+    ///_colorInterpolator.reset();
+    ///_colorInterpolator = defaultInitialiser;
+    setResult(defaultInitialiser);
 
 
 
@@ -129,14 +146,10 @@ void NodeSparkInterpolator_ParamInitializer::process()
     setBaseObjectParams(defaultInitialiser);
 
     // set new interpolator as node result
-    if(_paramInterpolators.size() > 1)
-        _paramInterpolators.back().interpolatorFloat.reset();
-    _paramInterpolators.clear();
-
     ParamFloatInterpolator interpolator;
     interpolator.interpolatorFloat = defaultInitialiser;
     interpolator.param = param;
-    _paramInterpolators.push_back(interpolator);
+    setResult(interpolator);
 
     // trigger nodes connections
     dataUpdated(0);
