@@ -161,13 +161,24 @@ void NodeSparkGroup::process()
     }
 
     // set param interpolators
-    std::shared_ptr<NodeDataSparkParamInterpolators> inParams = getInput<NodeDataSparkParamInterpolators>(INPUT_PARAMSINTERPOLATOR_INDEX);
-    if(inParams)
+    std::shared_ptr<NodeDataSparkParamInterpolatorList> inParams = getInput<NodeDataSparkParamInterpolatorList>(INPUT_PARAMSINTERPOLATOR_INDEX);
+    if(inParams && inParams.get())
     {
+        /*for(size_t i=0; i<inParams->_result.size(); i++)
+        {
+            std::vector<ParamFloatInterpolator>& paramInterpolators = inParams->_result[i];
+            for(size_t j=0; j<inParams->_result[i]..size(); j++)
+            {
+                group->setParamInterpolator(paramInterpolators[j].param, paramInterpolators[j].interpolatorFloat);
+            }
+        }*/
+
         for(size_t i=0; i<inParams->_result.size(); i++)
         {
-            group->setParamInterpolator(inParams->_result[i].param, inParams->_result[i].interpolatorFloat);
+            if(inParams->_result[i].interpolatorFloat)
+                group->setParamInterpolator(inParams->_result[i].param, inParams->_result[i].interpolatorFloat);
         }
+
     }
 
 

@@ -62,7 +62,11 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkModifierEmitterAttacher>("modifiers");
     ret->registerModel<NodeSparkModifierLinearForce>("modifiers");
 
+
     ret->registerModel<NodeSparkInterpolator_ColorDefaultInitializer>("interpolators");
+
+    ret->registerModel<NodeSparkInterpolatorParamList>("interpolators");
+    ret->registerModel<NodeSparkInterpolator_ParamInitializer>("interpolators");
 
 
 

@@ -25,23 +25,20 @@ enum NodeClass
     ENC_ZONE,
     ENC_RENDERER,
     ENC_MODIFIER,
-    ENC_INTERPOLATOR,
     ENC_COLORINTERPOLATOR,
-    ENC_PARAMINTERPOLATOR
+    ENC_PARAMINTERPOLATOR,
 };
 
 static const NodeDataType NODE_DATA_TYPE[] =
 {
-    { "system"          , "system"          },
-    { "group"           , "group"           },
-    { "emitter"         , "emitter"         },
-    { "zone"            , "zone"            },
-    { "renderer"        , "renderer"        },
-    { "modifier"        , "modifier"        },
-    { "interpolator"    , "interpolator"    },
-
-    { "colorinterpolator"    , "colorinterpolator"    },
-    { "paraminterpolator"    , "paraminterpolator"    },
+    { "system"              , "system"              },
+    { "group"               , "group"               },
+    { "emitter"             , "emitter"             },
+    { "zone"                , "zone"                },
+    { "renderer"            , "renderer"            },
+    { "modifier"            , "modifier"            },
+    { "colorinterpolator"   , "colorinterpolator"   },
+    { "paraminterpolator"   , "paraminterpolator"   },
 };
 
 
