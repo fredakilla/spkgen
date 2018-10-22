@@ -19,7 +19,7 @@ struct ResultInterpolator
     SPK::Ref<SPK::Interpolator<SPK::Color>> interpolatorColor;
 };
 
-typedef MyNodeData<std::vector<SPK::Ref<ResultInterpolator>>, ENC_INTERPOLATOR>  NodeDataSparkInterpolatorList;
+typedef MyNodeData<std::vector<ResultInterpolator>, ENC_INTERPOLATOR>  NodeDataSparkInterpolatorList;
 
 
 

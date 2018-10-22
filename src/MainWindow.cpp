@@ -13,6 +13,7 @@
 #include "SpkSystem.h"
 #include "SpkEmitters.h"
 #include "SpkModifiers.h"
+#include "SpkInterpolators.h"
 #include "GraphView.h"
 
 #include <nodes/DataModelRegistry>
@@ -61,6 +62,7 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkModifierEmitterAttacher>("modifiers");
     ret->registerModel<NodeSparkModifierLinearForce>("modifiers");
 
+    ret->registerModel<NodeSparkInterpolator_ColorDefaultInitializer>("interpolators");
 
 
 

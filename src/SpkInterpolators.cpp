@@ -40,9 +40,20 @@ void NodeSparkInterpolator_ColorDefaultInitializer::process()
     setBaseObjectParams(defaultInitialiser);
 
     // set new interpolator as node result
-    //_interpolators.interpolatorColor.reset();
-    //_interpolators.interpolatorColor = defaultInitialiser;
+   /// _interpolators.interpolatorColor.reset();
+   /// _interpolators.interpolatorColor = defaultInitialiser;
     //setResult(defaultInitialiser);
+
+
+    ResultInterpolator result;
+    result.interpolatorColor = defaultInitialiser;
+
+    if(_interpolators.size() > 1)
+        _interpolators.back().interpolatorColor.reset();
+    _interpolators.clear();
+    _interpolators.push_back(result);
+
+
 
     // trigger nodes connections
     dataUpdated(0);
