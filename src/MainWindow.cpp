@@ -68,10 +68,13 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkInterpolator_ColorInterpolatorSimple>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ColorInterpolatorRandom>("interpolators");
 
-
-
     ret->registerModel<NodeSparkInterpolatorParamList>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ParamInitializer>("interpolators");
+    ret->registerModel<NodeSparkInterpolator_ParamInitializerRandom>("interpolators");
+    ret->registerModel<NodeSparkInterpolator_ParamInterpolatorSimple>("interpolators");
+    ret->registerModel<NodeSparkInterpolator_ParamInterpolatorRandom>("interpolators");
+
+
 
 
 

@@ -78,6 +78,10 @@ public:
 
 
 
+
+
+
+
 //------------------------------------------------------------------------------------------------------------------------------
 // param interpolator list node
 //------------------------------------------------------------------------------------------------------------------------------
@@ -103,6 +107,46 @@ private:
 public:
     NodeSparkInterpolator_ParamInitializer();
 };
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random param initializer node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkInterpolator_ParamInitializerRandom : public NodeSparkParamInterpolatorBase
+{
+private:
+    const QString Name() const override { return QString("ParamRandomInitializer"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkParamInterpolatorList>(_paramInterpolators); }
+    void process() override;
+public:
+    NodeSparkInterpolator_ParamInitializerRandom();
+};
+
+//------------------------------------------------------------------------------------------------------------------------------
+// simple param interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkInterpolator_ParamInterpolatorSimple : public NodeSparkParamInterpolatorBase
+{
+private:
+    const QString Name() const override { return QString("ParamSimpleInterpolator"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkParamInterpolatorList>(_paramInterpolators); }
+    void process() override;
+public:
+    NodeSparkInterpolator_ParamInterpolatorSimple();
+};
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random param interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkInterpolator_ParamInterpolatorRandom : public NodeSparkParamInterpolatorBase
+{
+private:
+    const QString Name() const override { return QString("ParamRandomInterpolator"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkParamInterpolatorList>(_paramInterpolators); }
+    void process() override;
+public:
+    NodeSparkInterpolator_ParamInterpolatorRandom();
+};
+
 
 
 #endif // SPKINTERPOLATORS_H

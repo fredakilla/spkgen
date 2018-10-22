@@ -232,10 +232,128 @@ void NodeSparkInterpolator_ParamInitializer::process()
     setBaseObjectParams(defaultInitialiser);
 
     // set new interpolator as node result
-    ParamFloatInterpolator interpolator;
-    interpolator.interpolatorFloat = defaultInitialiser;
-    interpolator.param = param;
-    setResult(interpolator);
+    ParamFloatInterpolator result;
+    result.interpolatorFloat = defaultInitialiser;
+    result.param = param;
+    setResult(result);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random param initializer node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkInterpolator_ParamInitializerRandom::NodeSparkInterpolator_ParamInitializerRandom()
+{
+    OUT_PORT(ENC_PARAMINTERPOLATOR, "param");
+
+    createBaseObjectParams(Name());
+    PARAM_FLOAT("MinValue", eF32_MIN, eF32_MAX, 1.0f);
+    PARAM_FLOAT("MaxValue", eF32_MIN, eF32_MAX, 1.0f);
+    PARAM_ENUM("Param", "Scale|Mass|Angle|TextureIndex|RotationSpeed", 1);
+}
+
+void NodeSparkInterpolator_ParamInitializerRandom::process()
+{
+     // get parameters
+    float minValue = getParameter("MinValue")->getValueAsFloat();
+    float maxValue = getParameter("MaxValue")->getValueAsFloat();
+    SPK::Param param = TABLE_PARAM[ getParameter("Param")->getValueAsEnum() ];
+
+    // create new interpolator
+    SPK::Ref<SPK::RandomInitializer<float>> randomInitializer;
+    randomInitializer = SPK::RandomInitializer<float>::create(minValue, maxValue);
+
+    // set base spark object parameters
+    setBaseObjectParams(randomInitializer);
+
+    // set new interpolator as node result
+    ParamFloatInterpolator result;
+    result.interpolatorFloat = randomInitializer;
+    result.param = param;
+    setResult(result);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// simple param interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkInterpolator_ParamInterpolatorSimple::NodeSparkInterpolator_ParamInterpolatorSimple()
+{
+    OUT_PORT(ENC_PARAMINTERPOLATOR, "param");
+
+    createBaseObjectParams(Name());
+    PARAM_FLOAT("BirthValue", eF32_MIN, eF32_MAX, 1.0f);
+    PARAM_FLOAT("DeathValue", eF32_MIN, eF32_MAX, 1.0f);
+    PARAM_ENUM("Param", "Scale|Mass|Angle|TextureIndex|RotationSpeed", 1);
+}
+
+void NodeSparkInterpolator_ParamInterpolatorSimple::process()
+{
+     // get parameters
+    float birthValue = getParameter("BirthValue")->getValueAsFloat();
+    float deathValue = getParameter("DeathValue")->getValueAsFloat();
+    SPK::Param param = TABLE_PARAM[ getParameter("Param")->getValueAsEnum() ];
+
+    // create new interpolator
+    SPK::Ref<SPK::SimpleInterpolator<float>> simpleInterpolator;
+    simpleInterpolator = SPK::SimpleInterpolator<float>::create(birthValue, deathValue);
+
+    // set base spark object parameters
+    setBaseObjectParams(simpleInterpolator);
+
+    // set new interpolator as node result
+    ParamFloatInterpolator result;
+    result.interpolatorFloat = simpleInterpolator;
+    result.param = param;
+    setResult(result);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+//------------------------------------------------------------------------------------------------------------------------------
+// random param interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkInterpolator_ParamInterpolatorRandom::NodeSparkInterpolator_ParamInterpolatorRandom()
+{
+    OUT_PORT(ENC_PARAMINTERPOLATOR, "param");
+
+    createBaseObjectParams(Name());
+    PARAM_FXY("BirthValue", eF32_MIN, eF32_MAX, 1.0f, 1.0f);
+    PARAM_FXY("DeathValue", eF32_MIN, eF32_MAX, 1.0f, 1.0f);
+    PARAM_ENUM("Param", "Scale|Mass|Angle|TextureIndex|RotationSpeed", 1);
+}
+
+void NodeSparkInterpolator_ParamInterpolatorRandom::process()
+{
+     // get parameters
+    float minBirthValue = getParameter("BirthValue")->getValueAsFXY().x;
+    float maxBirthValue = getParameter("BirthValue")->getValueAsFXY().y;
+    float minDeathValue = getParameter("DeathValue")->getValueAsFXY().x;
+    float maxDeathValue = getParameter("DeathValue")->getValueAsFXY().y;
+    SPK::Param param = TABLE_PARAM[ getParameter("Param")->getValueAsEnum() ];
+
+    // create new interpolator
+    SPK::Ref<SPK::RandomInterpolator<float>> randomInterpolator;
+    randomInterpolator = SPK::RandomInterpolator<float>::create(minBirthValue, maxBirthValue, minDeathValue, maxDeathValue);
+
+    // set base spark object parameters
+    setBaseObjectParams(randomInterpolator);
+
+    // set new interpolator as node result
+    ParamFloatInterpolator result;
+    result.interpolatorFloat = randomInterpolator;
+    result.param = param;
+    setResult(result);
 
     // trigger nodes connections
     dataUpdated(0);
