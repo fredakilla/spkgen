@@ -25,7 +25,9 @@ enum NodeClass
     ENC_ZONE,
     ENC_RENDERER,
     ENC_MODIFIER,
-    ENC_INTERPOLATOR
+    ENC_INTERPOLATOR,
+    ENC_COLORINTERPOLATOR,
+    ENC_PARAMINTERPOLATOR
 };
 
 static const NodeDataType NODE_DATA_TYPE[] =
@@ -37,6 +39,9 @@ static const NodeDataType NODE_DATA_TYPE[] =
     { "renderer"        , "renderer"        },
     { "modifier"        , "modifier"        },
     { "interpolator"    , "interpolator"    },
+
+    { "colorinterpolator"    , "colorinterpolator"    },
+    { "paraminterpolator"    , "paraminterpolator"    },
 };
 
 

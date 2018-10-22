@@ -21,7 +21,7 @@ void NodeSparkInterpolatorBase::setResult(ResultInterpolator interpolator)
 
 NodeSparkInterpolator_ColorDefaultInitializer::NodeSparkInterpolator_ColorDefaultInitializer()
 {
-    OUT_PORT(ENC_INTERPOLATOR, "interpolator");
+    OUT_PORT(ENC_COLORINTERPOLATOR, "colors");
 
     createBaseObjectParams(Name());
     PARAM_RGBA("DefaultValue", 255, 0, 0, 255);
@@ -45,13 +45,16 @@ void NodeSparkInterpolator_ColorDefaultInitializer::process()
     //setResult(defaultInitialiser);
 
 
-    ResultInterpolator result;
+   /* ResultInterpolator result;
     result.interpolatorColor = defaultInitialiser;
 
     if(_interpolators.size() > 1)
         _interpolators.back().interpolatorColor.reset();
     _interpolators.clear();
-    _interpolators.push_back(result);
+    _interpolators.push_back(result);*/
+
+    _colorInterpolator.reset();
+    _colorInterpolator = defaultInitialiser;
 
 
 

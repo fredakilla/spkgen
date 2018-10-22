@@ -20,7 +20,13 @@ struct ResultInterpolator
     SPK::Ref<SPK::Interpolator<SPK::Color>> interpolatorColor;
 };
 
-typedef MyNodeData<std::vector<ResultInterpolator>, ENC_INTERPOLATOR>  NodeDataSparkInterpolatorList;
+typedef MyNodeData<std::vector<ResultInterpolator>, ENC_INTERPOLATOR> NodeDataSparkInterpolatorList;
+
+
+//---
+
+typedef MyNodeData<SPK::Ref<SPK::Interpolator<SPK::Color>>, ENC_COLORINTERPOLATOR>  NodeDataSparkColorInterpolator;
+typedef MyNodeData<ParamFloatInterpolator, ENC_PARAMINTERPOLATOR>  NodeDataSparkParamInterpolator;
 
 
 
@@ -34,7 +40,7 @@ protected:
     //void setBaseInterpolatorParams(ResultInterpolator interpolator);
     //void setResult(ResultInterpolator interpolator);
     //std::vector<SPK::Ref<ResultInterpolator>> _interpolators;
-    std::vector<ResultInterpolator> _interpolators;
+    ///std::vector<ResultInterpolator> _interpolators;
 };
 
 
@@ -43,14 +49,30 @@ protected:
 //------------------------------------------------------------------------------------------------------------------------------
 class NodeSparkInterpolator_ColorDefaultInitializer : public NodeSparkInterpolatorBase
 {
+    SPK::Ref<SPK::Interpolator<SPK::Color>> _colorInterpolator;
 private:
     const QString Name() const override { return QString("ColorInit"); }
-    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkInterpolatorList>(_interpolators); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
     void process() override;
 public:
     NodeSparkInterpolator_ColorDefaultInitializer();
 };
 
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// default param initializer node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkInterpolator_ParamInitializer : public NodeSparkInterpolatorBase
+{
+    ParamFloatInterpolator _paramInterpolator;
+private:
+    const QString Name() const override { return QString("ParamInit"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkParamInterpolator>(_paramInterpolator); }
+    void process() override;
+public:
+    NodeSparkInterpolator_ParamInitializer();
+};
 
 
 #endif // SPKINTERPOLATORS_H

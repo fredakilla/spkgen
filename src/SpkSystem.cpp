@@ -52,7 +52,9 @@ NodeSparkGroup::NodeSparkGroup()
     IN_PORT(ENC_RENDERER, "renderer");
     IN_PORT(ENC_EMITTER, "emitters");
     IN_PORT(ENC_MODIFIER, "modifiers");
-    IN_PORT(ENC_INTERPOLATOR, "interpolators");
+    //IN_PORT(ENC_INTERPOLATOR, "interpolators");
+    IN_PORT(ENC_COLORINTERPOLATOR, "colors");
+    IN_PORT(ENC_PARAMINTERPOLATOR, "params");
     OUT_PORT(ENC_GROUP, "group");
 
     createBaseObjectParams("Group");
@@ -69,7 +71,8 @@ void NodeSparkGroup::process()
     const unsigned int INPUT_RENDERER_INDEX = 0;
     const unsigned int INPUT_EMITTERS_INDEX = 1;
     const unsigned int INPUT_MODIFIERS_INDEX = 2;
-    const unsigned int INPUT_INTERPOLATORS_INDEX = 3;
+    const unsigned int INPUT_COLORINTERPOLATOR_INDEX = 3;
+    const unsigned int INPUT_PARAMSINTERPOLATOR_INDEX = 4;
 
     // get parameters
     eInt capacity = getParameter("Capacity")->getValueAsInt();
@@ -122,6 +125,8 @@ void NodeSparkGroup::process()
         }
     }
 
+
+    /*
     // set interpolators
     std::shared_ptr<NodeDataSparkInterpolatorList> inInterpolators = getInput<NodeDataSparkInterpolatorList>(INPUT_INTERPOLATORS_INDEX);
     if(inInterpolators)
@@ -144,6 +149,31 @@ void NodeSparkGroup::process()
             }
         }
     }
+*/
+
+
+
+    // set color interpolator
+    std::shared_ptr<NodeDataSparkColorInterpolator> inColors = getInput<NodeDataSparkColorInterpolator>(INPUT_COLORINTERPOLATOR_INDEX);
+    if(inColors)
+    {
+        group->setColorInterpolator(inColors->_result);
+    }
+
+    // set param interpolators
+    std::shared_ptr<NodeDataSparkParamInterpolators> inParams = getInput<NodeDataSparkParamInterpolators>(INPUT_PARAMSINTERPOLATOR_INDEX);
+    if(inParams)
+    {
+        for(size_t i=0; i<inParams->_result.size(); i++)
+        {
+            group->setParamInterpolator(inParams->_result[i].param, inParams->_result[i].interpolatorFloat);
+        }
+    }
+
+
+
+
+
 
 
     // Zone
