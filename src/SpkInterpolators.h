@@ -29,7 +29,7 @@ protected:
 class NodeSparkInterpolator_ColorDefaultInitializer : public NodeSparkColorInterpolatorBase
 {
 private:
-    const QString Name() const override { return QString("ColorInit"); }
+    const QString Name() const override { return QString("ColorInitializer"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
     void process() override;
 public:
@@ -55,7 +55,7 @@ public:
 class NodeSparkInterpolator_ParamInitializer : public NodeSparkParamInterpolatorBase
 {
 private:
-    const QString Name() const override { return QString("ParamInit"); }
+    const QString Name() const override { return QString("ParamInitializer"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkParamInterpolatorList>(_paramInterpolators); }
     void process() override;
 public:
