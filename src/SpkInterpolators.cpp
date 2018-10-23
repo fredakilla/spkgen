@@ -9,6 +9,14 @@ SPK::Param TABLE_PARAM[] =
     SPK::PARAM_ROTATION_SPEED
 };
 
+SPK::InterpolationType TABLE_INTERPOLATION_TYPE[] =
+{
+    SPK::INTERPOLATOR_LIFETIME,
+    SPK::INTERPOLATOR_AGE,
+    SPK::INTERPOLATOR_PARAM,
+    SPK::INTERPOLATOR_VELOCITY
+};
+
 //------------------------------------------------------------------------------------------------------------------------------
 // base spark interpolator class
 //------------------------------------------------------------------------------------------------------------------------------
@@ -169,6 +177,44 @@ void NodeSparkInterpolator_ColorInterpolatorRandom::process()
     // trigger nodes connections
     dataUpdated(0);
 }
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// graph color interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkInterpolator_ColorInterpolatorGraph::NodeSparkInterpolator_ColorInterpolatorGraph()
+{
+    OUT_PORT(ENC_COLORINTERPOLATOR, "colors");
+
+    createBaseObjectParams(Name());
+    PARAM_ENUM("Type", "Lifetime|Age|Param|Velocity", 0);
+    PARAM_ENUM("Param", "Scale|Mass|Angle|TextureIndex|RotationSpeed", 1);
+}
+
+void NodeSparkInterpolator_ColorInterpolatorGraph::process()
+{
+    // get parameters
+    SPK::InterpolationType interpolateType =  TABLE_INTERPOLATION_TYPE[ getParameter("Type")->getValueAsEnum() ];
+    SPK::Param param =  TABLE_PARAM[ getParameter("Param")->getValueAsEnum() ];
+
+    // create new interpolator
+    SPK::Ref<SPK::GraphInterpolator<SPK::Color>> graphInterpolator;
+    graphInterpolator = SPK::GraphInterpolator<SPK::Color>::create();
+    graphInterpolator->setType(interpolateType, param);
+
+    // set base spark object parameters
+    setBaseObjectParams(graphInterpolator);
+
+    // set new interpolator as node result
+    setResult(graphInterpolator);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
+
+
+
 
 
 

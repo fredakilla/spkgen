@@ -75,7 +75,18 @@ public:
     NodeSparkInterpolator_ColorInterpolatorRandom();
 };
 
-
+//------------------------------------------------------------------------------------------------------------------------------
+// graph color interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkInterpolator_ColorInterpolatorGraph : public NodeSparkColorInterpolatorBase
+{
+private:
+    const QString Name() const override { return QString("ColorGraphInterpolator"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
+    void process() override;
+public:
+    NodeSparkInterpolator_ColorInterpolatorGraph();
+};
 
 
 
