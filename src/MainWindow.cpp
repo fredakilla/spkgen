@@ -110,10 +110,23 @@ MainWindow::MainWindow(QWidget* parent)
     _dockNodeGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::BottomDockWidgetArea, _dockNodeGraph);
 
+    GraphView* pathView = new GraphView(this);
+
     _dockGraph = new QDockWidget("Graph", this);
-    _dockGraph->setWidget(new GraphView(this));
+    _dockGraph->setWidget(pathView);
     _dockGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::TopDockWidgetArea, _dockGraph);
+
+
+    Path* myPath = new Path(PathType::EPT_AKIMA);
+    myPath->addKey(0.0, 1.0);
+    myPath->addKey(2.0, 3.0);
+    myPath->addKey(4.0, -2.0);
+    myPath->addKey(5.0, 2.0);
+    myPath->addKey(8.0, 5.0);
+    myPath->addKey(9.0, -5.0);
+    pathView->setPath(myPath);
+
 
     connect(_nodeScene, &FlowScene::nodeDoubleClicked, this, &MainWindow::showNode);
     connect(_nodeScene, &FlowScene::nodeCreated, this, &MainWindow::initNode);

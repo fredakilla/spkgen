@@ -71,12 +71,12 @@ SOURCES += \
     src/SpkSystem.cpp \
     src/Parameter.cpp \
     src/Color.cpp \
-    src/path.cpp \
     src/GraphView.cpp \
     src/SpkModifiers.cpp \
     src/CommentGraphicsItem.cpp \
     src/CustomFlowScene.cpp \
-    src/SpkInterpolators.cpp
+    src/SpkInterpolators.cpp \
+    src/Path.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -93,12 +93,12 @@ HEADERS += \
     src/SpkSystem.h \
     src/Color.h \
     src/benchmark.h \
-    src/path.hpp \
     src/GraphView.h \
     src/Nodestyle.h \
     src/SpkModifiers.h \
     src/CommentGraphicsItem.h \
     src/CustomFlowScene.h \
-    src/SpkInterpolators.h
+    src/SpkInterpolators.h \
+    src/Path.h
 
 

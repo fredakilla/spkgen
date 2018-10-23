@@ -3,232 +3,11 @@
 #include <QtCore/QDebug>
 #include <QLabel>
 
-
-//------------------------------------------------------------------------------------
-// Path temp implementation
-//------------------------------------------------------------------------------------
-
-#include "thirdparty/splines/Splines.hh"
-using namespace SplinesLoad;
-///static CubicSpline spline;
-///std::vector<double> X, Y;
-
-
-enum PathType
-{
-    EPT_CONSTANT,
-    EPT_LINEAR,
-    EPT_CUBIC,
-    EPT_AKIMA,
-    EPT_BESSEL,
-    EPT_PCHIP,
-    EPT_QUINTIC,
-};
-
-enum PathLoopMode
-{
-    ELM_LOOP,
-    ELM_ZERO,
-    ELM_LAST,
-};
-
-struct PathKey
-{
-    double time;
-    double value;
-};
-
-class Path
-{
-public:
-    Path(PathType splineType, unsigned int keyCount = 0);
-    ~Path();
-
-    void build();
-    double evaluate(double time) const;
-    void addKey(double keyTime, double keyValue);
-    void setAtIndex(unsigned index, double time, double value);
-    void setLoopMode(PathLoopMode loopMode);
-    void clear();
-
-    unsigned int getKeyCount() const;
-    const PathKey getKeyByIndex(unsigned int index) const;
-    double getStartTime() const;
-    double getEndTime() const;
-
-private:
-    void _insertKey(double keyTime, double keyValue);
-
-private:
-    std::vector<double> _times;
-    std::vector<double> _values;
-    Splines::Spline* _spline;
-    PathLoopMode _loopMode;
-};
-
-class Path4
-{
-
-};
-
-class PathSampler
-{
-
-};
-
-class Path4Sampler
-{
-
-};
-
-//------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------
-
-Path::Path(PathType splineType, unsigned int keyCount) :
-    _spline(nullptr),
-    _loopMode(ELM_LAST)
-{
-    switch(splineType)
-    {
-    case EPT_CONSTANT:    _spline = new Splines::ConstantSpline;  break;
-    case EPT_LINEAR:      _spline = new Splines::LinearSpline;    break;
-    case EPT_CUBIC:       _spline = new Splines::CubicSpline;     break;
-    case EPT_AKIMA:       _spline = new Splines::AkimaSpline;     break;
-    case EPT_BESSEL:      _spline = new Splines::BesselSpline;    break;
-    case EPT_PCHIP:       _spline = new Splines::PchipSpline;     break;
-    case EPT_QUINTIC:     _spline = new Splines::QuinticSpline;   break;
-    default: assert(0);
-    }
-
-    //_times.resize(keyCount);
-    //_values.resize(keyCount);
-}
-
-Path::~Path()
-{
-    if(_spline)
-        delete _spline;
-}
-
-void Path::addKey(double keyTime, double keyValue)
-{
-    assert(keyTime >= 0.0);
-
-    ///_insertKey(keyTime, keyValue);
-    _times.push_back(keyTime);
-    _values.push_back(keyValue);
-}
-
-void Path::_insertKey(double keyTime, double keyValue)
-{
-    for (unsigned int i=0; i<_times.size(); i++)
-    {
-        if (_times[i] > keyTime)
-        {
-            _times.insert(_times.begin()+i, keyTime);
-            _values.insert(_values.begin()+i, keyValue);
-            return;
-        }
-    }
-
-    // no key found => append
-    _times.push_back(keyTime);
-    _values.push_back(keyValue);
-}
-
-unsigned int Path::getKeyCount() const
-{
-    return _times.size();
-}
-
-const PathKey Path::getKeyByIndex(unsigned int index) const
-{
-    assert(index < _times.size());
-
-    PathKey key;
-    key.time = _times.at(index);
-    key.value = _values.at(index);
-    return key;
-}
-
-double Path::getStartTime() const
-{
-    if (_times.size() == 0)
-        return 0.0;
-
-    return _times.front();
-}
-
-double Path::getEndTime() const
-{
-    if (_times.size() == 0)
-        return 0.0f;
-
-    return _times.back();
-}
-
-void Path::clear()
-{
-    _times.clear();
-    _values.clear();
-}
-
-void Path::setAtIndex(unsigned index, double time, double value)
-{
-    assert(index < _times.size());
-    _times[index] = time;
-    _values[index] = value;
-}
-
-void Path::build()
-{
-    _spline->clear();
-    _spline->build(_times.data(), _values.data(), _times.size());
-}
-
-double Path::evaluate(double time) const
-{
-    if (!_times.size())
-        return 0.0;
-
-    const double minTime = _times.front();
-    const double maxTime = _times.back();
-
-    const double firstValue = _values.front();
-    const double lastValue = _values.back();
-
-    if (_loopMode == ELM_LOOP)
-        time = fmodf(time - minTime, maxTime - minTime);
-
-    if (time <= minTime || _times.size() == 1) // time before first key?
-        return (_loopMode == ELM_ZERO ? 0.0 : firstValue);
-    else if (time >= maxTime) //  time after last key?
-        return (_loopMode == ELM_ZERO ? 0.0 : lastValue);
-    else
-        return _spline->eval(time);
-}
-
-void Path::setLoopMode(PathLoopMode loopMode)
-{
-    _loopMode = loopMode;
-}
-
-//------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------
-
-
-
-
-
 QT_CHARTS_USE_NAMESPACE
 
 
 Path* myPath;
 
-
-#include "path.hpp"
-static ePath epath;
-static ePath4Sampler epath4sampler;
 
 GraphView::GraphView(QWidget *parent)
     : QChartView(new QChart(), parent),
@@ -251,22 +30,6 @@ GraphView::GraphView(QWidget *parent)
     chart()->setTitle("Graph Editor");
 
 
-   // X[0]=0.0; X[1]=0.4; X[2]=3.2; X[3]=3.8; X[4]=10.0;
-    //Y[0]=0.1; Y[1]=-3.7; Y[2]=2.6; Y[3]=1.1; Y[4]=-4.9;
-    /*X.push_back(0.0);
-    X.push_back(2.0);
-    X.push_back(4.0);
-    X.push_back(5.0);
-    X.push_back(8.0);
-    X.push_back(9.0);
-    //----------------
-    Y.push_back(1.0);
-    Y.push_back(3.0);
-    Y.push_back(-2.0);
-    Y.push_back(2.0);
-    Y.push_back(5.0);
-    Y.push_back(-5.0);*/
-
     myPath = new Path(PathType::EPT_LINEAR, 3);
     myPath->addKey(0.0, 1.0);
     myPath->addKey(2.0, 3.0);
@@ -275,22 +38,6 @@ GraphView::GraphView(QWidget *parent)
     myPath->addKey(8.0, 5.0);
     myPath->addKey(9.0, -5.0);
 
-
-    epath.addKey(0.0, 1.0,  ePI_CUBIC);
-    epath.addKey(2.0, 3.0,  ePI_CUBIC);
-    epath.addKey(4.0, -2.0, ePI_CUBIC);
-    epath.addKey(5.0, 2.0,  ePI_CUBIC);
-    epath.addKey(8.0, 5.0,  ePI_CUBIC);
-    epath.addKey(9.0, -5,   ePI_CUBIC);
-
-    ePath4 path4;
-    path4.getSubPath(0).addKey(0.0, 1.0,  ePI_CUBIC);
-    path4.getSubPath(0).addKey(2.0, 3.0,  ePI_CUBIC);
-    path4.getSubPath(0).addKey(4.0, -2.0, ePI_CUBIC);
-    path4.getSubPath(0).addKey(5.0, 2.0,  ePI_CUBIC);
-    path4.getSubPath(0).addKey(8.0, 5.0,  ePI_CUBIC);
-    path4.getSubPath(0).addKey(9.0, -5,   ePI_CUBIC);
-    epath4sampler.sample(path4, _splineResolution);
 
 
 
@@ -326,17 +73,6 @@ GraphView::GraphView(QWidget *parent)
         PathKey pathkey = myPath->getKeyByIndex(i);
         *m_scatter << QPointF(pathkey.time, pathkey.value);
     }
-
-
-    // epath
-    /*for(size_t i=0; i<epath.getKeyCount(); i++)
-        *m_scatter << QPointF(epath.getKeyByIndex(i).time, epath.getKeyByIndex(i).val);*/
-
-    // epath4sampler
-    /*for(size_t i=0; i<path4.getAllKeys().size(); i++)
-            *m_scatter << QPointF(path4.getAllKeys()[i]->time, path4.getAllKeys()[i]->val);
-*/
-
 
 
     chart()->legend()->hide();
@@ -426,9 +162,15 @@ GraphView::GraphView(QWidget *parent)
     axisY->setShadesVisible(true);*/
 }
 
-
 GraphView::~GraphView()
 {
+}
+
+void GraphView::setPath(Path* path)
+{
+    Q_ASSERT(path);
+
+    _currentPath = path;
 }
 
 void GraphView::resizeEvent(QResizeEvent *event)
@@ -442,7 +184,6 @@ void GraphView::resizeEvent(QResizeEvent *event)
     }
     QChartView::resizeEvent(event);
 }
-
 
 void GraphView::keyPressEvent(QKeyEvent *event)
 {
@@ -465,9 +206,6 @@ void GraphView::keyReleaseEvent(QKeyEvent *event)
 {
 
 }
-
-
-
 
 static bool xPointLessThan(const QPointF &p1, const QPointF &p2)
 {
@@ -498,26 +236,12 @@ void GraphView::rebuildKeys()
 
     // rebuild spline data
 
-    /// X.clear();
-    /// Y.clear();
-    ///
-    /// X.resize(m_scatter->count());
-    /// Y.resize(m_scatter->count());
-    ///
-    /// for(int i=0; i<m_scatter->count(); ++i)
-    /// {
-    ///     X[i] = m_scatter->at(i).x();
-    ///     Y[i] = m_scatter->at(i).y();
-    /// }
-
     myPath->clear();
     //myPath.resize(m_scatter->count());
     for(int i=0; i<m_scatter->count(); ++i)
     {
         myPath->addKey(m_scatter->at(i).x(), m_scatter->at(i).y());
     }
-
-
 }
 
 void GraphView::mousePressEvent(QMouseEvent *event)
@@ -541,7 +265,6 @@ void GraphView::mouseMoveEvent(QMouseEvent *event)
     m_mouseCoordX->setText(QString("X: %1").arg(chart()->mapToValue(event->pos()).x()));
     m_mouseCoordY->setText(QString("Y: %1").arg(chart()->mapToValue(event->pos()).y()));
 
-
     if(_isPointSelected && _isClicked)
     {
         // get index of selected point
@@ -559,31 +282,16 @@ void GraphView::mouseMoveEvent(QMouseEvent *event)
         if(isKeyMovable(newPoint.x(), pointIndex) == false)
             return;
 
-        qDebug() << "newpoint at " << newPoint.x() << "," << newPoint.y();
-
-        // reset spline, update data at current point and rebuild spline
-        //spline.clear();
-        //myPath.getTimeKeyAtIndex(pointIndex) = newPoint.x();
-        //myPath.getValueKeyAtIndex(pointIndex) = newPoint.y();
-        //spline.build(myPath.getTimeKeys(), myPath.getValueKeys(), myPath.size());
-
-        ///X[pointIndex] = newPoint.x();
-        ///Y[pointIndex] = newPoint.y();
+        // replace point at index
         myPath->setAtIndex(pointIndex, newPoint.x(), newPoint.y());
-
-        //spline.build(X.data(), Y.data(), X.size());
-        //epath.getKeyByIndex(pointIndex).time = newPoint.x();
-        //epath.getKeyByIndex(pointIndex).val = newPoint.y();
-
 
         // replace point (simulate moving)
         m_scatter->replace(_selectedPoint, newPoint);
-
         m_scatterSelected->replace(0, newPoint);
 
         _selectedPoint = newPoint;
 
-         plot();
+        plot();
     }
 
     QChartView::mouseMoveEvent(event);
@@ -596,7 +304,6 @@ void GraphView::mouseReleaseEvent(QMouseEvent *event)
     _isClicked = false;
     _isPointSelected = false;
 }
-
 
 void GraphView::zoom()
 {
@@ -684,39 +391,21 @@ bool GraphView::isKeyMovable(double newTime, int index)
     return true;
 }
 
-
-
 void GraphView::plot()
 {
-    //static_cast<QValueAxis *>(chart()->axisX())->
-
-    // rebuild spline
-    //spline.clear();
-    //spline.build(X.data(), Y.data(), X.size());
-    //spline.build(myPath->getTimesData(), myPath->getValuesData(), myPath->getKeyCount());
-
+    // rebuild path
     myPath->build();
-
-
 
     // regenerate spline for drawing
     m_lines->clear();
     chart()->removeSeries(m_lines);
     for(size_t i=0; i<_splineResolution; i++)
     {
-        // spline lib
-        double max = myPath->getEndTime(); ////X.back();
+        double max = myPath->getEndTime();
         double x = i*max/_splineResolution;
-        ///*m_lines << QPointF( x, spline(x));
         *m_lines << QPointF( x, myPath->evaluate(x));
-
-        // epath
-       /*double max = epath.getEndTime();
-        double x = i*max/_splineResolution;
-        *m_lines << QPointF(x, epath.evaluate(x));*/
     }
     chart()->addSeries(m_lines);
-
 
     // need to setup axes after new added serie
     chart()->createDefaultAxes();
@@ -725,7 +414,6 @@ void GraphView::plot()
 
     chart()->zoomIn(m_zoom);
 }
-
 
 void GraphView::deleteSelectedKeys()
 {

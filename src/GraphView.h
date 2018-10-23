@@ -36,6 +36,8 @@
 #include <QtCharts/QSplineSeries>
 #include <QtCharts/QCategoryAxis>
 
+#include "Path.h"
+
 QT_CHARTS_USE_NAMESPACE
 
 class GraphView : public QChartView
@@ -53,6 +55,7 @@ public:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
+    void setPath(Path* path);
 
 private Q_SLOTS:
     void handleClickedPoint(const QPointF &point);
@@ -65,6 +68,7 @@ private:
     bool isKeyMovable(double newTime, int index);
     void plot();
 
+    Path* _currentPath;
     QScatterSeries* m_scatter;
     QScatterSeries* m_scatterSelected;
     QLineSeries* m_lines;

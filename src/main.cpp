@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QStyleFactory>
 
-#include "path.hpp"
+//#include "path.hpp"
 #include "GraphView.h"
 
 
@@ -89,7 +89,7 @@ void benchmarkSplines()
 
     //--------------------
 
-    ePath pathLinear;
+   /* ePath pathLinear;
     ePath pathCubic;
     ePath pathStep;
     ePath mixedStep;
@@ -126,7 +126,7 @@ void benchmarkSplines()
     path4Sampler.sample(path4);
 
     GP_BENCHMARK_FUNC(path4Sampler.evaluate(key), LOOP);
-
+*/
 
 
     GP_BENCHMARK_REPORT();
