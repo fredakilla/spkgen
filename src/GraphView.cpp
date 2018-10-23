@@ -5,10 +5,6 @@
 
 QT_CHARTS_USE_NAMESPACE
 
-
-Path* myPath;
-
-
 GraphView::GraphView(QWidget *parent)
     : QChartView(new QChart(), parent),
       m_scatter(nullptr),
@@ -27,19 +23,7 @@ GraphView::GraphView(QWidget *parent)
     _isClicked = false;
     _splineResolution = 250.0f;
 
-    chart()->setTitle("Graph Editor");
-
-
-    myPath = new Path(PathType::EPT_LINEAR, 3);
-    myPath->addKey(0.0, 1.0);
-    myPath->addKey(2.0, 3.0);
-    myPath->addKey(4.0, -2.0);
-    myPath->addKey(5.0, 2.0);
-    myPath->addKey(8.0, 5.0);
-    myPath->addKey(9.0, -5.0);
-
-
-
+    chart()->setTitle("Path Editor");
 
     // create line serie for drawing curve
     m_lines = new QLineSeries();
@@ -63,18 +47,6 @@ GraphView::GraphView(QWidget *parent)
     m_scatterSelected->setMarkerSize(12.0);
     m_scatterSelected->setMarkerShape(QScatterSeries::MarkerShapeCircle);
 
-
-
-    // spline lib
-   ///for(size_t i=0; i<X.size(); i++)
-   ///     *m_scatter << QPointF(X[i],Y[i]);
-    for(size_t i=0; i<myPath->getKeyCount(); i++)
-    {
-        PathKey pathkey = myPath->getKeyByIndex(i);
-        *m_scatter << QPointF(pathkey.time, pathkey.value);
-    }
-
-
     chart()->legend()->hide();
     chart()->addSeries(m_scatter);
     chart()->addSeries(m_scatterSelected);
@@ -83,9 +55,6 @@ GraphView::GraphView(QWidget *parent)
     chart()->axisY()->setRange(-10.0f, 10.0f);
 
     m_zoom = chart()->plotArea();
-
-    plot();
-
 
     m_mouseCoordX = new QGraphicsSimpleTextItem(chart());
     m_mouseCoordX->setPos(chart()->size().width()/2 - 50, chart()->size().height());
@@ -171,6 +140,17 @@ void GraphView::setPath(Path* path)
     Q_ASSERT(path);
 
     _currentPath = path;
+
+    m_scatter->clear();
+    m_scatterSelected->clear();
+
+    for(size_t i=0; i<_currentPath->getKeyCount(); i++)
+    {
+        PathKey pathkey = _currentPath->getKeyByIndex(i);
+        *m_scatter << QPointF(pathkey.time, pathkey.value);
+    }
+
+    plot();
 }
 
 void GraphView::resizeEvent(QResizeEvent *event)
@@ -214,6 +194,9 @@ static bool xPointLessThan(const QPointF &p1, const QPointF &p2)
 
 void GraphView::addNewPoint(QPointF newPoint)
 {
+    if(!_currentPath)
+        return;
+
     // don't add new point behind x origin
     if(newPoint.x() <= 0.0f)
         return;
@@ -236,11 +219,11 @@ void GraphView::rebuildKeys()
 
     // rebuild spline data
 
-    myPath->clear();
-    //myPath.resize(m_scatter->count());
+    _currentPath->clear();
+    //_currentPath.resize(m_scatter->count());
     for(int i=0; i<m_scatter->count(); ++i)
     {
-        myPath->addKey(m_scatter->at(i).x(), m_scatter->at(i).y());
+        _currentPath->addKey(m_scatter->at(i).x(), m_scatter->at(i).y());
     }
 }
 
@@ -283,7 +266,7 @@ void GraphView::mouseMoveEvent(QMouseEvent *event)
             return;
 
         // replace point at index
-        myPath->setAtIndex(pointIndex, newPoint.x(), newPoint.y());
+        _currentPath->setAtIndex(pointIndex, newPoint.x(), newPoint.y());
 
         // replace point (simulate moving)
         m_scatter->replace(_selectedPoint, newPoint);
@@ -393,17 +376,20 @@ bool GraphView::isKeyMovable(double newTime, int index)
 
 void GraphView::plot()
 {
+    if(!_currentPath || _currentPath->getKeyCount() <= 1)
+        return;
+
     // rebuild path
-    myPath->build();
+    _currentPath->build();
 
     // regenerate spline for drawing
     m_lines->clear();
     chart()->removeSeries(m_lines);
     for(size_t i=0; i<_splineResolution; i++)
     {
-        double max = myPath->getEndTime();
+        double max = _currentPath->getEndTime();
         double x = i*max/_splineResolution;
-        *m_lines << QPointF( x, myPath->evaluate(x));
+        *m_lines << QPointF( x, _currentPath->evaluate(x));
     }
     chart()->addSeries(m_lines);
 
@@ -417,6 +403,9 @@ void GraphView::plot()
 
 void GraphView::deleteSelectedKeys()
 {
+    if(!_currentPath)
+        return;
+
     for(int i=0; i<m_scatterSelected->count(); ++i)
     {
         QPointF p = m_scatterSelected->at(i);
