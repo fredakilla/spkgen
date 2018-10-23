@@ -1,17 +1,136 @@
 #include "GraphView.h"
 #include <QtCore/QtMath>
 #include <QtCore/QDebug>
-
 #include <QLabel>
+
+
+//------------------------------------------------------------------------------------
+// Path temp implementation
+//------------------------------------------------------------------------------------
+
+#include "thirdparty/splines/Splines.hh"
+using namespace SplinesLoad;
+static CubicSpline spline;
+std::vector<double> X(5), Y(5);
+
+
+struct PathKey
+{
+    double time;
+    double value;
+};
+
+
+class Path
+{
+public:
+    void addKey(double time, double value);
+    unsigned int getKeyCount() const;
+    const PathKey getKeyByIndex(unsigned int index) const;
+    void clear();
+    void resize(unsigned int newsize);
+    void setAtIndex(unsigned index, double time, double value);
+
+    const double* getTimesData() const noexcept;
+    const double* getValuesData() const noexcept;
+    double* getTimesData() noexcept;
+    double* getValuesData() noexcept;
+
+private:
+    std::vector<double> _times;
+    std::vector<double> _values;
+    Splines::SplineType _splineType;
+};
+
+class Path4
+{
+
+};
+
+class PathSampler
+{
+
+};
+
+class Path4Sampler
+{
+
+};
+
+//------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------
+
+void Path::addKey(double time, double value)
+{
+    _times.push_back(value);
+    _values.push_back(time);
+}
+
+unsigned int Path::getKeyCount() const
+{
+    return _times.size();
+}
+
+const PathKey Path::getKeyByIndex(unsigned int index) const
+{
+    assert(index < _times.size());
+
+    PathKey key;
+    key.time = _times.at(index);
+    key.value = _values.at(index);
+    return key;
+}
+
+void Path::clear()
+{
+    _times.clear();
+    _values.clear();
+}
+
+void Path::resize(unsigned int newsize)
+{
+    _times.resize(newsize);
+    _values.resize(newsize);
+}
+
+void Path::setAtIndex(unsigned index, double time, double value)
+{
+    assert(index < _times.size());
+    _times[index] = time;
+    _values[index] = value;
+}
+
+const double* Path::getTimesData() const noexcept
+{
+    return _times.data();
+}
+
+const double* Path::getValuesData() const noexcept
+{
+    return _values.data();
+}
+
+double* Path::getTimesData() noexcept
+{
+    return _times.data();
+}
+
+double* Path::getValuesData() noexcept
+{
+    return _values.data();
+}
+
+//------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------
+
+
+
+
 
 QT_CHARTS_USE_NAMESPACE
 
 
-
-#include "thirdparty/splines/Splines.hh"
-using namespace SplinesLoad;
-static AkimaSpline spline;
-std::vector<double> X(5), Y(5);
+Path myPath;
 
 
 #include "path.hpp"
@@ -41,6 +160,12 @@ GraphView::GraphView(QWidget *parent)
 
     X[0]=0.0; X[1]=0.4; X[2]=3.2; X[3]=3.8; X[4]=10.0;
     Y[0]=0.1; Y[1]=-3.7; Y[2]=2.6; Y[3]=1.1; Y[4]=-4.9;
+    myPath.addKey(0.0, 1.0);
+    myPath.addKey(2.0, 3.0);
+    myPath.addKey(4.0, -2.0);
+    myPath.addKey(5.0, 2.0);
+    myPath.addKey(8.0, 5.0);
+    myPath.addKey(9.0, -5);
 
 
     epath.addKey(0.0, 1.0,  ePI_CUBIC);
@@ -86,8 +211,14 @@ GraphView::GraphView(QWidget *parent)
 
 
     // spline lib
-   for(size_t i=0; i<X.size(); i++)
-        *m_scatter << QPointF(X[i],Y[i]);
+   //for(size_t i=0; i<X.size(); i++)
+   //     *m_scatter << QPointF(X[i],Y[i]);
+    for(size_t i=0; i<myPath.getKeyCount(); i++)
+    {
+        PathKey pathkey = myPath.getKeyByIndex(i);
+        *m_scatter << QPointF(pathkey.time, pathkey.value);
+    }
+
 
     // epath
     /*for(size_t i=0; i<epath.getKeyCount(); i++)
@@ -258,17 +389,26 @@ void GraphView::rebuildKeys()
 
     // rebuild spline data
 
-    X.clear();
-    Y.clear();
+    /// X.clear();
+    /// Y.clear();
+    ///
+    /// X.resize(m_scatter->count());
+    /// Y.resize(m_scatter->count());
+    ///
+    /// for(int i=0; i<m_scatter->count(); ++i)
+    /// {
+    ///     X[i] = m_scatter->at(i).x();
+    ///     Y[i] = m_scatter->at(i).y();
+    /// }
 
-    X.resize(m_scatter->count());
-    Y.resize(m_scatter->count());
-
+    myPath.clear();
+    myPath.resize(m_scatter->count());
     for(int i=0; i<m_scatter->count(); ++i)
     {
-        X[i] = m_scatter->at(i).x();
-        Y[i] = m_scatter->at(i).y();
+        myPath.addKey(m_scatter->at(i).x(), m_scatter->at(i).y());
     }
+
+
 }
 
 void GraphView::mousePressEvent(QMouseEvent *event)
@@ -313,17 +453,18 @@ void GraphView::mouseMoveEvent(QMouseEvent *event)
         qDebug() << "newpoint at " << newPoint.x() << "," << newPoint.y();
 
         // reset spline, update data at current point and rebuild spline
-        ///spline.clear();
-        ///myPath.getTimeKeyAtIndex(pointIndex) = newPoint.x();
-        ///myPath.getValueKeyAtIndex(pointIndex) = newPoint.y();
-        ///spline.build(myPath.getTimeKeys(), myPath.getValueKeys(), myPath.size());
+        //spline.clear();
+        //myPath.getTimeKeyAtIndex(pointIndex) = newPoint.x();
+        //myPath.getValueKeyAtIndex(pointIndex) = newPoint.y();
+        //spline.build(myPath.getTimeKeys(), myPath.getValueKeys(), myPath.size());
 
-        X[pointIndex] = newPoint.x();
-        Y[pointIndex] = newPoint.y();
-        ///spline.build(X.data(), Y.data(), X.size());
+        ////X[pointIndex] = newPoint.x();
+        ////Y[pointIndex] = newPoint.y();
+        myPath.setAtIndex(pointIndex, newPoint.x(), newPoint.y());
 
-        ///epath.getKeyByIndex(pointIndex).time = newPoint.x();
-        ///epath.getKeyByIndex(pointIndex).val = newPoint.y();
+        //spline.build(X.data(), Y.data(), X.size());
+        //epath.getKeyByIndex(pointIndex).time = newPoint.x();
+        //epath.getKeyByIndex(pointIndex).val = newPoint.y();
 
 
         // replace point (simulate moving)
@@ -443,6 +584,7 @@ void GraphView::plot()
     // rebuild spline
     spline.clear();
     spline.build(X.data(), Y.data(), X.size());
+    ///spline.build(myPath.getTimesData(), myPath.getValuesData(), myPath.getKeyCount());
 
     // regenerate spline for drawing
     m_lines->clear();
@@ -450,7 +592,7 @@ void GraphView::plot()
     for(size_t i=0; i<_splineResolution; i++)
     {
         // spline lib
-        double max = X.back();
+        double max = myPath.getKeyByIndex(0).time; ///X.back();
         double x = i*max/_splineResolution;
         *m_lines << QPointF( x, spline(x));
 
