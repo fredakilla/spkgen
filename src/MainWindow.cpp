@@ -6,21 +6,15 @@
 #include <QDebug>
 #include <QMenuBar>
 
-
-
 #include "Nodestyle.h"
 #include "SpkZones.h"
 #include "SpkSystem.h"
 #include "SpkEmitters.h"
 #include "SpkModifiers.h"
 #include "SpkInterpolators.h"
-#include "GraphView.h"
 
 #include <nodes/DataModelRegistry>
 using QtNodes::DataModelRegistry;
-
-
-
 
 
 static std::shared_ptr<DataModelRegistry> registerDataModels()
@@ -35,7 +29,6 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkZoneBox>("zones");
     ret->registerModel<NodeSparkZoneCylinder>("zones");
     ret->registerModel<NodeSparkZoneRing>("zones");
-
 
     ret->registerModel<NodeSparkGroup>("system");
     ret->registerModel<NodeSparkSystem>("system");
@@ -62,7 +55,6 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkModifierEmitterAttacher>("modifiers");
     ret->registerModel<NodeSparkModifierLinearForce>("modifiers");
 
-
     ret->registerModel<NodeSparkInterpolator_ColorInitializerDefault>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ColorInitializerRandom>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ColorInterpolatorSimple>("interpolators");
@@ -73,11 +65,6 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkInterpolator_ParamInitializerRandom>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ParamInterpolatorSimple>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ParamInterpolatorRandom>("interpolators");
-
-
-
-
-
 
     return ret;
 }
@@ -110,22 +97,22 @@ MainWindow::MainWindow(QWidget* parent)
     _dockNodeGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::BottomDockWidgetArea, _dockNodeGraph);
 
-    GraphView* pathView = new GraphView(this);
+    _pathView = new GraphView(this);
 
     _dockGraph = new QDockWidget("Graph", this);
-    _dockGraph->setWidget(pathView);
+    _dockGraph->setWidget(_pathView);
     _dockGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::TopDockWidgetArea, _dockGraph);
 
 
-    Path* myPath = new Path(PathType::EPT_AKIMA);
+    Path* myPath = new Path(PathType::EPT_LINEAR);
     myPath->addKey(0.0, 1.0);
     myPath->addKey(2.0, 3.0);
     myPath->addKey(4.0, -2.0);
     myPath->addKey(5.0, 2.0);
     myPath->addKey(8.0, 5.0);
     myPath->addKey(9.0, -5.0);
-    pathView->setPath(myPath);
+    _pathView->setPath(myPath);
 
 
     connect(_nodeScene, &FlowScene::nodeDoubleClicked, this, &MainWindow::showNode);

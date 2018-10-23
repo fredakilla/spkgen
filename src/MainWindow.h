@@ -6,6 +6,7 @@
 
 #include "RenderViewWidget.h"
 #include "CustomFlowScene.h"
+#include "GraphView.h"
 
 class MainWindow : public QMainWindow
 {
@@ -38,6 +39,7 @@ private:
     CustomFlowScene* _nodeScene;
     FlowView* _nodeView;
     RenderViewWidget* _renderView;
+    GraphView* _pathView;
     QDockWidget* _dockView;
     QDockWidget* _dockNodeGraph;
     QDockWidget* _dockGraph;
