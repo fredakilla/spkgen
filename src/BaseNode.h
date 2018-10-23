@@ -7,6 +7,7 @@
 #include "Types.h"
 #include <spark/SPARK.h>
 #include <gplay-engine.h>
+#include "Path.h"
 
 using QtNodes::NodeDataModel;
 using QtNodes::NodeDataType;
@@ -27,6 +28,7 @@ enum NodeClass
     ENC_MODIFIER,
     ENC_COLORINTERPOLATOR,
     ENC_PARAMINTERPOLATOR,
+    ENC_PATH,
 };
 
 static const NodeDataType NODE_DATA_TYPE[] =
@@ -39,6 +41,7 @@ static const NodeDataType NODE_DATA_TYPE[] =
     { "modifier"            , "modifier"            },
     { "colorinterpolator"   , "colorinterpolator"   },
     { "paraminterpolator"   , "paraminterpolator"   },
+    { "path"                , "path"                },
 };
 
 
@@ -266,6 +269,8 @@ struct ParamFloatInterpolator
 
 typedef MyNodeData<SPK::Ref<SPK::Interpolator<SPK::Color>>, ENC_COLORINTERPOLATOR>  NodeDataSparkColorInterpolator;
 typedef MyNodeData<std::vector<ParamFloatInterpolator>, ENC_PARAMINTERPOLATOR>      NodeDataSparkParamInterpolatorList;
+
+typedef MyNodeData<Path*, ENC_PATH>     NodeDataPath;
 
 
 

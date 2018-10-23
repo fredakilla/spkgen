@@ -4,6 +4,22 @@
 #include "BaseNode.h"
 
 //------------------------------------------------------------------------------------------------------------------------------
+// path node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodePath : public BaseNode
+{
+    Path* _path;
+private:
+    const QString Name() const override { return QString("Path"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataPath>(_path); }
+    void process() override;
+public:
+    NodePath();
+    Path* getResult() { return _path; }
+};
+
+
+//------------------------------------------------------------------------------------------------------------------------------
 // base spark color interpolator class
 //------------------------------------------------------------------------------------------------------------------------------
 class NodeSparkColorInterpolatorBase : public NodeSparkBaseNode

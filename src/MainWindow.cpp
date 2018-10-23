@@ -55,6 +55,7 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
     ret->registerModel<NodeSparkModifierEmitterAttacher>("modifiers");
     ret->registerModel<NodeSparkModifierLinearForce>("modifiers");
 
+    ret->registerModel<NodePath>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ColorInitializerDefault>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ColorInitializerRandom>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ColorInterpolatorSimple>("interpolators");
@@ -214,6 +215,7 @@ void MainWindow::timerEvent(QTimerEvent* event)
 
 void MainWindow::showNode(QtNodes::Node& node)
 {
+    // is a system node ?
     NodeSparkSystem* systemNode = dynamic_cast<NodeSparkSystem*>(node.nodeDataModel());
     if(systemNode)
     {
@@ -221,6 +223,19 @@ void MainWindow::showNode(QtNodes::Node& node)
         {
            GPDevice::get().setCurentParticleSystem(systemNode->getResult());
         }
+
+        return;
+    }
+
+    // is a Path node ?
+    NodePath* pathNode = dynamic_cast<NodePath*>(node.nodeDataModel());
+    if(pathNode)
+    {
+        if(pathNode->getResult() != nullptr)
+        {
+            _pathView->setPath(pathNode->getResult());
+        }
+        return;
     }
 }
 

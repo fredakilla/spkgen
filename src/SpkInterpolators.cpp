@@ -17,6 +17,36 @@ SPK::InterpolationType TABLE_INTERPOLATION_TYPE[] =
     SPK::INTERPOLATOR_VELOCITY
 };
 
+
+//------------------------------------------------------------------------------------------------------------------------------
+// path node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodePath::NodePath() : _path(nullptr)
+{
+    OUT_PORT(ENC_PATH, "path");
+
+    PARAM_BUTTON("button", "Edit path");
+    PARAM_ENUM("PathType", "Constant|Linear|Cubic|Akima|Bessel|Pchip|Quintic", 1);
+
+    _path = new Path(PathType::EPT_CUBIC);
+    _path->addKey(0.0, 0.0);
+    _path->addKey(1.0, 0.0);
+}
+
+void NodePath::process()
+{
+    PathType pathType = (PathType)getParameter("PathType")->getValueAsEnum();
+
+    if(_path)
+        delete _path;
+
+    _path = new Path(pathType);
+    _path->addKey(0.0, 0.0);
+    _path->addKey(1.0, 0.0);
+}
+
+
 //------------------------------------------------------------------------------------------------------------------------------
 // base spark interpolator class
 //------------------------------------------------------------------------------------------------------------------------------
@@ -185,6 +215,7 @@ void NodeSparkInterpolator_ColorInterpolatorRandom::process()
 
 NodeSparkInterpolator_ColorInterpolatorGraph::NodeSparkInterpolator_ColorInterpolatorGraph()
 {
+    IN_PORT(ENC_PATH, "path")
     OUT_PORT(ENC_COLORINTERPOLATOR, "colors");
 
     createBaseObjectParams(Name());
