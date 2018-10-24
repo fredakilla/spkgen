@@ -36,7 +36,8 @@
 #include <QtCharts/QSplineSeries>
 #include <QtCharts/QCategoryAxis>
 
-#include "Path.h"
+#include "SpkInterpolators.h"
+
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -55,7 +56,7 @@ public:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
-    void setPath(Path* path);
+    void setPathNode(NodePath* node);
 
 private Q_SLOTS:
     void handleClickedPoint(const QPointF &point);
@@ -68,6 +69,7 @@ private:
     bool isKeyMovable(double newTime, int index);
     void plot();
 
+    NodePath* _pathNode;
     Path* _currentPath;
     QScatterSeries* m_scatter;
     QScatterSeries* m_scatterSelected;

@@ -107,16 +107,6 @@ MainWindow::MainWindow(QWidget* parent)
     addDockWidget(Qt::TopDockWidgetArea, _dockGraph);
 
 
-    Path* myPath = new Path(PathType::EPT_LINEAR);
-    myPath->addKey(0.0, 1.0);
-    myPath->addKey(2.0, 3.0);
-    myPath->addKey(4.0, -2.0);
-    myPath->addKey(5.0, 2.0);
-    myPath->addKey(8.0, 5.0);
-    myPath->addKey(9.0, -5.0);
-    _pathView->setPath(myPath);
-
-
     connect(_nodeScene, &FlowScene::nodeDoubleClicked, this, &MainWindow::showNode);
     connect(_nodeScene, &FlowScene::nodeCreated, this, &MainWindow::initNode);
     connect(_renderView, &RenderViewWidget::windowResized, this, &MainWindow::resizeRenderView);
@@ -233,7 +223,7 @@ void MainWindow::showNode(QtNodes::Node& node)
     {
         if(pathNode->getResult() != nullptr)
         {
-            _pathView->setPath(pathNode->getResult());
+            _pathView->setPathNode(pathNode);
         }
         return;
     }

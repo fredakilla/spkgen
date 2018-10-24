@@ -51,8 +51,8 @@ GraphView::GraphView(QWidget *parent)
     chart()->addSeries(m_scatter);
     chart()->addSeries(m_scatterSelected);
     chart()->createDefaultAxes();
-    chart()->axisX()->setRange(0.0f, 10.0f);
-    chart()->axisY()->setRange(-10.0f, 10.0f);
+    chart()->axisX()->setRange(0.0f, 5.0f);
+    chart()->axisY()->setRange(-1.0f, 1.0f);
 
     m_zoom = chart()->plotArea();
 
@@ -135,11 +135,12 @@ GraphView::~GraphView()
 {
 }
 
-void GraphView::setPath(Path* path)
+void GraphView::setPathNode(NodePath* node)
 {
-    Q_ASSERT(path);
+    Q_ASSERT(node);
 
-    _currentPath = path;
+    _pathNode = node;
+    _currentPath = node->getResult();
 
     m_scatter->clear();
     m_scatterSelected->clear();
@@ -376,7 +377,7 @@ bool GraphView::isKeyMovable(double newTime, int index)
 
 void GraphView::plot()
 {
-    if(!_currentPath || _currentPath->getKeyCount() <= 1)
+    if(!_pathNode || !_currentPath || _currentPath->getKeyCount() <= 1)
         return;
 
     // rebuild path
@@ -395,10 +396,13 @@ void GraphView::plot()
 
     // need to setup axes after new added serie
     chart()->createDefaultAxes();
-    chart()->axisX()->setRange(0.0f, 10.0f);
-    chart()->axisY()->setRange(-10.0f, 10.0f);
+    chart()->axisX()->setRange(0.0f, 5.0f);
+    chart()->axisY()->setRange(-1.0f, 1.0f);
 
     chart()->zoomIn(m_zoom);
+
+    // trigger node connections and updates in flow graph
+    _pathNode->dataUpdated(0);
 }
 
 void GraphView::deleteSelectedKeys()

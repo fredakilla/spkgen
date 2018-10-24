@@ -11,10 +11,10 @@ SPK::Param TABLE_PARAM[] =
 
 SPK::InterpolationType TABLE_INTERPOLATION_TYPE[] =
 {
-    SPK::INTERPOLATOR_LIFETIME,
-    SPK::INTERPOLATOR_AGE,
-    SPK::INTERPOLATOR_PARAM,
-    SPK::INTERPOLATOR_VELOCITY
+    SPK::INTERPOLATOR_LIFETIME,     // interpolation is done from 0 to 100% between 0 and 1 in graph
+    SPK::INTERPOLATOR_AGE,          // interpolation is done from 0 to max particle lifetime in seconds (see group)
+    SPK::INTERPOLATOR_PARAM,        // interpolation affect selected param
+    SPK::INTERPOLATOR_VELOCITY      // interpolation is based on the particle velocity
 };
 
 
@@ -29,7 +29,8 @@ NodePath::NodePath() : _path(nullptr)
     PARAM_BUTTON("button", "Edit path");
     PARAM_ENUM("PathType", "Constant|Linear|Cubic|Akima|Bessel|Pchip|Quintic", 1);
 
-    _path = new Path(PathType::EPT_CUBIC);
+    _path = new Path(PathType::EPT_LINEAR);
+    _path->setLoopMode(PathLoopMode::ELM_LAST);
     _path->addKey(0.0, 0.0);
     _path->addKey(1.0, 0.0);
 }
@@ -38,12 +39,7 @@ void NodePath::process()
 {
     PathType pathType = (PathType)getParameter("PathType")->getValueAsEnum();
 
-    if(_path)
-        delete _path;
-
-    _path = new Path(pathType);
-    _path->addKey(0.0, 0.0);
-    _path->addKey(1.0, 0.0);
+    // change path propeties in graph editor.
 }
 
 
@@ -229,10 +225,50 @@ void NodeSparkInterpolator_ColorInterpolatorGraph::process()
     SPK::InterpolationType interpolateType =  TABLE_INTERPOLATION_TYPE[ getParameter("Type")->getValueAsEnum() ];
     SPK::Param param =  TABLE_PARAM[ getParameter("Param")->getValueAsEnum() ];
 
+    // get path from input
+
+    Path* path = nullptr;
+    std::shared_ptr<NodeDataPath> inPath = getInput<NodeDataPath>(0);
+    if(inPath.get() && inPath->_result)
+    {
+        path = inPath->_result;
+    }
+    else
+    {
+        // error
+        return;
+    }
+
     // create new interpolator
     SPK::Ref<SPK::GraphInterpolator<SPK::Color>> graphInterpolator;
     graphInterpolator = SPK::GraphInterpolator<SPK::Color>::create();
     graphInterpolator->setType(interpolateType, param);
+
+
+    // fo each keys, evaluate value and add it into the spark interpolator graph
+    for (eU32 i=0; i<path->getKeyCount(); ++i)
+    {
+        // get time key
+        eF32 time = path->getKeyByIndex(i).time;
+
+        // evaluate color value at time
+        SPK::Color color;
+        color.r = path->evaluate(time) * 255.0;
+        color.g = 0;
+        color.b = 0;
+        color.a = 255;
+
+        /*SPK::Color color;
+                color.r = path.getSubPath(0).getKeyByTime(time)->val * 255.0f;
+                color.g = path.getSubPath(1).getKeyByTime(time)->val * 255.0f;
+                color.b = path.getSubPath(2).getKeyByTime(time)->val * 255.0f;
+                color.a = path.getSubPath(3).getKeyByTime(time)->val * 255.0f;*/
+
+        // add new graph entry
+        graphInterpolator->addEntry(time, color);
+    }
+
+
 
     // set base spark object parameters
     setBaseObjectParams(graphInterpolator);
