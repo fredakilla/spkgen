@@ -36,9 +36,6 @@ public:
 
     void update(float elapsedTime) override;
     void resize(int width, int height) override;
-
-    void onMouseEvent();
-    void onKeyEvent();
     Urho3D::Scene* getScene() { return _scene; }
 
 protected:
