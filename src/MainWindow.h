@@ -4,9 +4,9 @@
 #include <QMainWindow>
 #include <QDockWidget>
 
-#include "RenderViewWidget.h"
-#include "CustomFlowScene.h"
+#include "node-editor/common/CustomFlowScene.h"
 #include "GraphView.h"
+#include "RenderWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -17,31 +17,36 @@ public:
     ~MainWindow();
 
 private Q_SLOTS:
-    void resizeRenderView(const QSize& size);
-    void showNode(Node& node);
     void newFile();
     void open();
     void save();
-    void initNode(QtNodes::Node& node);
+    void onRenderViewResized(int width, int height);
 
 private:
     void shutdown();
+    void createWidgets();
     void createActions();
     void createMenus();
     void closeEvent(QCloseEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
 
-    QMenu *fileMenu;
-    QAction *newAct;
-    QAction *openAct;
-    QAction *saveAct;
 
-    CustomFlowScene* _nodeScene;
-    FlowView* _nodeView;
-    RenderViewWidget* _renderView;
+    std::shared_ptr<DataModelRegistry> _sparkNodesRegistry;
+
+    // GUI stuff
+
+    QMenu* _fileMenu;
+    QAction* _newAct;
+    QAction* _openAct;
+    QAction* _saveAct;
+
+    CustomFlowScene* _nodeFlowScene;
+    FlowView* _nodeFlowView;
+    QWidget* _viewportContainer;
+    RenderWidget* _renderView;
     GraphView* _pathView;
     QDockWidget* _dockView;
-    QDockWidget* _dockNodeGraph;
+    QDockWidget* _dockNodeFlowView;
     QDockWidget* _dockGraph;
     int _gameLoopTimerId;
 };

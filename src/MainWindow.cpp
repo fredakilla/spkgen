@@ -1,103 +1,72 @@
 #include "MainWindow.h"
-#include "GPDevice.h"
+#include "UrhoDevice.h"
 
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QDebug>
 #include <QMenuBar>
+#include <QApplication>
+#include <QVBoxLayout>
 
-#include "Nodestyle.h"
-#include "SpkZones.h"
-#include "SpkSystem.h"
-#include "SpkEmitters.h"
-#include "SpkModifiers.h"
-#include "SpkInterpolators.h"
+#include "node-editor/common/Nodestyle.h"
+#include "node-editor/spark-nodes/SparkNodesRegistry.h"
 
-#include <nodes/DataModelRegistry>
-using QtNodes::DataModelRegistry;
-
-
-static std::shared_ptr<DataModelRegistry> registerDataModels()
-{
-    auto ret = std::make_shared<DataModelRegistry>();
-
-    ret->registerModel<NodeSparkTest>("test");
-
-    ret->registerModel<NodeSparkZonePoint>("zones");
-    ret->registerModel<NodeSparkZonePlane>("zones");
-    ret->registerModel<NodeSparkZoneSphere>("zones");
-    ret->registerModel<NodeSparkZoneBox>("zones");
-    ret->registerModel<NodeSparkZoneCylinder>("zones");
-    ret->registerModel<NodeSparkZoneRing>("zones");
-
-    ret->registerModel<NodeSparkGroup>("system");
-    ret->registerModel<NodeSparkSystem>("system");
-    ret->registerModel<NodeSparkGroupList>("system");
-    ret->registerModel<NodeSparkQuadRenderer>("renderer");
-
-    ret->registerModel<NodeSparkEmitterList>("emitters");
-    ret->registerModel<NodeSparkEmitterStatic>("emitters");
-    ret->registerModel<NodeSparkEmitterSpheric>("emitters");
-    ret->registerModel<NodeSparkEmitterRandom>("emitters");
-    ret->registerModel<NodeSparkEmitterStraight>("emitters");
-    ret->registerModel<NodeSparkEmitterNormal>("emitters");
-
-    ret->registerModel<NodeSparkModifierList>("modifiers");
-    ret->registerModel<NodeSparkModifierGravity>("modifiers");
-    ret->registerModel<NodeSparkModifierFriction>("modifiers");
-    ret->registerModel<NodeSparkModifierCollider>("modifiers");
-    ret->registerModel<NodeSparkModifierDestroyer>("modifiers");
-    ret->registerModel<NodeSparkModifierObstacle>("modifiers");
-    ret->registerModel<NodeSparkModifierPointMass>("modifiers");
-    ret->registerModel<NodeSparkModifierRandomForce>("modifiers");
-    ret->registerModel<NodeSparkModifierRotator>("modifiers");
-    ret->registerModel<NodeSparkModifierVortex>("modifiers");
-    ret->registerModel<NodeSparkModifierEmitterAttacher>("modifiers");
-    ret->registerModel<NodeSparkModifierLinearForce>("modifiers");
-
-    ret->registerModel<NodePath>("interpolators");
-    ret->registerModel<NodeSparkInterpolator_ColorInitializerDefault>("interpolators");
-    ret->registerModel<NodeSparkInterpolator_ColorInitializerRandom>("interpolators");
-    ret->registerModel<NodeSparkInterpolator_ColorInterpolatorSimple>("interpolators");
-    ret->registerModel<NodeSparkInterpolator_ColorInterpolatorRandom>("interpolators");
-    ret->registerModel<NodeSparkInterpolator_ColorInterpolatorGraph>("interpolators");
-
-    ret->registerModel<NodeSparkInterpolatorParamList>("interpolators");
-    ret->registerModel<NodeSparkInterpolator_ParamInitializer>("interpolators");
-    ret->registerModel<NodeSparkInterpolator_ParamInitializerRandom>("interpolators");
-    ret->registerModel<NodeSparkInterpolator_ParamInterpolatorSimple>("interpolators");
-    ret->registerModel<NodeSparkInterpolator_ParamInterpolatorRandom>("interpolators");
-
-    return ret;
-}
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     //setNodeStyle();
+    createWidgets();
     createActions();
     createMenus();
 
-    _renderView = new RenderViewWidget(this);
+    // create Nodes registry
+    _sparkNodesRegistry = registerSparkNodesDataModels();
+    _nodeFlowScene->setRegistry(_sparkNodesRegistry);
 
-    _dockView = new QDockWidget("View", this);
-    _dockView->setWidget(_renderView);
+    // create render view
+    UrhoDevice::getInstance()->createRenderWindow((void*)_renderView->winId());
+
+    _gameLoopTimerId = startTimer(0);
+}
+
+MainWindow::~MainWindow()
+{
+    delete _nodeFlowScene;
+    delete _nodeFlowView;
+    delete _renderView;
+    delete _viewportContainer;
+    delete _dockView;
+    delete _dockNodeFlowView;
+}
+
+void MainWindow::createWidgets()
+{
+    _renderView = new RenderWidget(this);
+    _renderView->setMouseTracking(true);
+    _renderView->setFocusPolicy(Qt::StrongFocus);
+
+    _viewportContainer = new QWidget(this);
+    _viewportContainer->setLayout(new QVBoxLayout());
+    _viewportContainer->layout()->addWidget(_renderView);
+
+    _dockView = new QDockWidget("Viewport", this);
+    _dockView->setWidget(_viewportContainer);
     _dockView->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::TopDockWidgetArea, _dockView);
 
-    GPDevice::get().createRenderWindow((void*)_renderView->winId());
+    _nodeFlowScene = new CustomFlowScene();
 
-    _nodeScene = new CustomFlowScene(registerDataModels());
-    _nodeView = new FlowView(_nodeScene);
-    _nodeView->setWindowTitle("Node-based flow editor");
-    _nodeView->resize(800, 600);
-    _nodeView->show();
-    _nodeView->scale(0.9, 0.9);
+    _nodeFlowView = new FlowView(_nodeFlowScene);
+    _nodeFlowView->setWindowTitle("Node-based flow editor");
+    _nodeFlowView->resize(800, 600);
+    _nodeFlowView->show();
+    _nodeFlowView->scale(0.9, 0.9);
 
-    _dockNodeGraph = new QDockWidget("NodeGraph", this);
-    _dockNodeGraph->setWidget(_nodeView);
-    _dockNodeGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
-    addDockWidget(Qt::BottomDockWidgetArea, _dockNodeGraph);
+    _dockNodeFlowView = new QDockWidget("NodeGraph", this);
+    _dockNodeFlowView->setWidget(_nodeFlowView);
+    _dockNodeFlowView->setAllowedAreas(Qt::AllDockWidgetAreas);
+    addDockWidget(Qt::BottomDockWidgetArea, _dockNodeFlowView);
 
     _pathView = new GraphView(this);
 
@@ -106,72 +75,60 @@ MainWindow::MainWindow(QWidget* parent)
     _dockGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::TopDockWidgetArea, _dockGraph);
 
-
-    connect(_nodeScene, &FlowScene::nodeDoubleClicked, this, &MainWindow::showNode);
-    connect(_nodeScene, &FlowScene::nodeCreated, this, &MainWindow::initNode);
-    connect(_renderView, &RenderViewWidget::windowResized, this, &MainWindow::resizeRenderView);
+    // make some connections
+    connect(_nodeFlowScene, &CustomFlowScene::showPathNodeRequest, _pathView, &GraphView::setPathNode);
+    connect(_renderView, &RenderWidget::resized, this, &MainWindow::onRenderViewResized);
 
     // connect to FlowView deleteSelectionAction a method to delete comments graphics items.
-    QAction* deleteAction = _nodeView->deleteSelectionAction();
-    connect(deleteAction, &QAction::triggered, _nodeScene, &CustomFlowScene::deleteSelectedComments);
-
-    _gameLoopTimerId = startTimer(0);
-}
-
-MainWindow::~MainWindow()
-{
-    delete _nodeScene;
-    delete _nodeView;
-    delete _renderView;
-    delete _dockView;
-    delete _dockNodeGraph;
+    QAction* deleteAction = _nodeFlowView->deleteSelectionAction();
+    connect(deleteAction, &QAction::triggered, _nodeFlowScene, &CustomFlowScene::deleteSelectedComments);
 }
 
 void MainWindow::createActions()
 {
-    newAct = new QAction(tr("&New"), this);
-    newAct->setShortcuts(QKeySequence::New);
-    newAct->setStatusTip(tr("New"));
-    connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
+    _newAct = new QAction(tr("&New"), this);
+    _newAct->setShortcuts(QKeySequence::New);
+    _newAct->setStatusTip(tr("New"));
+    connect(_newAct, &QAction::triggered, this, &MainWindow::newFile);
 
-    openAct = new QAction(tr("&Open"), this);
-    openAct->setShortcuts(QKeySequence::Open);
-    openAct->setStatusTip(tr("Open"));
-    connect(openAct, &QAction::triggered, this, &MainWindow::open);
+    _openAct = new QAction(tr("&Open"), this);
+    _openAct->setShortcuts(QKeySequence::Open);
+    _openAct->setStatusTip(tr("Open"));
+    connect(_openAct, &QAction::triggered, this, &MainWindow::open);
 
-    saveAct = new QAction(tr("&Save"), this);
-    saveAct->setShortcuts(QKeySequence::Save);
-    saveAct->setStatusTip(tr("Save"));
-    connect(saveAct, &QAction::triggered, this, &MainWindow::save);
+    _saveAct = new QAction(tr("&Save"), this);
+    _saveAct->setShortcuts(QKeySequence::Save);
+    _saveAct->setStatusTip(tr("Save"));
+    connect(_saveAct, &QAction::triggered, this, &MainWindow::save);
 }
 
 void MainWindow::createMenus()
 {
-    fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(newAct);
-    fileMenu->addAction(openAct);
-    fileMenu->addAction(saveAct);
+    _fileMenu = menuBar()->addMenu(tr("&File"));
+    _fileMenu->addAction(_newAct);
+    _fileMenu->addAction(_openAct);
+    _fileMenu->addAction(_saveAct);
 }
 
 void MainWindow::newFile()
 {
-    _nodeScene->clearScene();
-    _nodeScene->clearComments();
+    _nodeFlowScene->clearScene();
+    _nodeFlowScene->clearComments();
 }
 
 void MainWindow::open()
 {
-    _nodeScene->load();
+    _nodeFlowScene->load();
 }
 
 void MainWindow::save()
 {
-    _nodeScene->save();
+    _nodeFlowScene->save();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "APP_NAME",
+    QMessageBox::StandardButton resBtn = QMessageBox::question( this, qApp->applicationName(),
                                                                     tr("Are you sure?\n"),
                                                                     QMessageBox::No | QMessageBox::Yes,
                                                                     QMessageBox::Yes);
@@ -189,48 +146,16 @@ void MainWindow::closeEvent(QCloseEvent* event)
 void MainWindow::shutdown()
 {
     killTimer(_gameLoopTimerId);
-    GPDevice::get().stop();
-}
-
-void MainWindow::resizeRenderView(const QSize& size)
-{
-    GPDevice::get().resizeRenderView(size.width(), size.height());
+    UrhoDevice::getInstance()->stop();
 }
 
 void MainWindow::timerEvent(QTimerEvent* event)
 {
-    QWidget::timerEvent(event);
-    GPDevice::get().frame();
+    QMainWindow::timerEvent(event);
+    UrhoDevice::getInstance()->runFrame();
 }
 
-void MainWindow::showNode(QtNodes::Node& node)
+void MainWindow::onRenderViewResized(int width, int height)
 {
-    // is a system node ?
-    NodeSparkSystem* systemNode = dynamic_cast<NodeSparkSystem*>(node.nodeDataModel());
-    if(systemNode)
-    {
-        if(systemNode->getResult().get() != nullptr)
-        {
-           GPDevice::get().setCurentParticleSystem(systemNode->getResult());
-        }
-
-        return;
-    }
-
-    // is a Path node ?
-    NodePath* pathNode = dynamic_cast<NodePath*>(node.nodeDataModel());
-    if(pathNode)
-    {
-        if(pathNode->getResult() != nullptr)
-        {
-            _pathView->setPathNode(pathNode);
-        }
-        return;
-    }
-}
-
-void MainWindow::initNode(QtNodes::Node& node)
-{
-    BaseNode* baseNode = dynamic_cast<BaseNode*>(node.nodeDataModel());
-    baseNode->init();
+    UrhoDevice::getInstance()->onResize(width, height);
 }

@@ -36,7 +36,7 @@
 #include <QtCharts/QSplineSeries>
 #include <QtCharts/QCategoryAxis>
 
-#include "SpkInterpolators.h"
+#include "node-editor/spark-nodes/SpkInterpolators.h"
 
 
 QT_CHARTS_USE_NAMESPACE
@@ -56,6 +56,8 @@ public:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
+
+public Q_SLOTS:
     void setPathNode(NodePath* node);
 
 private Q_SLOTS:
