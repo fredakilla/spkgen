@@ -21,6 +21,11 @@ BaseRenderer3D::BaseRenderer3D() :
     _viewport = new Viewport(context_, _scene, camera);
     renderer->SetViewport(0, _viewport);
 
+
+    _debugRenderer = new DebugRenderer(context_);
+    _scene->AddComponent(_debugRenderer, 0, LOCAL);
+
+
     _grid.CreateGrid(_scene);
     _grid.ShowGrid();
 }

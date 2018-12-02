@@ -40,6 +40,7 @@ public:
 
 protected:
     Urho3D::SharedPtr<Urho3D::Scene> _scene;
+    Urho3D::SharedPtr<Urho3D::DebugRenderer> _debugRenderer;
     Urho3D::SharedPtr<Urho3D::Viewport> _viewport;
     CameraController* _cameraController;
     GridGeometry _grid;

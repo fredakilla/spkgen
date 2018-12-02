@@ -5,34 +5,153 @@
 #include <Urhox/Spark/SparkParticleEffect.h>
 #include <Urhox/Spark/SPK_Urho3D_QuadRenderer.h>
 #include "SpkUtils.h"
+#include "../../UrhoDevice.h"
+
+#include <Urho3D/Urho3DAll.h>
 
 
-void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone)
+static Vector3 PointOnSphere(const Sphere& sphere, unsigned theta, unsigned phi)
 {
-   /* // every zone has a position
+    return Vector3(
+        sphere.center_.x_ + sphere.radius_ * Sin((float)theta) * Sin((float)phi),
+        sphere.center_.y_ + sphere.radius_ * Cos((float)phi),
+        sphere.center_.z_ + sphere.radius_ * Cos((float)theta) * Sin((float)phi)
+    );
+}
+
+void DrawDebugSphere(const Sphere& sphere, const Matrix3x4& transform, const Color& color, bool depthTest, DebugRenderer* debugDraw)
+{
+    unsigned uintColor = color.ToUInt();
+
+    unsigned step = 28;
+
+    for (unsigned j = 0; j < 180; j += step)
+    {
+        for (unsigned i = 0; i < 360; i += step)
+        {
+            Vector3 p1 = transform * PointOnSphere(sphere, i, j);
+            Vector3 p2 = transform * PointOnSphere(sphere, i + step, j);
+            Vector3 p3 = transform * PointOnSphere(sphere, i, j + step);
+            Vector3 p4 = transform * PointOnSphere(sphere, i + step, j + step);
+
+            debugDraw->AddLine(p1, p2, uintColor, depthTest);
+            debugDraw->AddLine(p3, p4, uintColor, depthTest);
+            debugDraw->AddLine(p1, p3, uintColor, depthTest);
+            debugDraw->AddLine(p2, p4, uintColor, depthTest);
+        }
+    }
+}
+
+void DrawDebugBox(const BoundingBox& box, const Matrix3x4& transform, const Color& color, bool depthTest, DebugRenderer* debugDraw)
+{
+    const Vector3& min = box.min_;
+    const Vector3& max = box.max_;
+
+    Vector3 v0(transform * min);
+    Vector3 v1(transform * Vector3(max.x_, min.y_, min.z_));
+    Vector3 v2(transform * Vector3(max.x_, max.y_, min.z_));
+    Vector3 v3(transform * Vector3(min.x_, max.y_, min.z_));
+    Vector3 v4(transform * Vector3(min.x_, min.y_, max.z_));
+    Vector3 v5(transform * Vector3(max.x_, min.y_, max.z_));
+    Vector3 v6(transform * Vector3(min.x_, max.y_, max.z_));
+    Vector3 v7(transform * max);
+
+    unsigned uintColor = color.ToUInt();
+
+    debugDraw->AddLine(v0, v1, uintColor, depthTest);
+    debugDraw->AddLine(v1, v2, uintColor, depthTest);
+    debugDraw->AddLine(v2, v3, uintColor, depthTest);
+    debugDraw->AddLine(v3, v0, uintColor, depthTest);
+    debugDraw->AddLine(v4, v5, uintColor, depthTest);
+    debugDraw->AddLine(v5, v7, uintColor, depthTest);
+    debugDraw->AddLine(v7, v6, uintColor, depthTest);
+    debugDraw->AddLine(v6, v4, uintColor, depthTest);
+    debugDraw->AddLine(v0, v4, uintColor, depthTest);
+    debugDraw->AddLine(v1, v5, uintColor, depthTest);
+    debugDraw->AddLine(v2, v7, uintColor, depthTest);
+    debugDraw->AddLine(v3, v6, uintColor, depthTest);
+}
+
+void DrawDebugCylinder(const Vector3& position, float radius, float halfHeight, const Quaternion& rotation, const Color& color, bool depthTest, DebugRenderer* debugDraw)
+{
+    Sphere sphere(Vector3::ZERO, radius);
+    Vector3 halfHeightVec = rotation * Vector3(0, halfHeight, 0);
+    Vector3 offsetXVec = rotation * Vector3(radius, 0, 0);
+    Vector3 offsetZVec = rotation * Vector3(0, 0, radius);
+    for (unsigned i = 0; i < 360; i += 45)
+    {
+        Vector3 p1 = rotation * PointOnSphere(sphere, i, 90) + position;
+        Vector3 p2 = rotation * PointOnSphere(sphere, i + 45, 90) + position;
+        debugDraw->AddLine(p1 - halfHeightVec, p2 - halfHeightVec, color, depthTest);
+        debugDraw->AddLine(p1 + halfHeightVec, p2 + halfHeightVec, color, depthTest);
+    }
+    debugDraw->AddLine(position - halfHeightVec + offsetXVec, position + halfHeightVec + offsetXVec, color, depthTest);
+    debugDraw->AddLine(position - halfHeightVec - offsetXVec, position + halfHeightVec - offsetXVec, color, depthTest);
+    debugDraw->AddLine(position - halfHeightVec + offsetZVec, position + halfHeightVec + offsetZVec, color, depthTest);
+    debugDraw->AddLine(position - halfHeightVec - offsetZVec, position + halfHeightVec - offsetZVec, color, depthTest);
+}
+
+
+void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone, Urho3D::SharedPtr<Urho3D::DebugRenderer> debugDraw)
+{
+    // every zone has a position
     const SPK::Vector3D pos = zone->getPosition();
 
     if(zone->getClassName() == "Point")
     {
-        DebugDraw::getInstance()->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.1f, Vector3(1,1,1));
+        Matrix3x4 mat;
+        mat.SetTranslation(Vector3(pos.x, pos.y, pos.z));
+        Sphere sphere;
+        sphere.radius_ = 0.1f;
+        DrawDebugSphere(sphere, mat, Color::YELLOW, true, debugDraw);
+        //DebugDraw::getInstance()->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.1f, Vector3(1,1,1));
     }
     else if(zone->getClassName() == "Sphere")
     {
-        const SPK::Sphere* sphere = dynamic_cast<SPK::Sphere*>(zone.get());
+        /*const SPK::Sphere* sphere = dynamic_cast<SPK::Sphere*>(zone.get());
         GP_ASSERT(sphere);
         float radius = sphere->getRadius();
-        DebugDraw::getInstance()->drawSphere(Vector3(pos.x, pos.y, pos.z), radius, Vector3(1,1,1));
+        DebugDraw::getInstance()->drawSphere(Vector3(pos.x, pos.y, pos.z), radius, Vector3(1,1,1));*/
+
+        const SPK::Sphere* spkSphere = dynamic_cast<SPK::Sphere*>(zone.get());
+        assert(spkSphere);
+
+        Matrix3x4 mat;
+        mat.SetTranslation(Vector3(pos.x, pos.y, pos.z));
+        Sphere sphere;
+        sphere.radius_ = spkSphere->getRadius();
+        DrawDebugSphere(sphere, mat, Color::WHITE, true, debugDraw);
     }
     else if(zone->getClassName() == "Plane")
     {
-        const SPK::Plane* plane = dynamic_cast<SPK::Plane*>(zone.get());
+        /*const SPK::Plane* plane = dynamic_cast<SPK::Plane*>(zone.get());
         GP_ASSERT(plane);
         const SPK::Vector3D normal = plane->getNormal();
-        DebugDraw::getInstance()->drawPlane(Vector3(normal.x, normal.y, normal.z), 0.0f, Matrix::identity(), Vector3(1,1,1));
+        DebugDraw::getInstance()->drawPlane(Vector3(normal.x, normal.y, normal.z), 0.0f, Matrix::identity(), Vector3(1,1,1));*/
     }
     else if(zone->getClassName() == "Box")
     {
-        const SPK::Box* box = dynamic_cast<SPK::Box*>(zone.get());
+        const SPK::Box* spkBox = dynamic_cast<SPK::Box*>(zone.get());
+        assert(spkBox);
+
+        Vector3 scale = ToUrhoVector3(spkBox->getDimensions());
+        Vector3 pos = ToUrhoVector3(spkBox->getPosition());
+
+        // todo fix rotation
+        Vector3 direction = ToUrhoVector3(spkBox->getTransform().getLocalSide());
+        Vector3 up = ToUrhoVector3(spkBox->getTransform().getLocalUp());
+        Quaternion rot;
+        rot.FromLookRotation(direction,up);
+
+        Matrix3x4 matrix;
+        matrix.SetTranslation(pos);
+        matrix.SetRotation(rot.RotationMatrix());
+
+        BoundingBox box(-scale/2, scale/2);
+        DrawDebugBox(box, matrix, Color::WHITE, true, debugDraw);
+
+
+        /*const SPK::Box* box = dynamic_cast<SPK::Box*>(zone.get());
         GP_ASSERT(box);
         Vector3 scale = ToGplayVector3(box->getDimensions());
         Matrix matrix;
@@ -40,11 +159,11 @@ void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone)
         Matrix::createTranslation(ToGplayVector3(pos), &matrix);
         BoundingBox bbox(-scale/2.0f, scale/2.0f);
         bbox *= matrix;
-        DebugDraw::getInstance()->drawBox(bbox.min, bbox.max, Vector3(1,1,1));
+        DebugDraw::getInstance()->drawBox(bbox.min, bbox.max, Vector3(1,1,1));*/
     }
     else if(zone->getClassName() == "Cylinder")
     {
-        const SPK::Cylinder* cylinder = dynamic_cast<SPK::Cylinder*>(zone.get());
+        /*const SPK::Cylinder* cylinder = dynamic_cast<SPK::Cylinder*>(zone.get());
         GP_ASSERT(cylinder);
 
         const SPK::Vector3D axis = cylinder->getAxis();
@@ -54,11 +173,11 @@ void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone)
         // todo: fix rotation
         Matrix matrix;
         Matrix::createTranslation(ToGplayVector3(pos), &matrix);
-        DebugDraw::getInstance()->drawCylinder(radius, height/2.0f, 1, matrix, Vector3(1,1,1));
+        DebugDraw::getInstance()->drawCylinder(radius, height/2.0f, 1, matrix, Vector3(1,1,1));*/
     }
     else if(zone->getClassName() == "Ring")
     {
-        const SPK::Ring* ring = dynamic_cast<SPK::Ring*>(zone.get());
+        /*const SPK::Ring* ring = dynamic_cast<SPK::Ring*>(zone.get());
         GP_ASSERT(ring);
 
         float minRadius = ring->getMinRadius();
@@ -68,21 +187,22 @@ void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone)
 
         DebugDraw::getInstance()->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), minRadius, minRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
         DebugDraw::getInstance()->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), maxRadius, maxRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
-    }*/
+    */
+    }
 }
-/*
-void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
-{
-    DebugDraw::getInstance()->begin(scene->getActiveCamera()->getViewProjectionMatrix());
 
-    SPK::Ref<SPK::System> spkSystem = spkEffect->getSparkSystem();
+
+
+void drawDebugShapes(Urho3D::SparkParticle* spark, Urho3D::SharedPtr<Urho3D::DebugRenderer> debugDraw)
+{
+    SPK::Ref<SPK::System> spkSystem = spark->GetSystem();
     for(size_t nGroup = 0; nGroup < spkSystem->getNbGroups(); nGroup++)
     {
         // show emitters zones
         for(size_t nEmitter = 0; nEmitter < spkSystem->getGroup(nGroup)->getNbEmitters(); nEmitter++)
         {
             const SPK::Ref<SPK::Zone> zone = spkSystem->getGroup(nGroup)->getEmitter(nEmitter)->getZone();
-            createDebugGeomteriesFromZone(zone);
+            createDebugGeomteriesFromZone(zone, debugDraw);
         }
 
         // show modifiers zones
@@ -92,35 +212,33 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
 
             if(modifier->getClassName() == "PointMass")
             {
-                const SPK::PointMass* pointMass = dynamic_cast<SPK::PointMass*>(modifier.get());
+                /*const SPK::PointMass* pointMass = dynamic_cast<SPK::PointMass*>(modifier.get());
                 GP_ASSERT(pointMass);
                 const SPK::Vector3D pos = pointMass->getPosition();
-                DebugDraw::getInstance()->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.25f, Vector3(0,1,0));
+                DebugDraw::getInstance()->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.25f, Vector3(0,1,0));*/
             }
             else if(modifier->getClassName() == "Destroyer")
             {
-                const SPK::Destroyer* destroyer = dynamic_cast<SPK::Destroyer*>(modifier.get());
+                /*const SPK::Destroyer* destroyer = dynamic_cast<SPK::Destroyer*>(modifier.get());
                 GP_ASSERT(destroyer);
-                createDebugGeomteriesFromZone(destroyer->getZone());
+                createDebugGeomteriesFromZone(destroyer->getZone());*/
             }
             else if(modifier->getClassName() == "Obstacle")
             {
-                const SPK::Obstacle* obstacle = dynamic_cast<SPK::Obstacle*>(modifier.get());
+                /*const SPK::Obstacle* obstacle = dynamic_cast<SPK::Obstacle*>(modifier.get());
                 GP_ASSERT(obstacle);
-                createDebugGeomteriesFromZone(obstacle->getZone());
+                createDebugGeomteriesFromZone(obstacle->getZone());*/
             }
             else if(modifier->getClassName() == "LinearForce")
             {
-                const SPK::LinearForce* linearForce = dynamic_cast<SPK::LinearForce*>(modifier.get());
+                /*const SPK::LinearForce* linearForce = dynamic_cast<SPK::LinearForce*>(modifier.get());
                 GP_ASSERT(linearForce);
-                createDebugGeomteriesFromZone(linearForce->getZone());
+                createDebugGeomteriesFromZone(linearForce->getZone());*/
             }
         }
     }
-
-    DebugDraw::getInstance()->end();
 }
-*/
+
 
 
 
@@ -128,28 +246,11 @@ void drawDebugShapes(SparkParticleEmitter* spkEffect, Scene* scene)
 
 SparkNodeRender::SparkNodeRender() :
     BaseRenderer3D(),
-    _isShowDebug(true)
+    _isShowDebug(true),
+    _sparkNode(nullptr)
 {
-
-
-   /* // create a framebuffer for scene preview in imgui window
-
-    const int frameBufferWidth = 512;
-    const int frameBufferHeight = 512;
-
-    Texture* texColor = Texture::create("targetColor", frameBufferWidth, frameBufferHeight, Texture::Format::RGBA, Texture::Type::TEXTURE_RT);
-    Texture* texDepth = Texture::create("targetDepth", frameBufferWidth, frameBufferHeight, Texture::Format::D16, Texture::Type::TEXTURE_RT);
-    std::vector<Texture*> textures;
-    textures.push_back(texColor);
-    textures.push_back(texDepth);
-    _frameBuffer = FrameBuffer::create("MyFrameBuffer", textures);
-
-    View::create(1, Rectangle(frameBufferWidth, frameBufferHeight), View::ClearFlags::COLOR_DEPTH, 0x000000ff, 1.0f, 0);
-
-
-    // show gplay in game editor
-    Game::getInstance()->showEditor(_scene);*/
-
+    if(_isShowDebug)
+        SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(SparkNodeRender, handleUpdate));
 }
 
 void SparkNodeRender::setCurentParticleSystem(SPK::Ref<SPK::System> sparkSystem)
@@ -164,21 +265,23 @@ void SparkNodeRender::setCurentParticleSystem(SPK::Ref<SPK::System> sparkSystem)
     Urho3D::SparkParticle* spk1 = sparkNode->CreateComponent<Urho3D::SparkParticle>();
     spk1->SetSystem(sparkSystem);
 
+    _sparkNode = sparkNode;
+
     // Look at spark node for orbit camera
-    _cameraController->setTarget(sparkNode->GetPosition());
+    _cameraController->setTarget(sparkNode->GetPosition()); 
+}
 
-
-   /* Node* node = _scene->findNode("SparkNode");
-    if(node)
-        _scene->removeNode(node);
-
-    // Create a node in scene and attach spark effect
-    SparkParticleEmitter* sparkEffect = SparkParticleEmitter::create(sparkSystem, true);
-    Node* sparkNode = Node::create("SparkNode");
-    sparkNode->setDrawable(sparkEffect);
-    sparkNode->setTranslation(0.0f, 0.0f, 0.0f);
-
-    _scene->addNode(sparkNode);*/
+void SparkNodeRender::handleUpdate(StringHash eventType, VariantMap& eventData)
+{
+    if (_sparkNode)
+    {
+        Urho3D::SparkParticle* spk = _sparkNode->GetComponent<Urho3D::SparkParticle>();
+        if (spk)
+        {
+            // show debug shapes for all zones in this spark system
+            drawDebugShapes(spk, _debugRenderer);
+        }
+    }
 }
 
 void SparkNodeRender::update(float elapsedTime)
