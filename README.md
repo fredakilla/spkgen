@@ -65,8 +65,9 @@ URHO3D_HOME = /home/John/Dev/Urho3D/BUILD
 URHOX_HOME = /home/John/Dev/Urhox/output
 ```
 
-##### 4. Build editor
+##### 4. Build
 ```
-- Open spkgen.pro with QtCreator.  
-- Build and Run.
+- Copy Urho3D assets 'Data' and 'CoreData' to Spkgen/Bin
+- Open Spkgen.pro with QtCreator
+- Build and Run
 ```
