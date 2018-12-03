@@ -19,7 +19,7 @@ static Vector3 PointOnSphere(const Sphere& sphere, unsigned theta, unsigned phi)
     );
 }
 
-void DrawDebugSphere(const Sphere& sphere, const Matrix3x4& transform, const Color& color, bool depthTest, DebugRenderer* debugDraw)
+void DrawDebugSphere(const Sphere& sphere, const Matrix3x4& transform, const Color& color, DebugRenderer* debugDraw, bool depthTest = true)
 {
     unsigned uintColor = color.ToUInt();
 
@@ -42,7 +42,7 @@ void DrawDebugSphere(const Sphere& sphere, const Matrix3x4& transform, const Col
     }
 }
 
-void DrawDebugBox(const BoundingBox& box, const Matrix3x4& transform, const Color& color, bool depthTest, DebugRenderer* debugDraw)
+void DrawDebugBox(const BoundingBox& box, const Matrix3x4& transform, const Color& color, DebugRenderer* debugDraw, bool depthTest = true)
 {
     const Vector3& min = box.min_;
     const Vector3& max = box.max_;
@@ -72,8 +72,11 @@ void DrawDebugBox(const BoundingBox& box, const Matrix3x4& transform, const Colo
     debugDraw->AddLine(v3, v6, uintColor, depthTest);
 }
 
-void DrawDebugCylinder(const Vector3& position, float radius, float halfHeight, const Quaternion& rotation, const Color& color, bool depthTest, DebugRenderer* debugDraw)
+void DrawDebugCylinder(float radius, float halfHeight, const Matrix3x4& matrix, const Color& color, DebugRenderer* debugDraw, bool depthTest = true)
 {
+    const Vector3& position = matrix.Translation();
+    const Quaternion& rotation = matrix.Rotation();
+
     Sphere sphere(Vector3::ZERO, radius);
     Vector3 halfHeightVec = rotation * Vector3(0, halfHeight, 0);
     Vector3 offsetXVec = rotation * Vector3(radius, 0, 0);
@@ -99,35 +102,29 @@ void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone, Urho3D::Share
 
     if(zone->getClassName() == "Point")
     {
-        Matrix3x4 mat;
-        mat.SetTranslation(Vector3(pos.x, pos.y, pos.z));
+        Matrix3x4 matrix;
+        matrix.SetTranslation(ToUrhoVector3(pos));
         Sphere sphere;
         sphere.radius_ = 0.1f;
-        DrawDebugSphere(sphere, mat, Color::YELLOW, true, debugDraw);
-        //DebugDraw::getInstance()->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.1f, Vector3(1,1,1));
+        DrawDebugSphere(sphere, matrix, Color::YELLOW, debugDraw);
     }
     else if(zone->getClassName() == "Sphere")
     {
-        /*const SPK::Sphere* sphere = dynamic_cast<SPK::Sphere*>(zone.get());
-        GP_ASSERT(sphere);
-        float radius = sphere->getRadius();
-        DebugDraw::getInstance()->drawSphere(Vector3(pos.x, pos.y, pos.z), radius, Vector3(1,1,1));*/
-
         const SPK::Sphere* spkSphere = dynamic_cast<SPK::Sphere*>(zone.get());
         assert(spkSphere);
 
-        Matrix3x4 mat;
-        mat.SetTranslation(Vector3(pos.x, pos.y, pos.z));
+        Matrix3x4 matrix;
+        matrix.SetTranslation(ToUrhoVector3(pos));
         Sphere sphere;
         sphere.radius_ = spkSphere->getRadius();
-        DrawDebugSphere(sphere, mat, Color::WHITE, true, debugDraw);
+        DrawDebugSphere(sphere, matrix, Color::WHITE, debugDraw);
     }
     else if(zone->getClassName() == "Plane")
     {
-        /*const SPK::Plane* plane = dynamic_cast<SPK::Plane*>(zone.get());
-        GP_ASSERT(plane);
-        const SPK::Vector3D normal = plane->getNormal();
-        DebugDraw::getInstance()->drawPlane(Vector3(normal.x, normal.y, normal.z), 0.0f, Matrix::identity(), Vector3(1,1,1));*/
+        const SPK::Plane* plane = dynamic_cast<SPK::Plane*>(zone.get());
+        assert(plane);
+        //const SPK::Vector3D normal = plane->getNormal();
+        //DebugDraw::getInstance()->drawPlane(Vector3(normal.x, normal.y, normal.z), 0.0f, Matrix::identity(), Vector3(1,1,1));*/
     }
     else if(zone->getClassName() == "Box")
     {
@@ -135,63 +132,48 @@ void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone, Urho3D::Share
         assert(spkBox);
 
         Vector3 scale = ToUrhoVector3(spkBox->getDimensions());
-        Vector3 pos = ToUrhoVector3(spkBox->getPosition());
-
-        // todo fix rotation
         Vector3 direction = ToUrhoVector3(spkBox->getTransform().getLocalSide());
         Vector3 up = ToUrhoVector3(spkBox->getTransform().getLocalUp());
-        Quaternion rot;
-        rot.FromLookRotation(direction,up);
 
+        Quaternion rot;
+        rot.FromLookRotation(direction, up);
         Matrix3x4 matrix;
-        matrix.SetTranslation(pos);
+        matrix.SetTranslation(ToUrhoVector3(pos));
         matrix.SetRotation(rot.RotationMatrix());
 
-        BoundingBox box(-scale/2, scale/2);
-        DrawDebugBox(box, matrix, Color::WHITE, true, debugDraw);
-
-
-        /*const SPK::Box* box = dynamic_cast<SPK::Box*>(zone.get());
-        GP_ASSERT(box);
-        Vector3 scale = ToGplayVector3(box->getDimensions());
-        Matrix matrix;
-        // todo: fix rotation
-        Matrix::createTranslation(ToGplayVector3(pos), &matrix);
-        BoundingBox bbox(-scale/2.0f, scale/2.0f);
-        bbox *= matrix;
-        DebugDraw::getInstance()->drawBox(bbox.min, bbox.max, Vector3(1,1,1));*/
+        BoundingBox box(-scale/2.0f, scale/2.0f);
+        DrawDebugBox(box, matrix, Color::WHITE, debugDraw);
     }
     else if(zone->getClassName() == "Cylinder")
     {
-        /*const SPK::Cylinder* cylinder = dynamic_cast<SPK::Cylinder*>(zone.get());
-        GP_ASSERT(cylinder);
+        const SPK::Cylinder* cylinder = dynamic_cast<SPK::Cylinder*>(zone.get());
+        assert(cylinder);
 
+        const SPK::Vector3D pos = cylinder->getPosition();
         const SPK::Vector3D axis = cylinder->getAxis();
-        float height = cylinder->getHeight();
+        float halfHeight = cylinder->getHeight() / 2.0f;
         float radius = cylinder->getRadius();
 
-        // todo: fix rotation
-        Matrix matrix;
-        Matrix::createTranslation(ToGplayVector3(pos), &matrix);
-        DebugDraw::getInstance()->drawCylinder(radius, height/2.0f, 1, matrix, Vector3(1,1,1));*/
+        Quaternion rot;
+        Matrix3x4 matrix;
+        matrix.SetTranslation(ToUrhoVector3(pos));
+        matrix.SetRotation(rot.RotationMatrix());
+
+        DrawDebugCylinder(radius, halfHeight, matrix, Color::WHITE, debugDraw);
     }
     else if(zone->getClassName() == "Ring")
     {
-        /*const SPK::Ring* ring = dynamic_cast<SPK::Ring*>(zone.get());
-        GP_ASSERT(ring);
+        const SPK::Ring* ring = dynamic_cast<SPK::Ring*>(zone.get());
+        assert(ring);
 
         float minRadius = ring->getMinRadius();
         float maxRadius = ring->getMaxRadius();
 
         // todo: fix rotation
-
-        DebugDraw::getInstance()->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), minRadius, minRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
-        DebugDraw::getInstance()->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), maxRadius, maxRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
-    */
+        //DebugDraw::getInstance()->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), minRadius, minRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
+        //DebugDraw::getInstance()->drawArc(ToGplayVector3(pos), Vector3(0,1,0), Vector3(1,0,0), maxRadius, maxRadius, 0.0f, MATH_DEG_TO_RAD(360.0f), Vector3(1,1,1), false);
     }
 }
-
-
 
 void drawDebugShapes(Urho3D::SparkParticle* spark, Urho3D::SharedPtr<Urho3D::DebugRenderer> debugDraw)
 {
@@ -212,33 +194,35 @@ void drawDebugShapes(Urho3D::SparkParticle* spark, Urho3D::SharedPtr<Urho3D::Deb
 
             if(modifier->getClassName() == "PointMass")
             {
-                /*const SPK::PointMass* pointMass = dynamic_cast<SPK::PointMass*>(modifier.get());
-                GP_ASSERT(pointMass);
-                const SPK::Vector3D pos = pointMass->getPosition();
-                DebugDraw::getInstance()->drawSphere(Vector3(pos.x, pos.y, pos.z), 0.25f, Vector3(0,1,0));*/
+                const SPK::PointMass* pointMass = dynamic_cast<SPK::PointMass*>(modifier.get());
+                assert(pointMass);
+
+                Sphere sphere;
+                sphere.radius_ = 0.18f;
+                sphere.center_ = ToUrhoVector3(pointMass->getPosition());
+                debugDraw->AddSphere(sphere, Color::RED);
             }
             else if(modifier->getClassName() == "Destroyer")
             {
-                /*const SPK::Destroyer* destroyer = dynamic_cast<SPK::Destroyer*>(modifier.get());
-                GP_ASSERT(destroyer);
-                createDebugGeomteriesFromZone(destroyer->getZone());*/
+                const SPK::Destroyer* destroyer = dynamic_cast<SPK::Destroyer*>(modifier.get());
+                assert(destroyer);
+                createDebugGeomteriesFromZone(destroyer->getZone(), debugDraw);
             }
             else if(modifier->getClassName() == "Obstacle")
             {
-                /*const SPK::Obstacle* obstacle = dynamic_cast<SPK::Obstacle*>(modifier.get());
-                GP_ASSERT(obstacle);
-                createDebugGeomteriesFromZone(obstacle->getZone());*/
+                const SPK::Obstacle* obstacle = dynamic_cast<SPK::Obstacle*>(modifier.get());
+                assert(obstacle);
+                createDebugGeomteriesFromZone(obstacle->getZone(), debugDraw);
             }
             else if(modifier->getClassName() == "LinearForce")
             {
-                /*const SPK::LinearForce* linearForce = dynamic_cast<SPK::LinearForce*>(modifier.get());
-                GP_ASSERT(linearForce);
-                createDebugGeomteriesFromZone(linearForce->getZone());*/
+                const SPK::LinearForce* linearForce = dynamic_cast<SPK::LinearForce*>(modifier.get());
+                assert(linearForce);
+                createDebugGeomteriesFromZone(linearForce->getZone(), debugDraw);
             }
         }
     }
 }
-
 
 
 
