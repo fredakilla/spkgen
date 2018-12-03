@@ -58,7 +58,7 @@ public:
 class NodeSparkInterpolator_ColorInitializerRandom : public NodeSparkColorInterpolatorBase
 {
 private:
-    const QString Name() const override { return QString("ColorRandomInitializer"); }
+    const QString Name() const override { return QString("ColorInitializerRandom"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
     void process() override;
 public:
@@ -71,7 +71,7 @@ public:
 class NodeSparkInterpolator_ColorInterpolatorSimple : public NodeSparkColorInterpolatorBase
 {
 private:
-    const QString Name() const override { return QString("ColorSimpleInterpolator"); }
+    const QString Name() const override { return QString("ColorInterpolator"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
     void process() override;
 public:
@@ -84,7 +84,7 @@ public:
 class NodeSparkInterpolator_ColorInterpolatorRandom : public NodeSparkColorInterpolatorBase
 {
 private:
-    const QString Name() const override { return QString("ColorRandomInterpolator"); }
+    const QString Name() const override { return QString("ColorInterpolatorRandom"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
     void process() override;
 public:
@@ -97,7 +97,7 @@ public:
 class NodeSparkInterpolator_ColorInterpolatorGraph : public NodeSparkColorInterpolatorBase
 {
 private:
-    const QString Name() const override { return QString("ColorGraphInterpolator"); }
+    const QString Name() const override { return QString("ColorInterpolatorGraph"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkColorInterpolator>(_colorInterpolator); }
     void process() override;
 public:
@@ -141,7 +141,7 @@ public:
 class NodeSparkInterpolator_ParamInitializerRandom : public NodeSparkParamInterpolatorBase
 {
 private:
-    const QString Name() const override { return QString("ParamRandomInitializer"); }
+    const QString Name() const override { return QString("ParamInitializerRandom"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkParamInterpolatorList>(_paramInterpolators); }
     void process() override;
 public:
@@ -154,7 +154,7 @@ public:
 class NodeSparkInterpolator_ParamInterpolatorSimple : public NodeSparkParamInterpolatorBase
 {
 private:
-    const QString Name() const override { return QString("ParamSimpleInterpolator"); }
+    const QString Name() const override { return QString("ParamInterpolator"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkParamInterpolatorList>(_paramInterpolators); }
     void process() override;
 public:
@@ -167,7 +167,7 @@ public:
 class NodeSparkInterpolator_ParamInterpolatorRandom : public NodeSparkParamInterpolatorBase
 {
 private:
-    const QString Name() const override { return QString("ParamRandomInterpolator"); }
+    const QString Name() const override { return QString("ParamInterpolatorRandom"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkParamInterpolatorList>(_paramInterpolators); }
     void process() override;
 public:
