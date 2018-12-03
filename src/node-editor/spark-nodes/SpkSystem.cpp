@@ -172,13 +172,8 @@ void NodeSparkSystem::process()
     QString name = getParameter("Name")->getValueAsString();
     bool initialized = getParameter("Initialized")->getValueAsBool();
 
-    /*if(!_system.get())
-        _system = SPK::System::create(true);
-    else
-        _system->removeAllGroups();*/
-
-    _system = SPK::System::create(initialized);
-    _system->setName(name.toStdString());
+    SPK::Ref<SPK::System> system = SPK::System::create(initialized);
+    system->setName(name.toStdString());
 
     // add groups
     std::shared_ptr<NodeDataSparkGroupList> in0 = getInput<NodeDataSparkGroupList>(0);
@@ -187,11 +182,23 @@ void NodeSparkSystem::process()
         for(size_t i=0; i<in0->_result.size(); i++)
         {
             if(in0->_result[i].get())
-                _system->addGroup(in0->_result[i]);
+                system->addGroup(in0->_result[i]);
         }
     }
 
+    _system.reset();
+    _system = system;
+
     UrhoDevice::getInstance()->setCurentParticleSystem(_system);
+}
+
+void NodeSparkSystem::onParameterChanged()
+{
+    // custom onParameterChanged()
+    // process without emit dataUpdated
+    // to avoid signals infinite loop
+
+    process();
 }
 
 
@@ -215,22 +222,6 @@ NodeSparkQuadRenderer::NodeSparkQuadRenderer()
                               "|TOWARDS_POINT"
                               "|FIXED_ORIENTATION", 0);
 }
-
-/*Material* createDefaultMaterial()
-{
-    // Create a material for particles
-    Material* material = Material::create("res/core/shaders/particle.vert", "res/core/shaders/particle.frag");
-    Texture::Sampler* sampler = material->getParameter("u_diffuseTexture")->setValue("res/data/textures/flare.png", true);
-    sampler->setFilterMode(Texture::LINEAR_MIPMAP_LINEAR, Texture::LINEAR);
-    material->getStateBlock()->setCullFace(true);
-    material->getStateBlock()->setDepthTest(true);
-    material->getStateBlock()->setDepthWrite(false);
-    material->getStateBlock()->setBlend(true);
-    material->getStateBlock()->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
-    material->getStateBlock()->setBlendDst(RenderState::BLEND_ONE);
-
-    return material;
-}*/
 
 void NodeSparkQuadRenderer::process()
 {
@@ -258,8 +249,6 @@ void NodeSparkQuadRenderer::process()
         return;
     }
 
-
-
     // Load base material
     Urho3D::ResourceCache* cache = UrhoDevice::gUrhoContext->GetSubsystem<Urho3D::ResourceCache>();
     Urho3D::Material* baseMaterial = cache->GetResource<Urho3D::Material>(materialFile.c_str());
@@ -267,7 +256,6 @@ void NodeSparkQuadRenderer::process()
     // Create material clones and set textures
     Urho3D::SharedPtr<Urho3D::Material> material = baseMaterial->Clone();
     material->SetTexture(Urho3D::TU_DIFFUSE, cache->GetResource<Urho3D::Texture2D>(textureFile.c_str()));
-
 
     // Renderer
     SPK::Ref<SPK::URHO::Urho3DQuadRenderer> renderer = SPK::URHO::Urho3DQuadRenderer::create(UrhoDevice::gUrhoContext);

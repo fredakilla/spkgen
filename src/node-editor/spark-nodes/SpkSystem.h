@@ -41,6 +41,7 @@ private:
     const QString Name() const override { return QString("System"); }
     std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkSystem>(_system); }
     void process() override;
+    void onParameterChanged();
 public:
     NodeSparkSystem();
     SPK::Ref<SPK::System> getResult() { return _system; }
