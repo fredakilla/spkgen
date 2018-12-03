@@ -68,7 +68,7 @@ void CameraController::Update(float timeStep)
                 _zDistance = 0.0f;
 
             Vector3 targetPosition = _target;
-            Quaternion q = Quaternion(-_pitch, -_yaw, 0.0f);
+            Quaternion q = Quaternion(_pitch, _yaw, 0.0f);
             Vector3 cameraOffset(0.0f, 0.0f, _zDistance);
             Vector3 cameraPosition = targetPosition - (q * cameraOffset);
             node_->SetPosition(cameraPosition);  // Set new camera position and lookat values
@@ -95,7 +95,15 @@ void CameraController::MouseButtonPressed(StringHash eventType, VariantMap& even
     int b = LookUpButtonMap[buttons];
 
     if(b & MOUSEB_RIGHT)
+    {
         _isMoving = true;
+        _mode = CameraMode::Orbit;
+    }
+    else if(b & MOUSEB_MIDDLE)
+    {
+        _isMoving = true;
+        _mode = CameraMode::FirstPerson;
+    }
 }
 
 void CameraController::MouseButtonReleased(StringHash eventType, VariantMap& eventData)
@@ -122,8 +130,8 @@ void CameraController::MouseMoveEvent(StringHash eventType, VariantMap& eventDat
         // Clamp the pitch between -90 and 90 degrees
         IntVector2 mouseMove(dx, dy);
 
-        _yaw += MOUSE_SENSITIVITY * mouseMove.x_;
-        _pitch += MOUSE_SENSITIVITY * mouseMove.y_;
+        _yaw -= MOUSE_SENSITIVITY * mouseMove.x_;
+        _pitch -= MOUSE_SENSITIVITY * mouseMove.y_;
         _pitch = Clamp(_pitch, -90.0f, 90.0f);
     }
 }
