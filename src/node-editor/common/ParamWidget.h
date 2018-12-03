@@ -28,6 +28,7 @@ private:
     void createParamBoolButton(Parameter* p, QHBoxLayout* hbl);
     void createParamEnum(Parameter* p, QHBoxLayout* hbl);
     void createParamFile(Parameter* p, QHBoxLayout* hbl);
+    void createParamFileSave(Parameter* p, QHBoxLayout* hbl);
     void createParamFlags(Parameter* p, QHBoxLayout* hbl);
     void createParamRGBA(Parameter* p, QHBoxLayout* hbl);
     void createParamButton(Parameter* p, QHBoxLayout* hbl);

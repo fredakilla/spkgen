@@ -149,7 +149,14 @@ class eFileFrame : public QWidget
 {
     Q_OBJECT
 public:
-    eFileFrame(Parameter &param, QWidget *parent=nullptr);
+
+    enum Type
+    {
+        OPEN,
+        SAVE
+    };
+
+    eFileFrame(Parameter &param, Type type, QWidget *parent=nullptr);
     virtual ~eFileFrame();
 Q_SIGNALS:
     void onParameterChanged(const Parameter &param);
@@ -159,6 +166,8 @@ private Q_SLOTS:
 private:
     Parameter& m_param;
     eLineEdit* m_lineEdit;
+    Type _type;
+
 };
 
 

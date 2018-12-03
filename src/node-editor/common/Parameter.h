@@ -30,7 +30,8 @@ enum ParamType
     EPT_TEXT        = 14,
     EPT_RGB         = 15,
     EPT_RGBA        = 16,
-    EPT_BUTTON      = 17
+    EPT_BUTTON      = 17,
+    EPT_FILESAVE    = 18,
 };
 /*
 static const NodeDataType PARAM_TYPE[] =

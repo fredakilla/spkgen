@@ -45,6 +45,9 @@ private:
 public:
     NodeSparkSystem();
     SPK::Ref<SPK::System> getResult() { return _system; }
+
+private Q_SLOTS:
+    void onExportButtonClick();
 };
 
 //------------------------------------------------------------------------------------------------------------------------------

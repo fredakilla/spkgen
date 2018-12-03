@@ -206,6 +206,9 @@ public Q_SLOTS:
 #define PARAM_FILE(name, path) \
     addParameter<QString>(EPT_FILE, name, 0, 0, QString(path));
 
+#define PARAM_FILESAVE(name, path) \
+    addParameter<QString>(EPT_FILESAVE, name, 0, 0, QString(path));
+
 #define PARAM_FLAGS(name, descr, index) \
     addParameter<unsigned char>(EPT_FLAGS, name, 0, 255, (unsigned char)(index)); \
     _parameters.back()->setDescription(descr);

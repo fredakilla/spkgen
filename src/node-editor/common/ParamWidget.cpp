@@ -60,6 +60,10 @@ void ParamWidget::createWidgets()
             createParamFile(p, hbl);
             break;
 
+        case EPT_FILESAVE:
+            createParamFileSave(p, hbl);
+            break;
+
         case EPT_STRING:
             createParamLineEdit(p, hbl);
             break;
@@ -142,11 +146,17 @@ void ParamWidget::createParamFlags(Parameter* p, QHBoxLayout* hbl)
 
 void ParamWidget::createParamFile(Parameter* p, QHBoxLayout* hbl)
 {
-    eFileFrame* fileFrame = new eFileFrame(*p);
+    eFileFrame* fileFrame = new eFileFrame(*p, eFileFrame::Type::OPEN);
     hbl->addWidget(fileFrame);
     connect(fileFrame, &eFileFrame::onParameterChanged, _node, &BaseNode::onParameterChanged);
 }
 
+void ParamWidget::createParamFileSave(Parameter* p, QHBoxLayout* hbl)
+{
+    eFileFrame* fileFrame = new eFileFrame(*p, eFileFrame::Type::SAVE);
+    hbl->addWidget(fileFrame);
+    connect(fileFrame, &eFileFrame::onParameterChanged, _node, &BaseNode::onParameterChanged);
+}
 
 void ParamWidget::createParamEnum(Parameter* p, QHBoxLayout* hbl)
 {
@@ -254,6 +264,7 @@ void ParamWidget::save(QJsonObject& json)
         case EPT_BUTTON:
         case EPT_STRING:
         case EPT_FILE:
+        case EPT_FILESAVE:
             param[key] = p->getValueAsString();
             break;
         case EPT_BOOL:
@@ -379,6 +390,7 @@ void ParamWidget::restore(QJsonObject const &json)
         case EPT_BUTTON:
         case EPT_STRING:
         case EPT_FILE:
+        case EPT_FILESAVE:
             p->baseValue = paraObject.begin().value().toString();
             break;
         case EPT_BOOL:

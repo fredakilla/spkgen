@@ -239,7 +239,9 @@ void eTextEdit::_onTextChanged()
 eLineEdit::eLineEdit(Parameter &param, QWidget *parent) :
     m_param(param)
 {
-    Q_ASSERT(param.getType() == EPT_STRING || param.getType() == EPT_FILE);
+    Q_ASSERT(param.getType() == EPT_STRING
+             || param.getType() == EPT_FILE
+             || param.getType() == EPT_FILESAVE);
 
     setText(m_param.getValueAsString());
 
@@ -265,10 +267,11 @@ void eLineEdit::_onTextChanged(const QString &text)
 // file frame with line edit + button for open file dialog
 //------------------------------------------------------------------------------------------------------------------------------
 
-eFileFrame::eFileFrame(Parameter &param, QWidget *parent) : QWidget(parent),
-    m_param(param)
+eFileFrame::eFileFrame(Parameter &param, Type type = Type::SAVE, QWidget *parent) : QWidget(parent),
+    m_param(param),
+    _type(type)
 {
-    Q_ASSERT(param.getType() == EPT_FILE);
+    Q_ASSERT(param.getType() == EPT_FILE || param.getType() == EPT_FILESAVE);
 
     QHBoxLayout *hbl = new QHBoxLayout;
     hbl->setContentsMargins(0, 0, 0, 0);
@@ -298,15 +301,12 @@ void eFileFrame::_updateCaption()
 
 void eFileFrame::_onSelectLocally()
 {
-    /*QFileDialog fileDialog(0, tr("Load File"), ".", tr("all files (*.*)"));
-    fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
-    fileDialog.setFileMode(QFileDialog::ExistingFile);
-    fileDialog.setOption(QFileDialog::DontUseNativeDialog, true);
-    if (QDialog::Accepted != fileDialog.exec())
-        return;
-    const QString filename = fileDialog.selectedFiles().first();*/
+    QString filename;
 
-    const QString filename = QFileDialog::getOpenFileName(0, tr("Load File"), ".", tr("all files (*.*)"));
+    if (_type == Type::OPEN)
+        filename = QFileDialog::getOpenFileName(nullptr, tr("Load File"), ".", tr("all files (*.*)"));
+    else
+        filename = QFileDialog::getSaveFileName(nullptr, tr("Save File"), ".", tr("all files (*.*)"));
 
     if(!filename.isEmpty())
     {
