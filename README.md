@@ -19,14 +19,12 @@ Building on another system is not tested but final release should be cross-platf
 TODO
 - [x] implement generic nodes classes
 - [x] automatic node's parameters widgets creation from simple declaration
-- [ ] show 3D debug zones geometries
+- [x] show 3D debug zones geometries
 - [x] serialize node widget's parameters
-- [x] graph plot editor widget for spark graph interpolators (WIP but maybe do this using imgui)
+- [x] graph plot editor widget for spark graph interpolators (WIP, implement imgui widget ?)
 - [ ] complete all spark nodes (95% done)
-- [ ] interact with 3D view (camera move...) + use the in-game editor
+- [x] interact with 3D view (camera move...)
 - [ ] multiple scenes managment
-- [ ] possibility to attach result effect to scene nodes (static node, node in motion, trow bullet, ...)
-- [ ] ~~add pliable parameters button to show/hide parameters widgets~~
 - [x] comments items on node view
 - [ ] set styles
 - [ ] add shortcuts on node view : copy/paste nodes, repeat last created node,...
