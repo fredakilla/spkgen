@@ -11,6 +11,7 @@
 #include <Urho3D/Graphics/Material.h>
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/IO/FileSystem.h>
+#include <Urho3D/Graphics/Texture2D.h>
 
 
 //------------------------------------------------------------------------------------------------------------------------------
@@ -203,8 +204,8 @@ NodeSparkQuadRenderer::NodeSparkQuadRenderer()
     OUT_PORT(ENC_RENDERER, "renderer");
 
     createBaseObjectParams("Renderer");
-    PARAM_FILE("Material", "res/data/materials/particle.material");
-    PARAM_FILE("Texture", "res/data/textures/flare.png");
+    PARAM_FILE("Material", "Data/Materials/Particle.xml");
+    PARAM_FILE("Texture", "Data/Textures/Flare.dds");
     PARAM_IXY("AtlasDimension", 1, 1000, 1, 1);
     PARAM_FXY("Scale", 0.0f, eF32_MAX, 1.0f, 1.0f);
     PARAM_ENUM("Orientation", "CAMERA_PLANE_ALIGNED"
@@ -245,14 +246,27 @@ void NodeSparkQuadRenderer::process()
     bool isMaterialFileExists = fileSystem->FileExists(materialFile.c_str());
     bool isTextureFileExists = fileSystem->FileExists(textureFile.c_str());
 
+    if (!isMaterialFileExists)
+    {
+        setValidationState(NodeValidationState::Error, "Material file does not exists");
+        return;
+    }
+
+    if (!isTextureFileExists)
+    {
+        setValidationState(NodeValidationState::Error, "Texture file does not exists");
+        return;
+    }
+
+
 
     // Load base material
     Urho3D::ResourceCache* cache = UrhoDevice::gUrhoContext->GetSubsystem<Urho3D::ResourceCache>();
-    Urho3D::Material* baseMaterial = cache->GetResource<Urho3D::Material>("Materials/Particle.xml");
+    Urho3D::Material* baseMaterial = cache->GetResource<Urho3D::Material>(materialFile.c_str());
 
     // Create material clones and set textures
     Urho3D::SharedPtr<Urho3D::Material> material = baseMaterial->Clone();
-    //material->SetTexture(Urho3D::TU_DIFFUSE, cache->GetResource<Texture2D>("Spark/Textures/explosion.bmp"));
+    material->SetTexture(Urho3D::TU_DIFFUSE, cache->GetResource<Urho3D::Texture2D>(textureFile.c_str()));
 
 
     // Renderer
@@ -269,6 +283,8 @@ void NodeSparkQuadRenderer::process()
     _renderer = renderer;
 
     dataUpdated(0);
+
+    setValidationState(NodeValidationState::Valid);
 }
 
 
