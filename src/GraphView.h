@@ -70,6 +70,8 @@ private:
     void rebuildKeys();
     bool isKeyMovable(double newTime, int index);
     void plot();
+    void setStyle();
+    void setAxisStyle();
 
     NodePath* _pathNode;
     Path* _currentPath;

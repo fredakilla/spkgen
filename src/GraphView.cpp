@@ -57,32 +57,37 @@ GraphView::GraphView(QWidget *parent)
     m_zoom = chart()->plotArea();
 
     m_mouseCoordX = new QGraphicsSimpleTextItem(chart());
-    m_mouseCoordX->setPos(chart()->size().width()/2 - 50, chart()->size().height());
+    //m_mouseCoordX->setPos(chart()->size().width()/2 - 50, chart()->size().height());
     m_mouseCoordX->setText("X: ");
-    m_mouseCoordX->font().setPointSize(8);
+    m_mouseCoordX->font().setPointSize(6);
+    m_mouseCoordX->setBrush(Qt::white);
 
     m_mouseCoordY = new QGraphicsSimpleTextItem(chart());
-    m_mouseCoordY->setPos(chart()->size().width()/2 + 50, chart()->size().height());
+    //m_mouseCoordY->setPos(chart()->size().width()/2 + 50, chart()->size().height());
     m_mouseCoordY->setText("Y: ");
-    m_mouseCoordY->font().setPointSize(8);
-
-
-
+    m_mouseCoordY->font().setPointSize(6);
+    m_mouseCoordY->setBrush(Qt::white);
 
     //connect(m_scatter, &QScatterSeries::clicked, this, &ChartView::handleClickedPoint);
 
+    setStyle();
+}
 
+GraphView::~GraphView()
+{
+}
+
+void GraphView::setStyle()
+{
     chart()->setMargins(QMargins(0,0,0,0));
     chart()->setBackgroundRoundness(0.0f);
 
-/*
-
     // Customize chart title
     QFont font;
-    font.setPixelSize(18);
+    font.setPixelSize(12);
     chart()->setTitleFont(font);
     chart()->setTitleBrush(QBrush(Qt::white));
-    chart()->setTitle("Customchart example");
+    chart()->setTitle("Graph");
 
     // Customize chart background
     QLinearGradient backgroundGradient;
@@ -97,24 +102,30 @@ GraphView::GraphView(QWidget *parent)
     QLinearGradient plotAreaGradient;
     plotAreaGradient.setStart(QPointF(0, 1));
     plotAreaGradient.setFinalStop(QPointF(1, 0));
-    plotAreaGradient.setColorAt(0.0, QRgb(0x555555));
-    plotAreaGradient.setColorAt(1.0, QRgb(0x55aa55));
+    plotAreaGradient.setColorAt(0.0, QRgb(0x222222));
+    plotAreaGradient.setColorAt(1.0, QRgb(0x555555));
     plotAreaGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
     chart()->setPlotAreaBackgroundBrush(plotAreaGradient);
     chart()->setPlotAreaBackgroundVisible(true);
 
+    setAxisStyle();
+}
 
-    QAbstractAxis *axisX = chart()->axisX();
-    QAbstractAxis *axisY = chart()->axisY();
+void GraphView::setAxisStyle()
+{
+    QAbstractAxis* axisX = chart()->axisX();
+    QAbstractAxis* axisY = chart()->axisY();
 
     QFont labelsFont;
     labelsFont.setPixelSize(12);
     axisX->setLabelsFont(labelsFont);
     axisY->setLabelsFont(labelsFont);
+    axisX->setLabelsColor(Qt::white);
+    axisY->setLabelsColor(Qt::white);
 
     // Customize axis colors
     QPen axisPen(QRgb(0xd18952));
-    axisPen.setWidth(2);
+    axisPen.setWidth(1);
     axisX->setLinePen(axisPen);
     axisY->setLinePen(axisPen);
 
@@ -124,15 +135,17 @@ GraphView::GraphView(QWidget *parent)
     axisY->setLabelsBrush(axisBrush);
 
     // Customize grid lines and shades
-    axisX->setGridLineVisible(false);
-    axisY->setGridLineVisible(false);
-    axisY->setShadesPen(Qt::NoPen);
-    axisY->setShadesBrush(QBrush(QColor(0x99, 0xcc, 0xcc, 0x55)));
-    axisY->setShadesVisible(true);*/
-}
+    axisX->setGridLineVisible(true);
+    axisY->setGridLineVisible(true);
+    axisY->setLinePen(axisPen);
+    //axisY->setShadesPen(Qt::NoPen);
+    //axisY->setShadesBrush(QBrush(QColor(0x99, 0xcc, 0xcc, 0x55)));
+    //axisY->setShadesVisible(true);
 
-GraphView::~GraphView()
-{
+    axisX->setLabelsColor(Qt::white);
+    axisY->setLabelsColor(Qt::white);
+    axisX->setGridLineColor(QColor(128,128,128,128));
+    axisY->setGridLineColor(QColor(128,128,128,128));
 }
 
 void GraphView::setPathNode(NodePath* node)
@@ -160,8 +173,8 @@ void GraphView::resizeEvent(QResizeEvent *event)
     {
         //scene()->setSceneRect(QRect(QPoint(0, 0), event->size()));
         //chart()->resize(event->size());
-        m_mouseCoordX->setPos(chart()->size().width()/2 - 50, chart()->size().height() - 20);
-        m_mouseCoordY->setPos(chart()->size().width()/2 + 50, chart()->size().height() - 20);
+        m_mouseCoordX->setPos(20, 0);
+        m_mouseCoordY->setPos(70, 0);
     }
     QChartView::resizeEvent(event);
 }
@@ -246,8 +259,10 @@ void GraphView::mousePressEvent(QMouseEvent *event)
 
 void GraphView::mouseMoveEvent(QMouseEvent *event)
 {
-    m_mouseCoordX->setText(QString("X: %1").arg(chart()->mapToValue(event->pos()).x()));
-    m_mouseCoordY->setText(QString("Y: %1").arg(chart()->mapToValue(event->pos()).y()));
+    QString sx = QString::number(chart()->mapToValue(event->pos()).x(), 'f', 2);
+    QString sy = QString::number(chart()->mapToValue(event->pos()).y(), 'f', 2);
+    m_mouseCoordX->setText(QString("X: %1").arg(sx));
+    m_mouseCoordY->setText(QString("Y: %1").arg(sy));
 
     if(_isPointSelected && _isClicked)
     {
@@ -398,6 +413,7 @@ void GraphView::plot()
     chart()->createDefaultAxes();
     chart()->axisX()->setRange(0.0f, 5.0f);
     chart()->axisY()->setRange(-1.0f, 1.0f);
+    setAxisStyle();
 
     chart()->zoomIn(m_zoom);
 
