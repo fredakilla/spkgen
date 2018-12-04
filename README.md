@@ -2,7 +2,7 @@
 Spkgen is an editor for the [**SPARK**](https://github.com/fredakilla/SPARK) particles engine using a node-based interface to create particles effects for games.
  
 ## Screenshots
-<img src="https://i.imgur.com/4uplO1O.png" width="50%" height="%">
+<img src="https://i.imgur.com/9oEWdjl.png" width="50%" height="%">
 
 ## Current status
 Spkgen is in developpement and is not yet fully functional.
