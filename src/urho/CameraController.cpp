@@ -20,6 +20,7 @@ CameraController::CameraController(Context* context) :
     SubscribeToEvent(E_MOUSEMOVE, URHO3D_HANDLER(CameraController, MouseMoveEvent));
     SubscribeToEvent(E_MOUSEBUTTONDOWN, URHO3D_HANDLER(CameraController, MouseButtonPressed));
     SubscribeToEvent(E_MOUSEBUTTONUP, URHO3D_HANDLER(CameraController, MouseButtonReleased));
+    SubscribeToEvent(E_MOUSEWHEEL, URHO3D_HANDLER(CameraController, MouseWheelEvent));
 }
 
 void CameraController::setMode(CameraMode mode)
@@ -134,4 +135,11 @@ void CameraController::MouseMoveEvent(StringHash eventType, VariantMap& eventDat
         _pitch -= MOUSE_SENSITIVITY * mouseMove.y_;
         _pitch = Clamp(_pitch, -90.0f, 90.0f);
     }
+}
+
+void CameraController::MouseWheelEvent(StringHash eventType, VariantMap& eventData)
+{
+    using namespace MouseWheel;
+    int wheel = eventData[P_WHEEL].GetInt();
+    _zDistance += wheel;
 }

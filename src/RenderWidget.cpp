@@ -215,6 +215,27 @@ void RenderWidget::mouseMoveEvent(QMouseEvent* event)
 void RenderWidget::wheelEvent(QWheelEvent* event)
 {
     QWidget::wheelEvent(event);
+
+    QPoint numPixels = event->pixelDelta();
+    QPoint numDegrees = event->angleDelta() / 8;
+    QPoint wheel;
+
+    if (!numPixels.isNull())
+    {
+        wheel = numPixels;
+    }
+    else if (!numDegrees.isNull())
+    {
+        wheel = numDegrees / 15;
+    }
+
+    Urho3D::VariantMap map;
+    map[Urho3D::MouseWheel::P_WHEEL] = -wheel.y();
+    map[Urho3D::MouseWheel::P_BUTTONS] = event->buttons();
+    map[Urho3D::MouseButtonUp::P_QUALIFIERS] = event->modifiers();
+    SendEvent(Urho3D::E_MOUSEWHEEL, map);
+
+    event->accept();
 }
 
 void RenderWidget::keyReleaseEvent(QKeyEvent* event)

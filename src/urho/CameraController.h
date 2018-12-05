@@ -31,6 +31,7 @@ private:
     void MouseButtonPressed(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void MouseButtonReleased(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void MouseMoveEvent(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void MouseWheelEvent(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
     float _yaw;
     float _pitch;
