@@ -14,6 +14,7 @@ public:
     RenderWidget(QWidget* parent);
     virtual ~RenderWidget();
 
+    QSize sizeHint() const override { return QSize(256,256); }
     void resizeEvent(QResizeEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
@@ -21,6 +22,7 @@ public:
     void wheelEvent(QWheelEvent* event) override;
     void keyReleaseEvent(QKeyEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
+
 
 Q_SIGNALS:
     void resized(int width, int height);

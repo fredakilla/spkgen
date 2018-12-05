@@ -53,27 +53,28 @@ void MainWindow::createWidgets()
     _dockView = new QDockWidget("Viewport", this);
     _dockView->setWidget(_viewportContainer);
     _dockView->setAllowedAreas(Qt::AllDockWidgetAreas);
-    addDockWidget(Qt::TopDockWidgetArea, _dockView);
+    addDockWidget(Qt::LeftDockWidgetArea, _dockView);
 
     _nodeFlowScene = new CustomFlowScene();
 
     _nodeFlowView = new FlowView(_nodeFlowScene);
     _nodeFlowView->setWindowTitle("Node-based flow editor");
-    _nodeFlowView->resize(800, 600);
+    //_nodeFlowView->resize(800, 600);
     _nodeFlowView->show();
     _nodeFlowView->scale(0.9, 0.9);
 
-    _dockNodeFlowView = new QDockWidget("NodeGraph", this);
+    setCentralWidget(_nodeFlowView);
+    /*_dockNodeFlowView = new QDockWidget("NodeGraph", this);
     _dockNodeFlowView->setWidget(_nodeFlowView);
     _dockNodeFlowView->setAllowedAreas(Qt::AllDockWidgetAreas);
-    addDockWidget(Qt::BottomDockWidgetArea, _dockNodeFlowView);
+    addDockWidget(Qt::BottomDockWidgetArea, _dockNodeFlowView);*/
 
     _pathView = new GraphView(this);
 
     _dockGraph = new QDockWidget("Graph", this);
     _dockGraph->setWidget(_pathView);
     _dockGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
-    addDockWidget(Qt::TopDockWidgetArea, _dockGraph);
+    addDockWidget(Qt::LeftDockWidgetArea, _dockGraph);
 
     // make some connections
     connect(_nodeFlowScene, &CustomFlowScene::showPathNodeRequest, _pathView, &GraphView::setPathNode);

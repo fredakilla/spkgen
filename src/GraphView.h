@@ -49,6 +49,7 @@ public:
     GraphView(QWidget *parent = 0);
     ~GraphView();
 
+    QSize sizeHint() const override { return QSize(256,256); }
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
