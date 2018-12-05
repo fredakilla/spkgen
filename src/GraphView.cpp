@@ -8,9 +8,7 @@ QT_CHARTS_USE_NAMESPACE
 GraphView::GraphView(QWidget *parent)
     : QChartView(new QChart(), parent),
       _lineCount(1),
-      _currentSelectedLine(0),
-      m_mouseCoordX(nullptr),
-      m_mouseCoordY(nullptr)
+      _currentSelectedLine(0)
 {
     for (unsigned int i=0; i<MAX_LINES; i++)
     {
@@ -28,8 +26,6 @@ GraphView::GraphView(QWidget *parent)
     _isPointSelected = false;
     _isClicked = false;
     _splineResolution = 250.0f;
-
-    chart()->setTitle("Path Editor");
 
     const QColor pathCols[4] = {Qt::red, Qt::green, Qt::blue, Qt::magenta};
 
@@ -63,20 +59,11 @@ GraphView::GraphView(QWidget *parent)
         chart()->addSeries(m_scatter[i]);
     chart()->addSeries(m_scatterSelected);
     chart()->createDefaultAxes();
-    chart()->axisX()->setRange(0.0f, 5.0f);
+    chart()->axisX()->setRange(0.0f, 1.0f);
     chart()->axisY()->setRange(-1.0f, 1.0f);
+    chart()->setTitle(QString("X: 0.00, Y: 0.00"));
 
     m_zoom = chart()->plotArea();
-
-    m_mouseCoordX = new QGraphicsSimpleTextItem(chart());
-    m_mouseCoordX->setText("X: ");
-    m_mouseCoordX->font().setPointSize(6);
-    m_mouseCoordX->setBrush(Qt::white);
-
-    m_mouseCoordY = new QGraphicsSimpleTextItem(chart());
-    m_mouseCoordY->setText("Y: ");
-    m_mouseCoordY->font().setPointSize(6);
-    m_mouseCoordY->setBrush(Qt::white);
 
     //connect(m_scatter, &QScatterSeries::clicked, this, &ChartView::handleClickedPoint);
 
@@ -97,7 +84,6 @@ void GraphView::setStyle()
     font.setPixelSize(12);
     chart()->setTitleFont(font);
     chart()->setTitleBrush(QBrush(Qt::white));
-    chart()->setTitle("Graph");
 
     // Customize chart background
     QLinearGradient backgroundGradient;
@@ -215,8 +201,6 @@ void GraphView::resizeEvent(QResizeEvent *event)
     {
         //scene()->setSceneRect(QRect(QPoint(0, 0), event->size()));
         //chart()->resize(event->size());
-        m_mouseCoordX->setPos(20, 0);
-        m_mouseCoordY->setPos(70, 0);
     }
     QChartView::resizeEvent(event);
 }
@@ -306,8 +290,7 @@ void GraphView::mouseMoveEvent(QMouseEvent *event)
 
     QString sx = QString::number(chart()->mapToValue(event->pos()).x(), 'f', 2);
     QString sy = QString::number(chart()->mapToValue(event->pos()).y(), 'f', 2);
-    m_mouseCoordX->setText(QString("X: %1").arg(sx));
-    m_mouseCoordY->setText(QString("Y: %1").arg(sy));
+    chart()->setTitle(QString("X: %1, Y: %2 ").arg(sx).arg(sy));
 
     if(_isPointSelected && _isClicked)
     {
@@ -462,14 +445,6 @@ void GraphView::plot1()
     m_lines[0]->show();
     m_scatter[0]->show();
 
-    // need to setup axes after new added serie
-    chart()->createDefaultAxes();
-    chart()->axisX()->setRange(0.0f, 5.0f);
-    chart()->axisY()->setRange(-1.0f, 1.0f);
-    setAxisStyle();
-
-    chart()->zoomIn(m_zoom);
-
     // trigger node connections and updates in flow graph
     _pathNode->dataUpdated(0);
 }
@@ -509,15 +484,6 @@ void GraphView::plot4()
         m_scatter[j]->show();
     }
 
-
-    // need to setup axes after new added serie
-    chart()->createDefaultAxes();
-    chart()->axisX()->setRange(0.0f, 5.0f);
-    chart()->axisY()->setRange(-1.0f, 1.0f);
-    setAxisStyle();
-
-    chart()->zoomIn(m_zoom);
-
     // trigger node connections and updates in flow graph
     _pathNode4->dataUpdated(0);
 }
@@ -540,6 +506,15 @@ void GraphView::plot()
         // should not be reached.
         Q_ASSERT(0);
     }
+
+
+    // need to setup axes after new added serie
+    chart()->createDefaultAxes();
+    chart()->axisX()->setRange(0.0f, 1.0f);
+    chart()->axisY()->setRange(-1.0f, 1.0f);
+    setAxisStyle();
+
+    chart()->zoomIn(m_zoom);
 }
 
 void GraphView::deleteSelectedKeys()
@@ -563,4 +538,34 @@ void GraphView::deleteSelectedKeys()
 
     rebuildKeys();
     plot();
+}
+
+void GraphView::onPathSelectedX()
+{
+    _currentSelectedLine = 0;
+    if(_lineCount == 1)
+        _currentPath = _pathNode->getResult();
+    else if(_lineCount == 4)
+        _currentPath = &_pathNode4->getResult()->getSubPath(0);
+}
+
+void GraphView::onPathSelectedY()
+{
+    Q_ASSERT(_lineCount == 4 && _pathNode4);
+    _currentSelectedLine = 1;
+    _currentPath = &_pathNode4->getResult()->getSubPath(1);
+}
+
+void GraphView::onPathSelectedZ()
+{
+    Q_ASSERT(_lineCount == 4 && _pathNode4);
+    _currentSelectedLine = 2;
+    _currentPath = &_pathNode4->getResult()->getSubPath(2);
+}
+
+void GraphView::onPathSelectedW()
+{
+    Q_ASSERT(_lineCount == 4 && _pathNode4);
+    _currentSelectedLine = 3;
+    _currentPath = &_pathNode4->getResult()->getSubPath(3);
 }

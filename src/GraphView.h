@@ -61,6 +61,10 @@ public:
 public Q_SLOTS:
     void setPathNode(NodePath* node);
     void setPath4Node(NodePath4* node);
+    void onPathSelectedX();
+    void onPathSelectedY();
+    void onPathSelectedZ();
+    void onPathSelectedW();
 
 private Q_SLOTS:
     void handleClickedPoint(const QPointF &point);
@@ -92,9 +96,6 @@ private:
     QRectF m_zoom;
     qreal m_zoomFactorX;
     qreal m_zoomFactorY;
-    QGraphicsSimpleTextItem* m_mouseCoordX;
-    QGraphicsSimpleTextItem* m_mouseCoordY;
-
     bool _isPointSelected;
     bool _isClicked;
     QPointF _selectedPoint;

@@ -6,6 +6,7 @@
 
 #include "node-editor/common/CustomFlowScene.h"
 #include "GraphView.h"
+#include "GraphEditor.h"
 #include "RenderWidget.h"
 
 class MainWindow : public QMainWindow
@@ -45,6 +46,7 @@ private:
     QWidget* _viewportContainer;
     RenderWidget* _renderView;
     GraphView* _pathView;
+    GraphEditor* _pathEditor;
     QDockWidget* _dockView;
     QDockWidget* _dockNodeFlowView;
     QDockWidget* _dockGraph;

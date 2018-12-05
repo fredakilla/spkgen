@@ -84,7 +84,8 @@ SOURCES += \
     src/urho/CameraController.cpp \
     src/RenderWidget.cpp \
     src/urho/BaseRenderer.cpp \
-    src/node-editor/common/Curve.cpp
+    src/node-editor/common/Curve.cpp \
+    src/GraphEditor.cpp
 
 HEADERS += \
     src/node-editor/common/BaseNode.h \
@@ -115,7 +116,8 @@ HEADERS += \
     src/urho/CameraController.h \
     src/RenderWidget.h \
     src/urho/BaseRenderer.h \
-    src/node-editor/common/Curve.h
+    src/node-editor/common/Curve.h \
+    src/GraphEditor.h
 
 
 

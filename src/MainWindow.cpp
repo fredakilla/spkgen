@@ -7,6 +7,10 @@
 #include <QMenuBar>
 #include <QApplication>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QRadioButton>
+#include <QGroupBox>
+#include <QLabel>
 
 #include "node-editor/common/Nodestyle.h"
 #include "node-editor/spark-nodes/SparkNodesRegistry.h"
@@ -69,16 +73,19 @@ void MainWindow::createWidgets()
     _dockNodeFlowView->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::BottomDockWidgetArea, _dockNodeFlowView);*/
 
+    // Create path editor
     _pathView = new GraphView(this);
-
-    _dockGraph = new QDockWidget("Graph", this);
-    _dockGraph->setWidget(_pathView);
+    _pathEditor = new GraphEditor(_pathView, this);
+    _dockGraph = new QDockWidget("Path editor", this);
+    _dockGraph->setWidget(_pathEditor);
     _dockGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::LeftDockWidgetArea, _dockGraph);
 
     // make some connections
     connect(_nodeFlowScene, &CustomFlowScene::showPathNodeRequest, _pathView, &GraphView::setPathNode);
     connect(_nodeFlowScene, &CustomFlowScene::showPath4NodeRequest, _pathView, &GraphView::setPath4Node);
+    connect(_nodeFlowScene, &CustomFlowScene::showPathNodeRequest, _pathEditor, &GraphEditor::onSetPath);
+    connect(_nodeFlowScene, &CustomFlowScene::showPath4NodeRequest, _pathEditor, &GraphEditor::onSetPath4);
     connect(_renderView, &RenderWidget::resized, this, &MainWindow::onRenderViewResized);
 
     // connect to FlowView deleteSelectionAction a method to delete comments graphics items.
