@@ -28,6 +28,7 @@ enum NodeClass
     ENC_COLORINTERPOLATOR,
     ENC_PARAMINTERPOLATOR,
     ENC_PATH,
+    ENC_PATH4
 };
 
 static const NodeDataType NODE_DATA_TYPE[] =
@@ -41,6 +42,7 @@ static const NodeDataType NODE_DATA_TYPE[] =
     { "colorinterpolator"   , "colorinterpolator"   },
     { "paraminterpolator"   , "paraminterpolator"   },
     { "path"                , "path"                },
+    { "path4"               , "path4"               },
 };
 
 
@@ -272,8 +274,8 @@ struct ParamFloatInterpolator
 typedef MyNodeData<SPK::Ref<SPK::Interpolator<SPK::Color>>, ENC_COLORINTERPOLATOR>  NodeDataSparkColorInterpolator;
 typedef MyNodeData<std::vector<ParamFloatInterpolator>, ENC_PARAMINTERPOLATOR>      NodeDataSparkParamInterpolatorList;
 
-typedef MyNodeData<Path*, ENC_PATH>     NodeDataPath;
-
+typedef MyNodeData<Path*, ENC_PATH>     NodeDataPath;   // path with 1 value
+typedef MyNodeData<Path4*, ENC_PATH4>   NodeDataPath4;  // path with 4 values (for colors)
 
 
 #include "../spark-nodes/SpkUtils.h"

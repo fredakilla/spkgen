@@ -100,6 +100,17 @@ void CustomFlowScene::showNode(QtNodes::Node& node)
         }
         return;
     }
+
+    // is a Path4 node ?
+    NodePath4* path4Node = dynamic_cast<NodePath4*>(node.nodeDataModel());
+    if(path4Node)
+    {
+        if(path4Node->getResult() != nullptr)
+        {
+            Q_EMIT showPath4NodeRequest(path4Node);
+        }
+        return;
+    }
 }
 
 void CustomFlowScene::initNode(QtNodes::Node& node)

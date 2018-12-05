@@ -18,6 +18,20 @@ public:
     Path* getResult() { return _path; }
 };
 
+//------------------------------------------------------------------------------------------------------------------------------
+// path4 node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodePath4 : public BaseNode
+{
+    Path4* _path4;
+private:
+    const QString Name() const override { return QString("Path4"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataPath4>(_path4); }
+    void process() override;
+public:
+    NodePath4();
+    Path4* getResult() { return _path4; }
+};
 
 //------------------------------------------------------------------------------------------------------------------------------
 // base spark color interpolator class

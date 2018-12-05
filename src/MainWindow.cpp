@@ -78,6 +78,7 @@ void MainWindow::createWidgets()
 
     // make some connections
     connect(_nodeFlowScene, &CustomFlowScene::showPathNodeRequest, _pathView, &GraphView::setPathNode);
+    connect(_nodeFlowScene, &CustomFlowScene::showPath4NodeRequest, _pathView, &GraphView::setPath4Node);
     connect(_renderView, &RenderWidget::resized, this, &MainWindow::onRenderViewResized);
 
     // connect to FlowView deleteSelectionAction a method to delete comments graphics items.

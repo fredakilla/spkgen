@@ -39,6 +39,8 @@ std::shared_ptr<DataModelRegistry> registerSparkNodesDataModels()
     ret->registerModel<NodeSparkModifierLinearForce>("modifiers");
 
     ret->registerModel<NodePath>("interpolators");
+    ret->registerModel<NodePath4>("interpolators");
+
     ret->registerModel<NodeSparkInterpolator_ColorInitializerDefault>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ColorInitializerRandom>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ColorInterpolatorSimple>("interpolators");
@@ -51,7 +53,6 @@ std::shared_ptr<DataModelRegistry> registerSparkNodesDataModels()
     ret->registerModel<NodeSparkInterpolator_ParamInterpolatorSimple>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ParamInterpolatorRandom>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ParamInterpolatorGraph>("interpolators");
-
 
     return ret;
 }

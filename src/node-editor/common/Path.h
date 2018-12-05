@@ -168,6 +168,7 @@ public:
         Float4(float x, float y, float z, float w);
     };
 
+    Path4(PathType splineType = EPT_LINEAR);
     Float4 evaluate(double time) const;
     const Path &getSubPath(unsigned int index) const;
     Path& getSubPath(unsigned int index);

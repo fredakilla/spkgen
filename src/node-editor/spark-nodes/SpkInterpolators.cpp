@@ -42,6 +42,32 @@ void NodePath::process()
     // change path propeties in graph editor.
 }
 
+//------------------------------------------------------------------------------------------------------------------------------
+// path4 node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodePath4::NodePath4() : _path4(nullptr)
+{
+    OUT_PORT(ENC_PATH4, "path4");
+
+    PARAM_BUTTON("button", "Edit path");
+    PARAM_ENUM("PathType", "Constant|Linear|Cubic|Akima|Bessel|Pchip|Quintic", 1);
+
+    _path4 = new Path4(PathType::EPT_LINEAR);
+    for (int i=0; i<4; i++)
+    {
+        _path4->getSubPath(i).setLoopMode(PathLoopMode::ELM_LAST);
+        _path4->getSubPath(i).addKey(0.0, i * 0.2);
+        _path4->getSubPath(i).addKey(1.0, i * 0.2);
+    }
+}
+
+void NodePath4::process()
+{
+    PathType pathType = (PathType)getParameter("PathType")->getValueAsEnum();
+
+    // change path propeties in graph editor.
+}
 
 //------------------------------------------------------------------------------------------------------------------------------
 // base spark interpolator class
@@ -211,7 +237,7 @@ void NodeSparkInterpolator_ColorInterpolatorRandom::process()
 
 NodeSparkInterpolator_ColorInterpolatorGraph::NodeSparkInterpolator_ColorInterpolatorGraph()
 {
-    IN_PORT(ENC_PATH, "path")
+    IN_PORT(ENC_PATH4, "path4")
     OUT_PORT(ENC_COLORINTERPOLATOR, "colors");
 
     createBaseObjectParams(Name());

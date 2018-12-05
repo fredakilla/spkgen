@@ -60,6 +60,7 @@ public:
 
 public Q_SLOTS:
     void setPathNode(NodePath* node);
+    void setPath4Node(NodePath4* node);
 
 private Q_SLOTS:
     void handleClickedPoint(const QPointF &point);
@@ -71,14 +72,23 @@ private:
     void rebuildKeys();
     bool isKeyMovable(double newTime, int index);
     void plot();
+    void plot1();
+    void plot4();
     void setStyle();
     void setAxisStyle();
 
-    NodePath* _pathNode;
-    Path* _currentPath;
-    QScatterSeries* m_scatter;
-    QScatterSeries* m_scatterSelected;
-    QLineSeries* m_lines;
+    static const unsigned MAX_LINES = 4;    // max path to draw in graph
+
+    unsigned int _lineCount;                // nb of line for current path (1 or 4)
+    unsigned int _currentSelectedLine;      // current selected line index
+    NodePath* _pathNode;                    // current pathNode
+    NodePath4* _pathNode4;                  // current pathNode4
+    Path* _currentPath;                     // current path (or subpath for pathNode4)
+
+    QLineSeries* m_lines[MAX_LINES];        // used to draw path curve
+    QScatterSeries* m_scatter[MAX_LINES];   // used to draw path keys
+    QScatterSeries* m_scatterSelected;      // used to draw selected keys
+
     QRectF m_zoom;
     qreal m_zoomFactorX;
     qreal m_zoomFactorY;

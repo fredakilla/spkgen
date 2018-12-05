@@ -146,6 +146,14 @@ Path4::Float4::Float4(float x, float y, float z, float w) :
 {
 }
 
+Path4::Path4(PathType splineType)
+{
+    /*for (int i=0; i<4; i++)
+    {
+        _subPaths[i]
+    }*/
+}
+
 Path4::Float4 Path4::evaluate(double time) const
 {
     return Path4::Float4(_subPaths[0].evaluate(time),

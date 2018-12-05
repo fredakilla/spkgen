@@ -13,6 +13,7 @@ using QtNodes::FlowScene;
 using QtNodes::DataModelRegistry;
 
 class NodePath;
+class NodePath4;
 
 // empty graphic item used as parent container for comments items
 class QGraphicsItemLayer : public QGraphicsItem
@@ -46,6 +47,7 @@ public:
 
 Q_SIGNALS:
     void showPathNodeRequest(NodePath*);
+    void showPath4NodeRequest(NodePath4*);
 
 public Q_SLOTS:
     void deleteSelectedComments();
