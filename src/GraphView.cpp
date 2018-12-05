@@ -6,9 +6,9 @@
 QT_CHARTS_USE_NAMESPACE
 
 GraphView::GraphView(QWidget *parent)
-    : QChartView(new QChart(), parent),
-      _lineCount(1),
-      _currentSelectedLine(0)
+    : QChartView(new QChart(), parent)
+    , _currentPathType(PATH_1)
+    , _currentSelectedLine(0)
 {
     for (unsigned int i=0; i<MAX_LINES; i++)
     {
@@ -150,7 +150,7 @@ void GraphView::setPathNode(NodePath* node)
 
     _pathNode = node;
     _currentPath = node->getResult();
-    _lineCount = 1;
+    _currentPathType = PATH_1;
     _currentSelectedLine = 0;
 
     m_scatter[0]->clear();
@@ -174,7 +174,7 @@ void GraphView::setPath4Node(NodePath4* node)
     Path4* path4 = node->getResult();
     _currentPath = &path4->getSubPath(0);
     _currentSelectedLine = 0;
-    _lineCount = 4;
+    _currentPathType = PATH_4;
 
     m_scatter[0]->clear();
     m_scatter[1]->clear();
@@ -182,7 +182,7 @@ void GraphView::setPath4Node(NodePath4* node)
     m_scatter[3]->clear();
     m_scatterSelected->clear();
 
-    for(size_t j=0; j<_lineCount; j++)
+    for(size_t j=0; j<4; j++)
     {
         for(size_t i=0; i<path4->getSubPath(j).getKeyCount(); i++)
         {
@@ -421,7 +421,7 @@ bool GraphView::isKeyMovable(double newTime, int index)
 
 void GraphView::plot1()
 {
-    Q_ASSERT(_lineCount == 1);
+    Q_ASSERT(_currentPathType == PATH_1);
 
     if(!_pathNode || !_currentPath || _currentPath->getKeyCount() <= 1)
         return;
@@ -451,7 +451,7 @@ void GraphView::plot1()
 
 void GraphView::plot4()
 {
-    Q_ASSERT(_lineCount == 4);
+    Q_ASSERT(_currentPathType == PATH_4);
 
     if (!_pathNode4)
         return;
@@ -465,7 +465,7 @@ void GraphView::plot4()
     path4->getSubPath(3).build();
 
     // regenerate spline for drawing
-    for (unsigned int j=0; j<_lineCount; j++)
+    for (unsigned int j=0; j<4; j++)
     {
         QLineSeries* line = m_lines[j];
 
@@ -497,9 +497,9 @@ void GraphView::plot()
         m_scatter[i]->hide();
     }
 
-    if(_lineCount == 1)
+    if(_currentPathType == PATH_1)
         plot1();
-    else if(_lineCount == 4)
+    else if(_currentPathType == PATH_4)
         plot4();
     else
     {
@@ -543,29 +543,29 @@ void GraphView::deleteSelectedKeys()
 void GraphView::onPathSelectedX()
 {
     _currentSelectedLine = 0;
-    if(_lineCount == 1)
+    if(_currentPathType == PATH_1)
         _currentPath = _pathNode->getResult();
-    else if(_lineCount == 4)
+    else if(_currentPathType == PATH_4)
         _currentPath = &_pathNode4->getResult()->getSubPath(0);
 }
 
 void GraphView::onPathSelectedY()
 {
-    Q_ASSERT(_lineCount == 4 && _pathNode4);
+    Q_ASSERT(_currentPathType == PATH_4 && _pathNode4);
     _currentSelectedLine = 1;
     _currentPath = &_pathNode4->getResult()->getSubPath(1);
 }
 
 void GraphView::onPathSelectedZ()
 {
-    Q_ASSERT(_lineCount == 4 && _pathNode4);
+    Q_ASSERT(_currentPathType == PATH_4 && _pathNode4);
     _currentSelectedLine = 2;
     _currentPath = &_pathNode4->getResult()->getSubPath(2);
 }
 
 void GraphView::onPathSelectedW()
 {
-    Q_ASSERT(_lineCount == 4 && _pathNode4);
+    Q_ASSERT(_currentPathType == PATH_4 && _pathNode4);
     _currentSelectedLine = 3;
     _currentPath = &_pathNode4->getResult()->getSubPath(3);
 }

@@ -81,9 +81,14 @@ private:
     void setStyle();
     void setAxisStyle();
 
-    static const unsigned MAX_LINES = 4;    // max path to draw in graph
+    enum PathType
+    {
+        PATH_1,
+        PATH_4,
+    };
 
-    unsigned int _lineCount;                // nb of line for current path (1 or 4)
+    static const unsigned MAX_LINES = 4;    // max path to draw in graph
+    PathType _currentPathType;              // current path type
     unsigned int _currentSelectedLine;      // current selected line index
     NodePath* _pathNode;                    // current pathNode
     NodePath4* _pathNode4;                  // current pathNode4
