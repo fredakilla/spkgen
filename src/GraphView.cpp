@@ -12,16 +12,16 @@ GraphView::GraphView(QWidget *parent)
 {
     for (unsigned int i=0; i<MAX_LINES; i++)
     {
-        m_lines[i] = nullptr;
-        m_scatter[i] = nullptr;
+        _lines[i] = nullptr;
+        _scatter[i] = nullptr;
     }
 
     setRenderHint(QPainter::Antialiasing);
     setInteractive(true);
     //setRubberBand(RectangleRubberBand);
 
-    m_zoomFactorX = 1.0f;
-    m_zoomFactorY = 1.0f;
+    _zoomFactorX = 1.0f;
+    _zoomFactorY = 1.0f;
 
     _isPointSelected = false;
     _isClicked = false;
@@ -32,38 +32,38 @@ GraphView::GraphView(QWidget *parent)
     for (unsigned int i=0; i<MAX_LINES; i++)
     {
         // create line serie for drawing curve
-        m_lines[i] = new QLineSeries();
-        m_lines[i]->setName("path");
-        m_lines[i]->setColor(Qt::red + i);
+        _lines[i] = new QLineSeries();
+        _lines[i]->setName("path");
+        _lines[i]->setColor(Qt::red + i);
         QPen pen(pathCols[i]);
         pen.setWidth(2);
-        m_lines[i]->setPen(pen);
+        _lines[i]->setPen(pen);
 
          // create scatter serie for drawing key points on curve
-        m_scatter[i] = new QScatterSeries();
-        m_scatter[i]->setName("keys");
-        m_scatter[i]->setColor(Qt::red + i);
-        m_scatter[i]->setMarkerSize(10.0);
-        m_scatter[i]->setMarkerShape(QScatterSeries::MarkerShapeCircle);
+        _scatter[i] = new QScatterSeries();
+        _scatter[i]->setName("keys");
+        _scatter[i]->setColor(Qt::red + i);
+        _scatter[i]->setMarkerSize(10.0);
+        _scatter[i]->setMarkerShape(QScatterSeries::MarkerShapeCircle);
     }
 
     // create scatter serie for drawing selected keys
-    m_scatterSelected = new QScatterSeries();
-    m_scatterSelected->setName("keys selected");
-    m_scatterSelected->setColor(Qt::black);
-    m_scatterSelected->setMarkerSize(12.0);
-    m_scatterSelected->setMarkerShape(QScatterSeries::MarkerShapeCircle);
+    _scatterSelected = new QScatterSeries();
+    _scatterSelected->setName("keys selected");
+    _scatterSelected->setColor(Qt::black);
+    _scatterSelected->setMarkerSize(12.0);
+    _scatterSelected->setMarkerShape(QScatterSeries::MarkerShapeCircle);
 
     chart()->legend()->hide();
     for (unsigned int i=0; i<MAX_LINES; i++)
-        chart()->addSeries(m_scatter[i]);
-    chart()->addSeries(m_scatterSelected);
+        chart()->addSeries(_scatter[i]);
+    chart()->addSeries(_scatterSelected);
     chart()->createDefaultAxes();
     chart()->axisX()->setRange(0.0f, 1.0f);
     chart()->axisY()->setRange(-1.0f, 1.0f);
     chart()->setTitle(QString("X: 0.00, Y: 0.00"));
 
-    m_zoom = chart()->plotArea();
+    _zoom = chart()->plotArea();
 
     //connect(m_scatter, &QScatterSeries::clicked, this, &ChartView::handleClickedPoint);
 
@@ -153,12 +153,12 @@ void GraphView::setPathNode(NodePath* node)
     _currentPathType = PATH_1;
     _currentSelectedLine = 0;
 
-    m_scatter[0]->clear();
-    m_scatterSelected->clear();
+    _scatter[0]->clear();
+    _scatterSelected->clear();
 
     for(size_t i=0; i<_currentPath->getKeyCount(); i++)
     {
-        QScatterSeries* scatter = m_scatter[0];
+        QScatterSeries* scatter = _scatter[0];
         PathKey pathkey = _currentPath->getKeyByIndex(i);
         *scatter << QPointF(pathkey.time, pathkey.value);
     }
@@ -176,17 +176,17 @@ void GraphView::setPath4Node(NodePath4* node)
     _currentSelectedLine = 0;
     _currentPathType = PATH_4;
 
-    m_scatter[0]->clear();
-    m_scatter[1]->clear();
-    m_scatter[2]->clear();
-    m_scatter[3]->clear();
-    m_scatterSelected->clear();
+    _scatter[0]->clear();
+    _scatter[1]->clear();
+    _scatter[2]->clear();
+    _scatter[3]->clear();
+    _scatterSelected->clear();
 
     for(size_t j=0; j<4; j++)
     {
         for(size_t i=0; i<path4->getSubPath(j).getKeyCount(); i++)
         {
-            QScatterSeries* scatter = m_scatter[j];
+            QScatterSeries* scatter = _scatter[j];
             PathKey pathkey = path4->getSubPath(j).getKeyByIndex(i);
             *scatter << QPointF(pathkey.time, pathkey.value);
         }
@@ -241,7 +241,7 @@ void GraphView::addNewPoint(QPointF newPoint)
     if(newPoint.x() <= 0.0f)
         return;
 
-    m_scatter[_currentSelectedLine]->append(newPoint);
+    _scatter[_currentSelectedLine]->append(newPoint);
 
     rebuildKeys();
     plot();
@@ -249,7 +249,7 @@ void GraphView::addNewPoint(QPointF newPoint)
 
 void GraphView::rebuildKeys()
 {
-    QScatterSeries* scatter = m_scatter[_currentSelectedLine];
+    QScatterSeries* scatter = _scatter[_currentSelectedLine];
 
     // sort points by x value
     QList<QPointF> listPoints = scatter->points();
@@ -279,14 +279,14 @@ void GraphView::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    m_scatterSelected->clear();
+    _scatterSelected->clear();
     _isClicked = true;
     handleClickedPoint(chart()->mapToValue(event->pos()));
 }
 
 void GraphView::mouseMoveEvent(QMouseEvent *event)
 {
-    QScatterSeries* scatter = m_scatter[_currentSelectedLine];
+    QScatterSeries* scatter = _scatter[_currentSelectedLine];
 
     QString sx = QString::number(chart()->mapToValue(event->pos()).x(), 'f', 2);
     QString sy = QString::number(chart()->mapToValue(event->pos()).y(), 'f', 2);
@@ -314,7 +314,7 @@ void GraphView::mouseMoveEvent(QMouseEvent *event)
 
         // replace point (simulate moving)
         scatter->replace(_selectedPoint, newPoint);
-        m_scatterSelected->replace(0, newPoint);
+        _scatterSelected->replace(0, newPoint);
 
         _selectedPoint = newPoint;
 
@@ -340,14 +340,14 @@ void GraphView::zoom()
     QPointF center = chart()->plotArea().center();
     qreal left = chart()->plotArea().left();
 
-    rect.setWidth(m_zoomFactorX*rect.width());
-    rect.setHeight(m_zoomFactorY*rect.height());
+    rect.setWidth(_zoomFactorX*rect.width());
+    rect.setHeight(_zoomFactorY*rect.height());
 
     rect.moveCenter(center);
     rect.moveLeft(left);
 
     chart()->zoomIn(rect);
-    m_zoom = rect;
+    _zoom = rect;
 }
 
 void GraphView::wheelEvent(QWheelEvent *event)
@@ -356,9 +356,9 @@ void GraphView::wheelEvent(QWheelEvent *event)
 
     float delta = event->angleDelta().y() > 0 ? 0.5f : 2.0f;
     if (event->modifiers() || event->modifiers()&Qt::ControlModifier)
-        m_zoomFactorX *= delta;
+        _zoomFactorX *= delta;
     else
-        m_zoomFactorY *= delta;
+        _zoomFactorY *= delta;
 
     zoom();
 
@@ -374,7 +374,7 @@ void GraphView::handleClickedPoint(const QPointF &point)
     // Find the closest point from series 1
     QPointF closest(INT_MAX, INT_MAX);
     qreal distance(INT_MAX);
-    const auto points = m_scatter[_currentSelectedLine]->points();
+    const auto points = _scatter[_currentSelectedLine]->points();
     for (const QPointF &currentPoint : points)
     {
         qreal currentDistance = qSqrt((currentPoint.x() - clickedPoint.x())
@@ -390,15 +390,15 @@ void GraphView::handleClickedPoint(const QPointF &point)
             _selectedPoint = closest;
 
             // add point to selection
-            m_scatterSelected->clear();
-            m_scatterSelected->append(closest);
+            _scatterSelected->clear();
+            _scatterSelected->append(closest);
         }
     }
 }
 
 bool GraphView::isKeyMovable(double newTime, int index)
 {
-    QScatterSeries* scatter = m_scatter[_currentSelectedLine];
+    QScatterSeries* scatter = _scatter[_currentSelectedLine];
     Q_ASSERT(index >= 0 || index < scatter->count()-1);
 
     const double keytime = scatter->at(index).x();
@@ -430,7 +430,7 @@ void GraphView::plot1()
     _currentPath->build();
 
     // regenerate spline for drawing
-    QLineSeries* line = m_lines[0];
+    QLineSeries* line = _lines[0];
     line->clear();
     chart()->removeSeries(line);
     for(size_t i=0; i<_splineResolution; i++)
@@ -442,8 +442,8 @@ void GraphView::plot1()
     chart()->addSeries(line);
 
     // show line and scatter
-    m_lines[0]->show();
-    m_scatter[0]->show();
+    _lines[0]->show();
+    _scatter[0]->show();
 
     // trigger node connections and updates in flow graph
     _pathNode->dataUpdated(0);
@@ -467,7 +467,7 @@ void GraphView::plot4()
     // regenerate spline for drawing
     for (unsigned int j=0; j<4; j++)
     {
-        QLineSeries* line = m_lines[j];
+        QLineSeries* line = _lines[j];
 
         line->clear();
         chart()->removeSeries(line);
@@ -480,8 +480,8 @@ void GraphView::plot4()
         chart()->addSeries(line);
 
         // show lines and scatters
-        m_lines[j]->show();
-        m_scatter[j]->show();
+        _lines[j]->show();
+        _scatter[j]->show();
     }
 
     // trigger node connections and updates in flow graph
@@ -493,8 +493,8 @@ void GraphView::plot()
     // hide all lines and scatters
     for (unsigned int i=0; i<MAX_LINES; i++)
     {
-        m_lines[i]->hide();
-        m_scatter[i]->hide();
+        _lines[i]->hide();
+        _scatter[i]->hide();
     }
 
     if(_currentPathType == PATH_1)
@@ -514,7 +514,7 @@ void GraphView::plot()
     chart()->axisY()->setRange(-1.0f, 1.0f);
     setAxisStyle();
 
-    chart()->zoomIn(m_zoom);
+    chart()->zoomIn(_zoom);
 }
 
 void GraphView::deleteSelectedKeys()
@@ -522,11 +522,11 @@ void GraphView::deleteSelectedKeys()
     if(!_currentPath)
         return;
 
-    QScatterSeries* scatter = m_scatter[_currentSelectedLine];
+    QScatterSeries* scatter = _scatter[_currentSelectedLine];
 
-    for(int i=0; i<m_scatterSelected->count(); ++i)
+    for(int i=0; i<_scatterSelected->count(); ++i)
     {
-        QPointF p = m_scatterSelected->at(i);
+        QPointF p = _scatterSelected->at(i);
         int index = scatter->points().indexOf(p);
         if(index > 0 && index < scatter->count()-1)
         {
@@ -534,7 +534,7 @@ void GraphView::deleteSelectedKeys()
         }
     }
 
-    m_scatterSelected->clear();
+    _scatterSelected->clear();
 
     rebuildKeys();
     plot();

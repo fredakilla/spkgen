@@ -94,13 +94,13 @@ private:
     NodePath4* _pathNode4;                  // current pathNode4
     Path* _currentPath;                     // current path (or subpath for pathNode4)
 
-    QLineSeries* m_lines[MAX_LINES];        // used to draw path curve
-    QScatterSeries* m_scatter[MAX_LINES];   // used to draw path keys
-    QScatterSeries* m_scatterSelected;      // used to draw selected keys
+    QLineSeries* _lines[MAX_LINES];        // used to draw path curve
+    QScatterSeries* _scatter[MAX_LINES];   // used to draw path keys
+    QScatterSeries* _scatterSelected;      // used to draw selected keys
 
-    QRectF m_zoom;
-    qreal m_zoomFactorX;
-    qreal m_zoomFactorY;
+    QRectF _zoom;
+    qreal _zoomFactorX;
+    qreal _zoomFactorY;
     bool _isPointSelected;
     bool _isClicked;
     QPointF _selectedPoint;
