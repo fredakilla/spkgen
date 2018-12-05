@@ -50,6 +50,8 @@ std::shared_ptr<DataModelRegistry> registerSparkNodesDataModels()
     ret->registerModel<NodeSparkInterpolator_ParamInitializerRandom>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ParamInterpolatorSimple>("interpolators");
     ret->registerModel<NodeSparkInterpolator_ParamInterpolatorRandom>("interpolators");
+    ret->registerModel<NodeSparkInterpolator_ParamInterpolatorGraph>("interpolators");
+
 
     return ret;
 }

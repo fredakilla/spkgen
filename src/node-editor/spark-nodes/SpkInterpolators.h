@@ -175,5 +175,17 @@ public:
 };
 
 
+//------------------------------------------------------------------------------------------------------------------------------
+// graph param interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+class NodeSparkInterpolator_ParamInterpolatorGraph : public NodeSparkParamInterpolatorBase
+{
+private:
+    const QString Name() const override { return QString("ParamInterpolatorGraph"); }
+    std::shared_ptr<NodeData> outData(PortIndex) override { return std::make_shared<NodeDataSparkParamInterpolatorList>(_paramInterpolators); }
+    void process() override;
+public:
+    NodeSparkInterpolator_ParamInterpolatorGraph();
+};
 
 #endif // SPKINTERPOLATORS_H

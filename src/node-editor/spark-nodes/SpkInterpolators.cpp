@@ -471,3 +471,64 @@ void NodeSparkInterpolator_ParamInterpolatorRandom::process()
     // trigger nodes connections
     dataUpdated(0);
 }
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+// graph param interpolator node
+//------------------------------------------------------------------------------------------------------------------------------
+
+NodeSparkInterpolator_ParamInterpolatorGraph::NodeSparkInterpolator_ParamInterpolatorGraph()
+{
+    IN_PORT(ENC_PATH, "path")
+    OUT_PORT(ENC_PARAMINTERPOLATOR, "param");
+
+    createBaseObjectParams(Name());
+    PARAM_ENUM("Type", "Lifetime|Age|Param|Velocity", 0);
+    PARAM_ENUM("Param", "Scale|Mass|Angle|TextureIndex|RotationSpeed", 1);
+
+}
+
+void NodeSparkInterpolator_ParamInterpolatorGraph::process()
+{
+    // get parameters
+    SPK::InterpolationType interpolateType =  TABLE_INTERPOLATION_TYPE[ getParameter("Type")->getValueAsEnum() ];
+    SPK::Param param =  TABLE_PARAM[ getParameter("Param")->getValueAsEnum() ];
+
+    // get path from input
+    Path* path = nullptr;
+    std::shared_ptr<NodeDataPath> inPath = getInput<NodeDataPath>(0);
+    if(inPath.get() && inPath->_result)
+    {
+        path = inPath->_result;
+    }
+    else
+    {
+        // error
+        return;
+    }
+
+    // create new interpolator
+    SPK::Ref<SPK::GraphInterpolator<float>> graphInterpolator;
+    graphInterpolator = SPK::GraphInterpolator<float>::create();
+    graphInterpolator->setType(interpolateType, param);
+
+    // for each keys, evaluate value and add it into the spark interpolator graph
+    for (eU32 i=0; i<path->getKeyCount(); ++i)
+    {
+        eF32 time = path->getKeyByIndex(i).time;
+        float value = path->evaluate(time);
+        graphInterpolator->addEntry(time, value);
+    }
+
+    // set base spark object parameters
+    setBaseObjectParams(graphInterpolator);
+
+    // set new interpolator as node result
+    ParamFloatInterpolator paramInterpolator;
+    paramInterpolator.interpolatorFloat = graphInterpolator;
+    paramInterpolator.param = param;
+    setResult(paramInterpolator);
+
+    // trigger nodes connections
+    dataUpdated(0);
+}
