@@ -128,7 +128,7 @@ struct PathKey
 class Path
 {
 public:
-    Path(PathType splineType, unsigned int keyCount = 0);
+    Path(PathType splineType = EPT_LINEAR, unsigned int keyCount = 0);
     ~Path();
 
     void build();
@@ -153,9 +153,25 @@ private:
     PathLoopMode _loopMode;
 };
 
+
+
 class Path4
 {
+public:
+    struct Float4
+    {
+        double x;
+        double y;
+        double z;
+        double w;
+    };
 
+    Float4 evaluate(double time) const;
+    const Path4& getSubPath(unsigned int index) const;
+    Path4& getSubPath(unsigned int index);
+
+private:
+    Path _subPaths[4];
 };
 
 class PathSampler

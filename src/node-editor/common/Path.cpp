@@ -2,6 +2,10 @@
 #include <assert.h>
 #include <math.h>
 
+//------------------------------------------------------------------------------
+// Path impl
+//------------------------------------------------------------------------------
+
 Path::Path(PathType splineType, unsigned int keyCount) :
     _spline(nullptr),
     _loopMode(ELM_LAST)
@@ -130,4 +134,26 @@ double Path::evaluate(double time) const
 void Path::setLoopMode(PathLoopMode loopMode)
 {
     _loopMode = loopMode;
+}
+
+
+//------------------------------------------------------------------------------
+// Path4 impl
+//------------------------------------------------------------------------------
+
+Path4::Float4 Path4::evaluate(double time) const
+{
+
+}
+
+const Path4& Path4::getSubPath(unsigned int index) const
+{
+    assert(index < 4);
+    //return _subPaths[index];
+}
+
+Path4& Path4::getSubPath(unsigned int index)
+{
+    assert(index < 4);
+    //return _subPaths[index];
 }
