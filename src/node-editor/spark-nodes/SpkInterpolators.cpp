@@ -253,11 +253,11 @@ void NodeSparkInterpolator_ColorInterpolatorGraph::process()
 
     // get path from input
 
-    Path* path = nullptr;
-    std::shared_ptr<NodeDataPath> inPath = getInput<NodeDataPath>(0);
+    Path4* path4 = nullptr;
+    std::shared_ptr<NodeDataPath4> inPath = getInput<NodeDataPath4>(0);
     if(inPath.get() && inPath->_result)
     {
-        path = inPath->_result;
+        path4 = inPath->_result;
     }
     else
     {
@@ -270,31 +270,41 @@ void NodeSparkInterpolator_ColorInterpolatorGraph::process()
     graphInterpolator = SPK::GraphInterpolator<SPK::Color>::create();
     graphInterpolator->setType(interpolateType, param);
 
+    // Find subpath with maximum keys (this one will be used to add entries in graph interpolator)
+    eU32 nbkey1 =  path4->getSubPath(0).getKeyCount();
+    eU32 nbkey2 =  path4->getSubPath(1).getKeyCount();
+    eU32 nbkey3 =  path4->getSubPath(2).getKeyCount();
+    eU32 nbkey4 =  path4->getSubPath(3).getKeyCount();
+    eU32 maxIndex1 = nbkey1 > nbkey2 ? 0 : 1;
+    eU32 maxIndex2 = nbkey3 > nbkey4 ? 2 : 3;
+    eU32 nbkeyX = path4->getSubPath(maxIndex1).getKeyCount();
+    eU32 nbkeyY = path4->getSubPath(maxIndex2).getKeyCount();
+    eU32 maxIndexFinal = nbkeyX  > nbkeyY ? maxIndex1 : maxIndex2;
+    eU32 nbkey = path4->getSubPath(maxIndexFinal).getKeyCount();
+
 
     // fo each keys, evaluate value and add it into the spark interpolator graph
-    for (eU32 i=0; i<path->getKeyCount(); ++i)
+    for (eU32 i=0; i<nbkey; ++i)
     {
         // get time key
-        eF32 time = path->getKeyByIndex(i).time;
+        eF32 time = path4->getSubPath(maxIndexFinal).getKeyByIndex(i).time;
 
         // evaluate color value at time
         SPK::Color color;
-        color.r = path->evaluate(time) * 255.0;
-        color.g = 0;
-        color.b = 0;
-        color.a = 255;
+        color.r = path4->getSubPath(0).evaluate(time) * 255.0;
+        color.g = path4->getSubPath(1).evaluate(time) * 255.0;
+        color.b = path4->getSubPath(2).evaluate(time) * 255.0;
+        color.a = path4->getSubPath(3).evaluate(time) * 255.0;
 
         /*SPK::Color color;
-                color.r = path.getSubPath(0).getKeyByTime(time)->val * 255.0f;
-                color.g = path.getSubPath(1).getKeyByTime(time)->val * 255.0f;
-                color.b = path.getSubPath(2).getKeyByTime(time)->val * 255.0f;
-                color.a = path.getSubPath(3).getKeyByTime(time)->val * 255.0f;*/
+        color.r = path.getSubPath(0).getKeyByTime(time)->val * 255.0f;
+        color.g = path.getSubPath(1).getKeyByTime(time)->val * 255.0f;
+        color.b = path.getSubPath(2).getKeyByTime(time)->val * 255.0f;
+        color.a = path.getSubPath(3).getKeyByTime(time)->val * 255.0f;*/
 
         // add new graph entry
         graphInterpolator->addEntry(time, color);
     }
-
-
 
     // set base spark object parameters
     setBaseObjectParams(graphInterpolator);
