@@ -26,8 +26,8 @@ NodePath::NodePath() : _path(nullptr)
 {
     OUT_PORT(ENC_PATH, "path");
 
-    PARAM_BUTTON("button", "Edit path");
-    PARAM_ENUM("PathType", "Constant|Linear|Cubic|Akima|Bessel|Pchip|Quintic", 1);
+    //PARAM_TEXT("Info", "Double click to edit path");
+    //PARAM_ENUM("PathType", "Constant|Linear|Cubic|Akima|Bessel|Pchip|Quintic", 1);
 
     _path = new Path(PathType::EPT_LINEAR);
     _path->setLoopMode(PathLoopMode::ELM_LAST);
@@ -37,9 +37,9 @@ NodePath::NodePath() : _path(nullptr)
 
 void NodePath::process()
 {
-    PathType pathType = (PathType)getParameter("PathType")->getValueAsEnum();
+    //PathType pathType = (PathType)getParameter("PathType")->getValueAsEnum();
 
-    // change path propeties in graph editor.
+    // path is processed through the graph editor
 }
 
 //------------------------------------------------------------------------------------------------------------------------------
@@ -50,8 +50,8 @@ NodePath4::NodePath4() : _path4(nullptr)
 {
     OUT_PORT(ENC_PATH4, "path4");
 
-    PARAM_BUTTON("button", "Edit path");
-    PARAM_ENUM("PathType", "Constant|Linear|Cubic|Akima|Bessel|Pchip|Quintic", 1);
+    //PARAM_TEXT("Info", "Double click to edit path");
+    //PARAM_ENUM("PathType", "Constant|Linear|Cubic|Akima|Bessel|Pchip|Quintic", 1);
 
     _path4 = new Path4(PathType::EPT_LINEAR);
     for (int i=0; i<4; i++)
@@ -64,9 +64,9 @@ NodePath4::NodePath4() : _path4(nullptr)
 
 void NodePath4::process()
 {
-    PathType pathType = (PathType)getParameter("PathType")->getValueAsEnum();
+    //PathType pathType = (PathType)getParameter("PathType")->getValueAsEnum();
 
-    // change path propeties in graph editor.
+    // path is processed through the graph editor
 }
 
 //------------------------------------------------------------------------------------------------------------------------------
