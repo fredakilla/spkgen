@@ -164,11 +164,13 @@ public:
         double y;
         double z;
         double w;
+
+        Float4(float x, float y, float z, float w);
     };
 
     Float4 evaluate(double time) const;
-    const Path4& getSubPath(unsigned int index) const;
-    Path4& getSubPath(unsigned int index);
+    const Path &getSubPath(unsigned int index) const;
+    Path& getSubPath(unsigned int index);
 
 private:
     Path _subPaths[4];

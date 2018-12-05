@@ -141,19 +141,27 @@ void Path::setLoopMode(PathLoopMode loopMode)
 // Path4 impl
 //------------------------------------------------------------------------------
 
+Path4::Float4::Float4(float x, float y, float z, float w) :
+    x(x), y(y), z(z), w(w)
+{
+}
+
 Path4::Float4 Path4::evaluate(double time) const
 {
-
+    return Path4::Float4(_subPaths[0].evaluate(time),
+                    _subPaths[1].evaluate(time),
+                    _subPaths[2].evaluate(time),
+                    _subPaths[3].evaluate(time));
 }
 
-const Path4& Path4::getSubPath(unsigned int index) const
+const Path& Path4::getSubPath(unsigned int index) const
 {
     assert(index < 4);
-    //return _subPaths[index];
+    return _subPaths[index];
 }
 
-Path4& Path4::getSubPath(unsigned int index)
+Path& Path4::getSubPath(unsigned int index)
 {
     assert(index < 4);
-    //return _subPaths[index];
+    return _subPaths[index];
 }
