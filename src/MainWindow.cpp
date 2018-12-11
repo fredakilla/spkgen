@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget* parent)
     _sparkNodesRegistry = registerSparkNodesDataModels();
     _nodeFlowScene->setRegistry(_sparkNodesRegistry);
 
+    _addDefaultPage();
+
     // create render view
     UrhoDevice::getInstance()->createRenderWindow((void*)_renderView->winId());
 
@@ -176,4 +178,9 @@ void MainWindow::timerEvent(QTimerEvent* event)
 void MainWindow::onRenderViewResized(int width, int height)
 {
     UrhoDevice::getInstance()->onResize(width, height);
+}
+
+void MainWindow::_addDefaultPage()
+{
+    _pageTree->onAddPage();
 }

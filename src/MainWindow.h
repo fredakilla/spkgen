@@ -29,6 +29,7 @@ private:
     void createWidgets();
     void createActions();
     void createMenus();
+    void _addDefaultPage();
     void closeEvent(QCloseEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
 
