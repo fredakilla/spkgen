@@ -81,6 +81,15 @@ void MainWindow::createWidgets()
     _dockGraph->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::LeftDockWidgetArea, _dockGraph);
 
+
+    // Create page tree
+    _pageTree = new PageTree(this);
+    _dockPageTree = new QDockWidget("Pages", this);
+    _dockPageTree->setWidget(_pageTree);
+    _dockPageTree->setAllowedAreas(Qt::AllDockWidgetAreas);
+    addDockWidget(Qt::LeftDockWidgetArea, _dockPageTree);
+
+
     // make some connections
     connect(_nodeFlowScene, &CustomFlowScene::showPathNodeRequest, _pathView, &GraphView::setPathNode);
     connect(_nodeFlowScene, &CustomFlowScene::showPath4NodeRequest, _pathView, &GraphView::setPath4Node);
