@@ -8,6 +8,7 @@
 #include "GraphView.h"
 #include "GraphEditor.h"
 #include "RenderWidget.h"
+#include "PageTree.h"
 
 class MainWindow : public QMainWindow
 {
@@ -47,9 +48,11 @@ private:
     RenderWidget* _renderView;
     GraphView* _pathView;
     GraphEditor* _pathEditor;
+    PageTree* _pageTree;
     QDockWidget* _dockView;
     QDockWidget* _dockNodeFlowView;
     QDockWidget* _dockGraph;
+    QDockWidget* _dockPageTree;
     int _gameLoopTimerId;
 };
 
