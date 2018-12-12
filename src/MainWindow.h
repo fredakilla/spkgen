@@ -24,6 +24,7 @@ private Q_SLOTS:
     void save();
     void onRenderViewResized(int width, int height);
     void onPageSwitch(Page* page);
+    void onNewPage(Page* page);
 
 private:
     void shutdown();
@@ -35,8 +36,6 @@ private:
     void timerEvent(QTimerEvent* event) override;
 
 
-    std::shared_ptr<DataModelRegistry> _sparkNodesRegistry;
-
     // GUI stuff
 
     QMenu* _fileMenu;
@@ -44,7 +43,6 @@ private:
     QAction* _openAct;
     QAction* _saveAct;
 
-    CustomFlowScene* _nodeFlowScene;
     FlowView* _nodeFlowView;
     QWidget* _viewportContainer;
     RenderWidget* _renderView;

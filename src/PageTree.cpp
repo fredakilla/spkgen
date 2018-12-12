@@ -86,11 +86,13 @@ void PageTree::onAddPage()
     page->flowScene = new CustomFlowScene();
     page->flowScene->setRegistry(_sparkNodesRegistry);
     page->name = QString("New page");
-   _nodeFlowScenes.push_back(page);
+    _nodeFlowScenes.push_back(page);
 
     QTreeWidgetItem* newItem = _addPage(page);
     clearSelection();
     setItemSelected(newItem, true);
+
+    Q_EMIT signalPageAdded(page);
 }
 
 void PageTree::onRemovePage()

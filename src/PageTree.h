@@ -23,6 +23,7 @@ public:
     void mousePressEvent(QMouseEvent* event) override;
 
 Q_SIGNALS:
+    void signalPageAdded(Page* page);
     void signalPageSwitch(Page* page);
 
 public Q_SLOTS:
