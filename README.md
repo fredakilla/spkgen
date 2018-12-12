@@ -24,7 +24,7 @@ TODO
 - [x] graph plot editor widget for spark graph interpolators (WIP, implement imgui widget ?)
 - [ ] complete all spark nodes (95% done)
 - [x] interact with 3D view (camera move...)
-- [ ] multiple scenes managment
+- [x] multiple scenes managment
 - [x] comments items on node view
 - [ ] set styles
 - [ ] add shortcuts on node view : copy/paste nodes, repeat last created node,...

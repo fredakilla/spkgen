@@ -86,7 +86,7 @@ SOURCES += \
     src/urho/BaseRenderer.cpp \
     src/node-editor/common/Curve.cpp \
     src/GraphEditor.cpp \
-    src/PageTree.cpp
+    src/PageList.cpp
 
 HEADERS += \
     src/node-editor/common/BaseNode.h \
@@ -119,7 +119,7 @@ HEADERS += \
     src/urho/BaseRenderer.h \
     src/node-editor/common/Curve.h \
     src/GraphEditor.h \
-    src/PageTree.h
+    src/PageList.h
 
 
 

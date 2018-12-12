@@ -77,16 +77,16 @@ void MainWindow::createWidgets()
     addDockWidget(Qt::LeftDockWidgetArea, _dockGraph);
 
     // Create page tree
-    _pageTree = new PageTree(this);
-    _dockPageTree = new QDockWidget("Pages", this);
-    _dockPageTree->setWidget(_pageTree);
-    _dockPageTree->setAllowedAreas(Qt::AllDockWidgetAreas);
-    addDockWidget(Qt::LeftDockWidgetArea, _dockPageTree);
+    _pageList = new PageList(this);
+    _dockPageList = new QDockWidget("Pages", this);
+    _dockPageList->setWidget(_pageList);
+    _dockPageList->setAllowedAreas(Qt::AllDockWidgetAreas);
+    addDockWidget(Qt::LeftDockWidgetArea, _dockPageList);
 
     // make some connections
     connect(_renderView, &RenderWidget::signalResized, this, &MainWindow::onRenderViewResized);
-    connect(_pageTree, &PageTree::signalPageAdded, this, &MainWindow::onNewPage);
-    connect(_pageTree, &PageTree::signalPageSwitch, this, &MainWindow::onPageSwitch);
+    connect(_pageList, &PageList::signalPageAdded, this, &MainWindow::onNewPage);
+    connect(_pageList, &PageList::signalPageSwitch, this, &MainWindow::onPageSwitch);
 }
 
 void MainWindow::createActions()
@@ -139,7 +139,7 @@ void MainWindow::onOpen()
     QByteArray fileData = file.readAll();
 
     QJsonDocument loadDoc(QJsonDocument::fromJson(fileData));
-    _pageTree->load(loadDoc.object());
+    _pageList->load(loadDoc.object());
 }
 
 void MainWindow::onSave()
@@ -158,7 +158,7 @@ void MainWindow::onSave()
         if (file.open(QIODevice::WriteOnly))
         {
             QJsonObject json;
-            _pageTree->save(json);
+            _pageList->save(json);
 
             QJsonDocument saveDoc(json);
             file.write(saveDoc.toJson());
@@ -202,7 +202,7 @@ void MainWindow::onRenderViewResized(int width, int height)
 
 void MainWindow::addDefaultPage()
 {
-    _pageTree->onAddPage();
+    _pageList->onAddPage();
 }
 
 void MainWindow::onPageSwitch(Page* page)

@@ -1,4 +1,4 @@
-#include "PageTree.h"
+#include "PageList.h"
 #include "node-editor/spark-nodes/SparkNodesRegistry.h"
 
 #include <QtWidgets/QHeaderView>
@@ -7,8 +7,8 @@
 #include <QtCore/QJsonArray>
 #include <QMouseEvent>
 
-PageTree::PageTree(QWidget* parent) :
-    QTreeWidget(parent)
+PageList::PageList(QWidget* parent) :
+    QListWidget(parent)
 {
     _sparkNodesRegistry = registerSparkNodesDataModels();
 
@@ -17,60 +17,51 @@ PageTree::PageTree(QWidget* parent) :
 
     _createActions();
 
-    connect(this, &PageTree::itemSelectionChanged, this, &PageTree::onSelectionChanged);
-    connect(this, &PageTree::itemChanged, this, &PageTree::onItemChanged);
+    connect(this, &PageList::itemSelectionChanged, this, &PageList::onSelectionChanged);
+    connect(this, &PageList::itemChanged, this, &PageList::onItemChanged);
 }
 
-QSize PageTree::sizeHint() const
+QSize PageList::sizeHint() const
 {
     return QSize(150, 0);
 }
 
-void PageTree::mousePressEvent(QMouseEvent* event)
+void PageList::mousePressEvent(QMouseEvent* event)
 {
     QModelIndex item = indexAt(event->pos());
-    QTreeView::mousePressEvent(event);
+    QListWidget::mousePressEvent(event);
     if ((item.row() == -1 && item.column() == -1))
     {
         clearSelection();
     }
 }
 
-QTreeWidgetItem* PageTree::_addPage(Page* page, QTreeWidgetItem *parent)
+QListWidgetItem* PageList::_addPage(Page* page, QListWidgetItem *parent)
 {
     if (!parent && selectedItems().size() == 1)
         parent = selectedItems().first();
 
-    QTreeWidgetItem* item = new QTreeWidgetItem(parent);
-    item->setText(0, page->flowScene->getName());
-    item->setData(0, Qt::UserRole, qVariantFromValue<void*>(page));
+    QListWidgetItem* item = new QListWidgetItem();
+    item->setText(page->flowScene->getName());
+    item->setData(Qt::UserRole, qVariantFromValue<void*>(page));
     item->setFlags(item->flags()|Qt::ItemIsEditable);
-    addTopLevelItem(item);
-
-    if (parent)
-        parent->setExpanded(true);
+    addItem(item);
 
     return item;
 }
 
-void PageTree::_createActions()
+void PageList::_createActions()
 {
     QAction *act = new QAction("Add new", this);
     act->setShortcut(QKeySequence("a"));
     act->setShortcutContext(Qt::WidgetShortcut);
-    connect(act, &QAction::triggered, this, &PageTree::onAddPage);
+    connect(act, &QAction::triggered, this, &PageList::onAddPage);
     addAction(act);
 
     act = new QAction("Remove", this);
     act->setShortcut(QKeySequence::Delete);
     act->setShortcutContext(Qt::WidgetShortcut);
-    connect(act, &QAction::triggered, this, &PageTree::onRemovePage);
-    addAction(act);
-
-    act = new QAction("Rename", this);
-    act->setShortcut(QKeySequence("r"));
-    act->setShortcutContext(Qt::WidgetShortcut);
-    connect(act, &QAction::triggered, this, &PageTree::onRenamePage);
+    connect(act, &QAction::triggered, this, &PageList::onRemovePage);
     addAction(act);
 
     act = new QAction(this);
@@ -78,11 +69,11 @@ void PageTree::_createActions()
     addAction(act);
 
     act = new QAction("Sort by name", this);
-    connect(act, &QAction::triggered, this, &PageTree::onSortByName);
+    connect(act, &QAction::triggered, this, &PageList::onSortByName);
     addAction(act);
 }
 
-void PageTree::onAddPage()
+void PageList::onAddPage()
 {
     Page* page = new Page();
     page->flowScene = new CustomFlowScene();
@@ -90,20 +81,21 @@ void PageTree::onAddPage()
     page->flowScene->setName("New page");
     _nodeFlowScenes.push_back(page);
 
-    QTreeWidgetItem* newItem = _addPage(page);
+    QListWidgetItem* newItem = _addPage(page);
+
     clearSelection();
     setItemSelected(newItem, true);
 
     Q_EMIT signalPageAdded(page);
 }
 
-void PageTree::onRemovePage()
+void PageList::onRemovePage()
 {
-    QList<QTreeWidgetItem*> items = selectedItems();
+    QList<QListWidgetItem*> items = selectedItems();
 
-    Q_FOREACH (QTreeWidgetItem* item, items)
+    Q_FOREACH (QListWidgetItem* item, items)
     {
-        Page* page = (Page*)item->data(0, Qt::UserRole).value<void*>();
+        Page* page = (Page*)item->data(Qt::UserRole).value<void*>();
         int index = _nodeFlowScenes.indexOf(page);
         Q_ASSERT(index != -1);
         _nodeFlowScenes.removeAt(index);
@@ -113,28 +105,26 @@ void PageTree::onRemovePage()
     clearSelection();
 }
 
-void PageTree::onItemChanged(QTreeWidgetItem *item, int column)
+void PageList::onItemChanged(QListWidgetItem *item)
 {
+    Page* page = (Page*)item->data(Qt::UserRole).value<void*>();
+    page->flowScene->setName(item->text());
 }
 
-void PageTree::onSelectionChanged()
+void PageList::onSelectionChanged()
 {
     Page* page = nullptr;
     if (selectedItems().size() > 0)
-        page = (Page *)selectedItems().first()->data(0, Qt::UserRole).value<void*>();
+        page = (Page *)selectedItems().first()->data(Qt::UserRole).value<void*>();
 
     Q_EMIT signalPageSwitch(page);
 }
 
-void PageTree::onRenamePage()
+void PageList::onSortByName()
 {
 }
 
-void PageTree::onSortByName()
-{
-}
-
-void PageTree::load(const QJsonObject &json)
+void PageList::load(const QJsonObject &json)
 {
     clear();
     _nodeFlowScenes.clear();
@@ -142,13 +132,21 @@ void PageTree::load(const QJsonObject &json)
     QJsonArray pageArray = json["pages"].toArray();
     for (int pageIndex = 0; pageIndex < pageArray.size(); ++pageIndex)
     {
-        QJsonObject levelObject = pageArray[pageIndex].toObject();
+        // create new page
         onAddPage();
-        _nodeFlowScenes.last()->flowScene->load(levelObject);
+
+        // get last created page
+        int lastIndex = count()-1;
+        Page* page = (Page*)item(lastIndex)->data(Qt::UserRole).value<void*>();
+
+        // load page
+        QJsonObject pageJson = pageArray[pageIndex].toObject();
+        page->flowScene->load(pageJson);
+        item(lastIndex)->setText(page->flowScene->getName());
     }
 }
 
-void PageTree::save(QJsonObject &json)
+void PageList::save(QJsonObject &json)
 {
     QJsonArray pageArray;
     Q_FOREACH (Page* page, _nodeFlowScenes)

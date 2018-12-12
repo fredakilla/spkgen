@@ -1,7 +1,7 @@
-#ifndef PAGETREE_H
-#define PAGETREE_H
+#ifndef PAGELIST_H
+#define PAGELIST_H
 
-#include <QTreeWidget>
+#include <QListWidget>
 
 #include "node-editor/common/CustomFlowScene.h"
 
@@ -12,12 +12,12 @@ struct Page
 };
 
 
-class PageTree : public QTreeWidget
+class PageList : public QListWidget
 {
     Q_OBJECT
 
 public:
-    PageTree(QWidget* parent);
+    PageList(QWidget* parent);
     QSize sizeHint() const override;
     void mousePressEvent(QMouseEvent* event) override;
     void load(const QJsonObject &json);
@@ -30,18 +30,17 @@ Q_SIGNALS:
 public Q_SLOTS:
     void onAddPage();
     void onRemovePage();
-    void onItemChanged(QTreeWidgetItem *item, int column);
+    void onItemChanged(QListWidgetItem *item);
     void onSelectionChanged();
     void onSortByName();
-    void onRenamePage();
 
 private:
     void _createActions();
-    QTreeWidgetItem* _addPage(Page *page, QTreeWidgetItem *parent=nullptr);
+    QListWidgetItem* _addPage(Page *page, QListWidgetItem *parent=nullptr);
 
     std::shared_ptr<DataModelRegistry> _sparkNodesRegistry;
     QList<Page*> _nodeFlowScenes;
 
 };
 
-#endif // PAGETREE_H
+#endif // PAGELIST
