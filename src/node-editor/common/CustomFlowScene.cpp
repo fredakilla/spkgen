@@ -19,6 +19,7 @@
 
 CustomFlowScene::CustomFlowScene(std::shared_ptr<DataModelRegistry> registry, QObject * parent) :
     FlowScene(registry, parent)
+  , _name("New page")
 {
     _initialize();
 }
@@ -143,65 +144,54 @@ void CustomFlowScene::deleteSelectedComments()
     }
 }
 
-void CustomFlowScene::save() const
+void CustomFlowScene::save(QJsonObject &json) const
 {
-    // original code from FlowScene
-    // modified to append comments to json
+    // nodes and connections
+    QByteArray data = saveToMemory();
+    json = QJsonDocument::fromJson(data).object();
 
-    QString fileName = QFileDialog::getSaveFileName(nullptr,
-                                         tr("Open Flow Scene"),
-                                         QDir::homePath(),
-                                         tr("Flow Scene Files (*.flow)"));
+    // page name
+    json["Name"] = _name;
 
-    if (!fileName.isEmpty())
+    // comments
+    QJsonArray commentsJsonArray;
+    for (auto const & commentItem : _commentList)
     {
-        if (!fileName.endsWith("flow", Qt::CaseInsensitive))
-            fileName += ".flow";
-
-        QFile file(fileName);
-        if (file.open(QIODevice::WriteOnly))
-        {
-            // get nodes and connections data
-            QByteArray data = saveToMemory();
-
-            // intercept json result and append comments
-            QJsonObject json = QJsonDocument::fromJson(data).object();
-            saveCommentsToJson(json);
-
-            // finally write all in file
-            QJsonDocument document(json);
-            QByteArray dataWithComments = document.toJson();
-            file.write(dataWithComments);
-        }
+        commentsJsonArray.append(commentItem->save());
     }
+    json["comments"] = commentsJsonArray;
+
 }
 
-void CustomFlowScene::load()
+void CustomFlowScene::load(const QJsonObject& json)
 {
-    // original code from FlowScene
-
-    QString fileName = QFileDialog::getOpenFileName(nullptr,
-                                         tr("Open Flow Scene"),
-                                         QDir::homePath(),
-                                         tr("Flow Scene Files (*.flow)"));
-
-    if (!QFileInfo::exists(fileName))
-        return;
-
-    QFile file(fileName);
-
-    if (!file.open(QIODevice::ReadOnly))
-        return;
-
-    clearScene();       // clear scene here, not like original.
+    clearScene();
     clearComments();
 
-    QByteArray wholeFile = file.readAll();
+    // page name
+    _name = json["Name"].toString();
 
-    loadFromMemory(wholeFile);
+    // nodes
+    QJsonArray nodesJsonArray = json["nodes"].toArray();
+    for (QJsonValueRef node : nodesJsonArray)
+    {
+        restoreNode(node.toObject());
+    }
 
-    // additionnal code to load comments
-    loadCommentsFromMemory(wholeFile);
+    // connections
+    QJsonArray connectionJsonArray = json["connections"].toArray();
+    for (QJsonValueRef connection : connectionJsonArray)
+    {
+        restoreConnection(connection.toObject());
+    }
+
+    // comments
+    QJsonArray commentsJsonArray = json["comments"].toArray();
+    for (int i=0; i<commentsJsonArray.size(); ++i)
+    {
+        eCommentItem* comment = _addComment(QPointF(0,0));
+        comment->restore(commentsJsonArray[i].toObject());
+    }
 }
 
 void CustomFlowScene::clearComments()
@@ -212,34 +202,4 @@ void CustomFlowScene::clearComments()
         delete i;
     }
     _commentList.clear();
-}
-
-void CustomFlowScene::saveCommentsToJson(QJsonObject &json) const
-{
-    QJsonArray commentsJsonArray;
-    for (auto const & commentItem : _commentList)
-    {
-        commentsJsonArray.append(commentItem->save());
-    }
-    json["comments"] = commentsJsonArray;
-}
-
-void CustomFlowScene::loadCommentsFromMemory(const QByteArray& data)
-{
-    QJsonObject const jsonDocument = QJsonDocument::fromJson(data).object();
-
-    // check for errors
-    //QJsonParseError jsonError;
-    //QJsonDocument configJsonDoc = QJsonDocument::fromJson(data, &jsonError);
-    //if( jsonError.error != QJsonParseError::NoError )
-    //     qDebug() << QString("Json error: %1").arg(jsonError.errorString());
-    //else if( configJsonDoc .isNull() )
-    //     qDebug() << "Null JsonDocument";
-
-    QJsonArray commentsJsonArray = jsonDocument["comments"].toArray();
-    for (int i=0; i<commentsJsonArray.size(); ++i)
-    {
-        eCommentItem* comment = _addComment(QPointF(0,0));
-        comment->restore(commentsJsonArray[i].toObject());
-    }
 }

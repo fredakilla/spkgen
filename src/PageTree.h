@@ -9,7 +9,6 @@
 struct Page
 {
     CustomFlowScene* flowScene;
-    QString name;
 };
 
 
@@ -21,6 +20,8 @@ public:
     PageTree(QWidget* parent);
     QSize sizeHint() const override;
     void mousePressEvent(QMouseEvent* event) override;
+    void load(const QJsonObject &json);
+    void save(QJsonObject &json);
 
 Q_SIGNALS:
     void signalPageAdded(Page* page);

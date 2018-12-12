@@ -11,6 +11,11 @@
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QLabel>
+#include <QFileDialog>
+#include <QFile>
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonObject>
+#include <QtCore/QJsonArray>
 
 #include "node-editor/common/Nodestyle.h"
 #include "node-editor/spark-nodes/SparkNodesRegistry.h"
@@ -118,12 +123,47 @@ void MainWindow::onNewFile()
 
 void MainWindow::onOpen()
 {
-    //_nodeFlowScene->load();
+    QString fileName = QFileDialog::getOpenFileName(nullptr,
+                                         tr("Open Flow Scene"),
+                                         QDir::homePath(),
+                                         tr("Flow Scene Files (*.flow)"));
+
+    if (!QFileInfo::exists(fileName))
+        return;
+
+    QFile file(fileName);
+
+    if (!file.open(QIODevice::ReadOnly))
+        return;
+
+    QByteArray fileData = file.readAll();
+
+    QJsonDocument loadDoc(QJsonDocument::fromJson(fileData));
+    _pageTree->load(loadDoc.object());
 }
 
 void MainWindow::onSave()
 {
-    //_nodeFlowScene->save();
+    QString fileName = QFileDialog::getSaveFileName(nullptr,
+                                         tr("Open Flow Scene"),
+                                         QDir::homePath(),
+                                         tr("Flow Scene Files (*.flow)"));
+
+    if (!fileName.isEmpty())
+    {
+        if (!fileName.endsWith("flow", Qt::CaseInsensitive))
+            fileName += ".flow";
+
+        QFile file(fileName);
+        if (file.open(QIODevice::WriteOnly))
+        {
+            QJsonObject json;
+            _pageTree->save(json);
+
+            QJsonDocument saveDoc(json);
+            file.write(saveDoc.toJson());
+        }
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)

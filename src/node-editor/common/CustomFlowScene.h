@@ -39,11 +39,12 @@ public:
     CustomFlowScene(QObject * parent = Q_NULLPTR);
     ~CustomFlowScene();
 
-    void save() const;
-    void load();
+    void save(QJsonObject &json) const;
+    void load(const QJsonObject &json);
     void clearComments();
-    void saveCommentsToJson(QJsonObject &json) const;
-    void loadCommentsFromMemory(const QByteArray& data);
+
+    QString getName() { return _name; }
+    void setName(QString name) { _name = name; }
 
 Q_SIGNALS:
     void signalShowPathNode(NodePath*);
@@ -69,6 +70,7 @@ private:
     QGraphicsItemLayer* _commentLayer;
     QPointF _mousePos;
     QList<eCommentItem*> _commentList;
+    QString _name;
 };
 
 

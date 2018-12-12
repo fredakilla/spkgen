@@ -3,6 +3,8 @@
 
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMenu>
+#include <QtCore/QJsonObject>
+#include <QtCore/QJsonArray>
 #include <QMouseEvent>
 
 PageTree::PageTree(QWidget* parent) :
@@ -40,7 +42,7 @@ QTreeWidgetItem* PageTree::_addPage(Page* page, QTreeWidgetItem *parent)
         parent = selectedItems().first();
 
     QTreeWidgetItem* item = new QTreeWidgetItem(parent);
-    item->setText(0, page->name);
+    item->setText(0, page->flowScene->getName());
     item->setData(0, Qt::UserRole, qVariantFromValue<void*>(page));
     item->setFlags(item->flags()|Qt::ItemIsEditable);
     addTopLevelItem(item);
@@ -85,7 +87,7 @@ void PageTree::onAddPage()
     Page* page = new Page();
     page->flowScene = new CustomFlowScene();
     page->flowScene->setRegistry(_sparkNodesRegistry);
-    page->name = QString("New page");
+    page->flowScene->setName("New page");
     _nodeFlowScenes.push_back(page);
 
     QTreeWidgetItem* newItem = _addPage(page);
@@ -131,3 +133,30 @@ void PageTree::onRenamePage()
 void PageTree::onSortByName()
 {
 }
+
+void PageTree::load(const QJsonObject &json)
+{
+    clear();
+    _nodeFlowScenes.clear();
+
+    QJsonArray pageArray = json["pages"].toArray();
+    for (int pageIndex = 0; pageIndex < pageArray.size(); ++pageIndex)
+    {
+        QJsonObject levelObject = pageArray[pageIndex].toObject();
+        onAddPage();
+        _nodeFlowScenes.last()->flowScene->load(levelObject);
+    }
+}
+
+void PageTree::save(QJsonObject &json)
+{
+    QJsonArray pageArray;
+    Q_FOREACH (Page* page, _nodeFlowScenes)
+    {
+        QJsonObject jsonPageData;
+        page->flowScene->save(jsonPageData);
+        pageArray.append(jsonPageData);
+    }
+    json["pages"] = pageArray;
+}
+
