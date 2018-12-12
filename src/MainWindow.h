@@ -23,6 +23,7 @@ private Q_SLOTS:
     void open();
     void save();
     void onRenderViewResized(int width, int height);
+    void onPageSwitch(Page* page);
 
 private:
     void shutdown();

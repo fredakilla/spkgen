@@ -98,6 +98,7 @@ void MainWindow::createWidgets()
     connect(_nodeFlowScene, &CustomFlowScene::showPathNodeRequest, _pathEditor, &GraphEditor::onSetPath);
     connect(_nodeFlowScene, &CustomFlowScene::showPath4NodeRequest, _pathEditor, &GraphEditor::onSetPath4);
     connect(_renderView, &RenderWidget::resized, this, &MainWindow::onRenderViewResized);
+    connect(_pageTree, &PageTree::signalPageSwitch, this, &MainWindow::onPageSwitch);
 
     // connect to FlowView deleteSelectionAction a method to delete comments graphics items.
     QAction* deleteAction = _nodeFlowView->deleteSelectionAction();
@@ -183,4 +184,12 @@ void MainWindow::onRenderViewResized(int width, int height)
 void MainWindow::_addDefaultPage()
 {
     _pageTree->onAddPage();
+}
+
+void MainWindow::onPageSwitch(Page* page)
+{
+    if(page)
+    {
+        _nodeFlowView->setScene(page->flowScene);
+    }
 }

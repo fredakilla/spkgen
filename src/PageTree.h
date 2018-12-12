@@ -15,15 +15,15 @@ struct Page
 
 class PageTree : public QTreeWidget
 {
+    Q_OBJECT
+
 public:
     PageTree(QWidget* parent);
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
+    void mousePressEvent(QMouseEvent* event) override;
 
 Q_SIGNALS:
-    /*void onPageAdd(eOperatorPage *&opPage);
-    void onPageRemove(eOperatorPage *opPage);
-    void onPageSwitch(eOperatorPage *opPage);
-    void onPageRenamed(eOperatorPage *opPage);*/
+    void signalPageSwitch(Page* page);
 
 public Q_SLOTS:
     void onAddPage();

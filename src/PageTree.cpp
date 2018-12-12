@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMenu>
+#include <QMouseEvent>
 
 PageTree::PageTree(QWidget* parent) :
     QTreeWidget(parent)
@@ -21,6 +22,16 @@ PageTree::PageTree(QWidget* parent) :
 QSize PageTree::sizeHint() const
 {
     return QSize(150, 0);
+}
+
+void PageTree::mousePressEvent(QMouseEvent* event)
+{
+    QModelIndex item = indexAt(event->pos());
+    QTreeView::mousePressEvent(event);
+    if ((item.row() == -1 && item.column() == -1))
+    {
+        clearSelection();
+    }
 }
 
 QTreeWidgetItem* PageTree::_addPage(Page* page, QTreeWidgetItem *parent)
@@ -104,6 +115,11 @@ void PageTree::onItemChanged(QTreeWidgetItem *item, int column)
 
 void PageTree::onSelectionChanged()
 {
+    Page* page = nullptr;
+    if (selectedItems().size() > 0)
+        page = (Page *)selectedItems().first()->data(0, Qt::UserRole).value<void*>();
+
+    Q_EMIT signalPageSwitch(page);
 }
 
 void PageTree::onRenamePage()
