@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget* parent)
     createWidgets();
     createActions();
     createMenus();
-    _addDefaultPage();
+    addDefaultPage();
 
     // create render view
     UrhoDevice::getInstance()->createRenderWindow((void*)_renderView->winId());
@@ -79,7 +79,7 @@ void MainWindow::createWidgets()
     addDockWidget(Qt::LeftDockWidgetArea, _dockPageTree);
 
     // make some connections
-    connect(_renderView, &RenderWidget::resized, this, &MainWindow::onRenderViewResized);
+    connect(_renderView, &RenderWidget::signalResized, this, &MainWindow::onRenderViewResized);
     connect(_pageTree, &PageTree::signalPageAdded, this, &MainWindow::onNewPage);
     connect(_pageTree, &PageTree::signalPageSwitch, this, &MainWindow::onPageSwitch);
 }
@@ -89,17 +89,17 @@ void MainWindow::createActions()
     _newAct = new QAction(tr("&New"), this);
     _newAct->setShortcuts(QKeySequence::New);
     _newAct->setStatusTip(tr("New"));
-    connect(_newAct, &QAction::triggered, this, &MainWindow::newFile);
+    connect(_newAct, &QAction::triggered, this, &MainWindow::onNewFile);
 
     _openAct = new QAction(tr("&Open"), this);
     _openAct->setShortcuts(QKeySequence::Open);
     _openAct->setStatusTip(tr("Open"));
-    connect(_openAct, &QAction::triggered, this, &MainWindow::open);
+    connect(_openAct, &QAction::triggered, this, &MainWindow::onOpen);
 
     _saveAct = new QAction(tr("&Save"), this);
     _saveAct->setShortcuts(QKeySequence::Save);
     _saveAct->setStatusTip(tr("Save"));
-    connect(_saveAct, &QAction::triggered, this, &MainWindow::save);
+    connect(_saveAct, &QAction::triggered, this, &MainWindow::onSave);
 }
 
 void MainWindow::createMenus()
@@ -110,18 +110,18 @@ void MainWindow::createMenus()
     _fileMenu->addAction(_saveAct);
 }
 
-void MainWindow::newFile()
+void MainWindow::onNewFile()
 {
     //_nodeFlowScene->clearScene();
     //_nodeFlowScene->clearComments();
 }
 
-void MainWindow::open()
+void MainWindow::onOpen()
 {
     //_nodeFlowScene->load();
 }
 
-void MainWindow::save()
+void MainWindow::onSave()
 {
     //_nodeFlowScene->save();
 }
@@ -160,7 +160,7 @@ void MainWindow::onRenderViewResized(int width, int height)
     UrhoDevice::getInstance()->onResize(width, height);
 }
 
-void MainWindow::_addDefaultPage()
+void MainWindow::addDefaultPage()
 {
     _pageTree->onAddPage();
 }
@@ -178,10 +178,10 @@ void MainWindow::onNewPage(Page* page)
     if(page)
     {
         // create required connections for each new page
-        connect(page->flowScene, &CustomFlowScene::showPathNodeRequest, _pathView, &GraphView::setPathNode);
-        connect(page->flowScene, &CustomFlowScene::showPath4NodeRequest, _pathView, &GraphView::setPath4Node);
-        connect(page->flowScene, &CustomFlowScene::showPathNodeRequest, _pathEditor, &GraphEditor::onSetPath);
-        connect(page->flowScene, &CustomFlowScene::showPath4NodeRequest, _pathEditor, &GraphEditor::onSetPath4);
+        connect(page->flowScene, &CustomFlowScene::signalShowPathNode, _pathView, &GraphView::onSetPathNode);
+        connect(page->flowScene, &CustomFlowScene::signalShowPath4Node, _pathView, &GraphView::onSetPath4Node);
+        connect(page->flowScene, &CustomFlowScene::signalShowPathNode, _pathEditor, &GraphEditor::onSetPath);
+        connect(page->flowScene, &CustomFlowScene::signalShowPath4Node, _pathEditor, &GraphEditor::onSetPath4);
 
         // connect to FlowView deleteSelectionAction a method to delete comments graphics items.
         QAction* deleteAction = _nodeFlowView->deleteSelectionAction();

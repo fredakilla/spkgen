@@ -19,9 +19,9 @@ public:
     ~MainWindow();
 
 private Q_SLOTS:
-    void newFile();
-    void open();
-    void save();
+    void onNewFile();
+    void onOpen();
+    void onSave();
     void onRenderViewResized(int width, int height);
     void onPageSwitch(Page* page);
     void onNewPage(Page* page);
@@ -31,7 +31,7 @@ private:
     void createWidgets();
     void createActions();
     void createMenus();
-    void _addDefaultPage();
+    void addDefaultPage();
     void closeEvent(QCloseEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
 

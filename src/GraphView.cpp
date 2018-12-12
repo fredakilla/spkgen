@@ -144,7 +144,7 @@ void GraphView::setAxisStyle()
     axisY->setGridLineColor(QColor(128,128,128,128));
 }
 
-void GraphView::setPathNode(NodePath* node)
+void GraphView::onSetPathNode(NodePath* node)
 {
     Q_ASSERT(node);
 
@@ -166,7 +166,7 @@ void GraphView::setPathNode(NodePath* node)
     plot();
 }
 
-void GraphView::setPath4Node(NodePath4* node)
+void GraphView::onSetPath4Node(NodePath4* node)
 {
     Q_ASSERT(node);
 

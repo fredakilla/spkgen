@@ -46,8 +46,8 @@ public:
     void loadCommentsFromMemory(const QByteArray& data);
 
 Q_SIGNALS:
-    void showPathNodeRequest(NodePath*);
-    void showPath4NodeRequest(NodePath4*);
+    void signalShowPathNode(NodePath*);
+    void signalShowPath4Node(NodePath4*);
 
 public Q_SLOTS:
     void deleteSelectedComments();

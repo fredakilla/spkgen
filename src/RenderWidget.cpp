@@ -128,7 +128,7 @@ void RenderWidget::resizeEvent(QResizeEvent* event)
     QWidget::resizeEvent(event);
     int width = event->size().width();
     int height = event->size().height();
-    Q_EMIT (resized(width, height));
+    Q_EMIT (signalResized(width, height));
 }
 
 void RenderWidget::mousePressEvent(QMouseEvent* event)

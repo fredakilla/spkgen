@@ -59,8 +59,8 @@ public:
     void wheelEvent(QWheelEvent *event) override;
 
 public Q_SLOTS:
-    void setPathNode(NodePath* node);
-    void setPath4Node(NodePath4* node);
+    void onSetPathNode(NodePath* node);
+    void onSetPath4Node(NodePath4* node);
     void onPathSelectedX();
     void onPathSelectedY();
     void onPathSelectedZ();

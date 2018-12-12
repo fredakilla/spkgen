@@ -25,7 +25,7 @@ public:
 
 
 Q_SIGNALS:
-    void resized(int width, int height);
+    void signalResized(int width, int height);
 
 private:
     QPoint _lastMousePos;

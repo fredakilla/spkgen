@@ -96,7 +96,7 @@ void CustomFlowScene::showNode(QtNodes::Node& node)
     {
         if(pathNode->getResult() != nullptr)
         {
-            Q_EMIT showPathNodeRequest(pathNode);
+            Q_EMIT signalShowPathNode(pathNode);
         }
         return;
     }
@@ -107,7 +107,7 @@ void CustomFlowScene::showNode(QtNodes::Node& node)
     {
         if(path4Node->getResult() != nullptr)
         {
-            Q_EMIT showPath4NodeRequest(path4Node);
+            Q_EMIT signalShowPath4Node(path4Node);
         }
         return;
     }
