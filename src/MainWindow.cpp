@@ -38,11 +38,11 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow()
 {
-    delete _nodeFlowView;
-    delete _renderView;
-    delete _viewportContainer;
-    delete _dockView;
-    delete _dockNodeFlowView;
+    //delete _nodeFlowView;
+    //delete _renderView;
+    //delete _viewportContainer;
+    //delete _dockView;
+    //delete _dockNodeFlowView;
 }
 
 void MainWindow::createWidgets()

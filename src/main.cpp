@@ -32,11 +32,12 @@ int main(int argc, char **argv)
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
     qApp->setPalette(darkPalette);
 
-    MainWindow mainWindow;
-    mainWindow.showMaximized();
+    MainWindow* mainWindow = new MainWindow();
+    mainWindow->showMaximized();
 
     int ret = app.exec();
 
+    delete mainWindow;
     UrhoDevice::freeContext();
 
     return ret;
