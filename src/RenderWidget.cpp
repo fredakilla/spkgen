@@ -241,6 +241,7 @@ void RenderWidget::keyReleaseEvent(QKeyEvent* event)
 {
     SDL_Event sdlEvent;
     sdlEvent.type = SDL_KEYUP;
+    sdlEvent.key.keysym.scancode = SDL_GetScancodeFromKey(event->nativeVirtualKey());
     sdlEvent.key.keysym.sym = __convertQtKeyToSDL( Qt::Key(event->key()) );
     sdlEvent.key.keysym.mod = __convertQtKeyModifierToSDL(event->modifiers());
     SDL_PushEvent(&sdlEvent);
@@ -250,6 +251,7 @@ void RenderWidget::keyPressEvent(QKeyEvent* event)
 {
     SDL_Event sdlEvent;
     sdlEvent.type = SDL_KEYDOWN;
+    sdlEvent.key.keysym.scancode = SDL_GetScancodeFromKey(event->nativeVirtualKey());
     sdlEvent.key.keysym.sym = __convertQtKeyToSDL( Qt::Key(event->key()) );
     sdlEvent.key.keysym.mod = __convertQtKeyModifierToSDL(event->modifiers());
     SDL_PushEvent(&sdlEvent);

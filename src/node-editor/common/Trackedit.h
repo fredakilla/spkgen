@@ -36,7 +36,7 @@ private:
     eBool               _changeValue(eF32 factor);
 
 public:
-    static const eInt   FLOAT_PRECISION = 3;
+    static const eInt   FLOAT_PRECISION = 2;
 
 private:
     eF32                m_curFlt;
