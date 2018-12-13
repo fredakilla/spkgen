@@ -36,8 +36,4 @@ void BaseRenderer3D::resize(int width, int height)
         _viewport->SetRect(IntRect(0, 0, width, height));
 }
 
-void BaseRenderer3D::update(float elapsedTime)
-{
-}
-
 

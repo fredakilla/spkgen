@@ -17,8 +17,6 @@ class ISubRenderer
 public:
     virtual ~ISubRenderer() {}
     virtual void resize(int width, int height) = 0;
-    virtual void update(float elapsedTime) = 0;
-    virtual void render(float elapsedTime) = 0;
 };
 
 
@@ -33,8 +31,6 @@ class BaseRenderer3D : public ISubRenderer, public Urho3D::Object
 
 public:
     BaseRenderer3D();
-
-    void update(float elapsedTime) override;
     void resize(int width, int height) override;
     Urho3D::Scene* getScene() { return _scene; }
 
