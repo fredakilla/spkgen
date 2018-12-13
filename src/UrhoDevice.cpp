@@ -3,7 +3,6 @@
 #include "node-editor/spark-nodes/SparkNodeRender.h"
 #include "urho/BaseRenderer.h"
 
-
 #include <Urho3D/Urho3DAll.h>
 #include <Urhox/Spark/UrhoSpark.h>
 
@@ -41,14 +40,6 @@ void UrhoDevice::freeContext()
     gUrhoContext = nullptr;
 }
 
-void UrhoDevice::initialize()
-{
-}
-
-void UrhoDevice::finalize()
-{
-}
-
 void UrhoDevice::createRenderWindow(void* hwnd)
 {
     // set engine paramaters
@@ -83,7 +74,6 @@ void UrhoDevice::runFrame()
 {
     _engine->RunFrame();
 
-
     /*// begin frame
     Renderer::getInstance().beginFrame();
     QtImGui::newFrame();
@@ -100,53 +90,22 @@ void UrhoDevice::runFrame()
 
 void UrhoDevice::handleMouseButtonDown(StringHash eventType, VariantMap& eventData)
 {
-
 }
 
 void UrhoDevice::handleMouseButtonUp(StringHash eventType, VariantMap& eventData)
 {
-
 }
 
 void UrhoDevice::handleMouseMove(StringHash eventType, VariantMap& eventData)
 {
-
 }
 
 void UrhoDevice::handleKeyDown(StringHash eventType, VariantMap& eventData)
 {
-
 }
 
 void UrhoDevice::stop()
 {
-   // _platform->stop();
-}
-
-void UrhoDevice::keyEvent()
-{
-   /*// send key event
-    std::shared_ptr<KeyEvent> keyEvent = KeyEvent::create();
-    keyEvent.get()->event = evt;
-    keyEvent.get()->key = key;
-    EventManager::getInstance()->queueEvent(keyEvent);*/
-}
-
-bool UrhoDevice::mouseEvent()
-{
-   /* // when right button is pressed set on mouse captured to interact with fps camera
-    if(evt == Mouse::MOUSE_PRESS_RIGHT_BUTTON)
-        setMouseCaptured(true);
-    else if(evt == Mouse::MOUSE_RELEASE_RIGHT_BUTTON)
-        setMouseCaptured(false);
-
-    // send mouse event
-    std::shared_ptr<MouseEvent> mouseEvent = MouseEvent::create();
-    mouseEvent.get()->event = evt;
-    mouseEvent.get()->mousePos = Vector2(x, y);
-    EventManager::getInstance()->queueEvent(mouseEvent);
-
-    return true;*/
 }
 
 void UrhoDevice::onResize(int width, int height)
@@ -156,19 +115,9 @@ void UrhoDevice::onResize(int width, int height)
     SDL_Window * win = (SDL_Window*)graphics->GetWindow();
     SDL_SetWindowSize(win, width, height);
 
-     // resize current renderer
+    // resize current renderer
     if (_curentSubRenderer)
         _curentSubRenderer->resize(width, height);
-}
-
-void UrhoDevice::update(float elapsedTime)
-{
-    //_curentSubRenderer->update(elapsedTime);
-}
-
-void UrhoDevice::render(float elapsedTime)
-{
-    _curentSubRenderer->render(elapsedTime);
 }
 
 void UrhoDevice::setCurentParticleSystem(SPK::Ref<SPK::System> sparkSystem)

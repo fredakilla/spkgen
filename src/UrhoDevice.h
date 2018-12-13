@@ -27,26 +27,12 @@ private:
     UrhoDevice();
     ~UrhoDevice();
 
-    void initialize();
-    void finalize();
-    void update(float elapsedTime);
-    void render(float elapsedTime);
-
-    void keyEvent();
-    bool mouseEvent();
-
     void handleMouseButtonDown(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void handleMouseButtonUp(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void handleMouseMove(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void handleKeyDown(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
-   // bool drawScene(gplay::Node* node);
-   // bool updateEmitters(gplay::Node* node, float elapsedTime);
-
 private:
-    //Platform* _platform;
-    //Scene* _scene;
-    //bool _isShowDebug;  // show debug shapes in effects
 
     Urho3D::Engine* _engine;    // Urho3D engine
 };
