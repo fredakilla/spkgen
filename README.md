@@ -5,8 +5,8 @@ Spkgen is an editor for the [**SPARK**](https://github.com/fredakilla/SPARK) par
 <img src="https://i.imgur.com/9oEWdjl.png" width="50%" height="%">
 
 ## Current status
-Spkgen is in developpement and is not yet fully functional.
-Development is done on linux.
+Spkgen is in developpement and is not yet fully functional.   
+Development is done on linux.   
 Building on another system is not tested but final release should be cross-platform.
 
 
@@ -21,13 +21,14 @@ TODO
 - [x] automatic node's parameters widgets creation from simple declaration
 - [x] show 3D debug zones geometries
 - [x] serialize node widget's parameters
-- [x] graph plot editor widget for spark graph interpolators (WIP, implement imgui widget ?)
-- [ ] complete all spark nodes (95% done)
+- [x] graph plot editor widget for spark graph interpolators
+- [x] complete all spark nodes
 - [x] interact with 3D view (camera move...)
 - [x] multiple scenes managment
 - [x] comments items on node view
 - [ ] set styles
 - [ ] add shortcuts on node view : copy/paste nodes, repeat last created node,...
+- [ ] add samples and tutorials (WIP)
 
 ## Build
 

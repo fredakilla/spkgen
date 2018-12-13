@@ -142,11 +142,11 @@ void RenderWidget::mousePressEvent(QMouseEvent* event)
     sdlEvent.type = SDL_MOUSEBUTTONDOWN;
     sdlEvent.button.state = SDL_PRESSED;
     if (event->button() == Qt::LeftButton)
-        sdlEvent.button.button = SDL_BUTTON_LMASK;
+        sdlEvent.button.button = SDL_BUTTON_LEFT;
     else if (event->button() == Qt::RightButton)
-        sdlEvent.button.button = SDL_BUTTON_RMASK;
+        sdlEvent.button.button = SDL_BUTTON_RIGHT;
     else if (event->button() == Qt::MidButton)
-        sdlEvent.button.button = SDL_BUTTON_MMASK;
+        sdlEvent.button.button = SDL_BUTTON_MIDDLE;
     QPoint position = event->pos();
     sdlEvent.button.x = position.x();
     sdlEvent.button.y = position.y();
@@ -154,7 +154,7 @@ void RenderWidget::mousePressEvent(QMouseEvent* event)
 
 
     Urho3D::VariantMap map;
-    map[Urho3D::MouseButtonDown::P_BUTTON] = event->button();
+    map[Urho3D::MouseButtonDown::P_BUTTON] = sdlEvent.button.button;
     map[Urho3D::MouseButtonDown::P_BUTTONS] = event->buttons();
     map[Urho3D::MouseButtonDown::P_QUALIFIERS] = event->modifiers();
     SendEvent(Urho3D::E_MOUSEBUTTONDOWN, map);
@@ -170,18 +170,18 @@ void RenderWidget::mouseReleaseEvent(QMouseEvent* event)
     sdlEvent.type = SDL_MOUSEBUTTONUP;
     sdlEvent.button.state = SDL_RELEASED;
     if (event->button() == Qt::LeftButton)
-        sdlEvent.button.button = SDL_BUTTON_LMASK;
+        sdlEvent.button.button = SDL_BUTTON_LEFT;
     else if (event->button() == Qt::RightButton)
-        sdlEvent.button.button = SDL_BUTTON_RMASK;
+        sdlEvent.button.button = SDL_BUTTON_RIGHT;
     else if (event->button() == Qt::MidButton)
-        sdlEvent.button.button = SDL_BUTTON_MMASK;
+        sdlEvent.button.button = SDL_BUTTON_MIDDLE;
     QPoint position = event->pos();
     sdlEvent.button.x = position.x();
     sdlEvent.button.y = position.y();
     SDL_PushEvent(&sdlEvent);
 
     Urho3D::VariantMap map;
-    map[Urho3D::MouseButtonUp::P_BUTTON] = event->button();
+    map[Urho3D::MouseButtonUp::P_BUTTON] = sdlEvent.button.button;
     map[Urho3D::MouseButtonUp::P_BUTTONS] = event->buttons();
     map[Urho3D::MouseButtonUp::P_QUALIFIERS] = event->modifiers();
     SendEvent(Urho3D::E_MOUSEBUTTONUP, map);

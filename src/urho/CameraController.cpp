@@ -78,29 +78,17 @@ void CameraController::Update(float timeStep)
     }
 }
 
-// map MouseButton Qt -> SDL
-int LookUpButtonMap[] =
-{
-    0x00000000,        // NoButton         = 0x00000000,
-    SDL_BUTTON_LMASK,  // LeftButton       = 0x00000001,
-    SDL_BUTTON_RMASK,  // RightButton      = 0x00000002,
-    SDL_BUTTON_MMASK,  // MidButton        = 0x00000004,
-    SDL_BUTTON_MMASK,  // MiddleButton     = MidButton,
-};
-
 void CameraController::MouseButtonPressed(StringHash eventType, VariantMap& eventData)
 {
     using namespace MouseButtonDown;
-    int buttons = eventData[P_BUTTONS].GetInt();
+    int button = eventData[P_BUTTON].GetInt();
 
-    int b = LookUpButtonMap[buttons];
-
-    if(b & MOUSEB_RIGHT)
+    if(button == MOUSEB_RIGHT)
     {
         _isMoving = true;
         _mode = CameraMode::Orbit;
     }
-    else if(b & MOUSEB_MIDDLE)
+    else if(button == MOUSEB_MIDDLE)
     {
         _isMoving = true;
         _mode = CameraMode::FirstPerson;
