@@ -5,6 +5,7 @@
 
 #include <Urho3D/Urho3DAll.h>
 #include <Urhox/Spark/UrhoSpark.h>
+#include <Urhox/SystemUI/SystemUI.h>
 
 ISubRenderer* _curentSubRenderer = nullptr;
 Urho3D::Context* UrhoDevice::gUrhoContext = nullptr;
@@ -59,6 +60,13 @@ void UrhoDevice::createRenderWindow(void* hwnd)
     // register objects
     RegisterSparkLibrary(context_);
     context_->RegisterFactory<CameraController>();
+
+    // SystemUI subsytem need to be registered after engine initialization
+    context_->RegisterSubsystem(new SystemUI(context_));
+    context_->GetSubsystem<SystemUI>()->Start();
+
+    ui::GetIO().ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    ui::GetIO().BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 
     // create spark renderer
     SparkNodeRender* spkRenderer = new SparkNodeRender();

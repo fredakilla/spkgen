@@ -6,6 +6,7 @@
 #include <Urhox/Spark/SPK_Urho3D_QuadRenderer.h>
 #include "SpkUtils.h"
 #include "../../UrhoDevice.h"
+#include <Urhox/SystemUI/SystemUI.h>
 
 #include <Urho3D/Urho3DAll.h>
 
@@ -131,17 +132,19 @@ void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone, Urho3D::Share
         const SPK::Box* spkBox = dynamic_cast<SPK::Box*>(zone.get());
         assert(spkBox);
 
-        Vector3 scale = ToUrhoVector3(spkBox->getDimensions());
-        Vector3 direction = ToUrhoVector3(spkBox->getTransform().getLocalSide());
-        Vector3 up = ToUrhoVector3(spkBox->getTransform().getLocalUp());
+        Vector3 scale = ToUrhoVector3(spkBox->getDimensions()) / 2.0f;
+        Vector3 xAxis = ToUrhoVector3(spkBox->getTransformedXAxis());
+        Vector3 yAxis = ToUrhoVector3(spkBox->getTransformedYAxis());
+        Vector3 zAxis = ToUrhoVector3(spkBox->getTransformedZAxis());
 
         Quaternion rot;
-        rot.FromLookRotation(direction, up);
+        rot.FromAxes(-xAxis, yAxis, zAxis);
+
         Matrix3x4 matrix;
         matrix.SetTranslation(ToUrhoVector3(pos));
         matrix.SetRotation(rot.RotationMatrix());
 
-        BoundingBox box(-scale/2.0f, scale/2.0f);
+        BoundingBox box(-scale, scale);
         DrawDebugBox(box, matrix, Color::WHITE, debugDraw);
     }
     else if(zone->getClassName() == "Cylinder")
@@ -266,5 +269,9 @@ void SparkNodeRender::handleUpdate(StringHash eventType, VariantMap& eventData)
             drawDebugShapes(spk, _debugRenderer);
         }
     }
+
+    // Show ImGui test window
+    /*ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver);
+    ImGui::ShowDemoWindow();*/
 }
 

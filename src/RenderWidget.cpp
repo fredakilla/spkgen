@@ -138,19 +138,19 @@ void RenderWidget::mousePressEvent(QMouseEvent* event)
     _lastMousePos = event->pos();
     _mouseDownPos = event->pos();
 
-    /*SDL_Event sdlEvent;
+    SDL_Event sdlEvent;
     sdlEvent.type = SDL_MOUSEBUTTONDOWN;
     sdlEvent.button.state = SDL_PRESSED;
-    if(event->buttons() & Qt::LeftButton)
+    if (event->button() == Qt::LeftButton)
         sdlEvent.button.button = SDL_BUTTON_LMASK;
-    if(event->buttons() & Qt::RightButton)
+    else if (event->button() == Qt::RightButton)
         sdlEvent.button.button = SDL_BUTTON_RMASK;
-    if(event->buttons() & Qt::MiddleButton)
-        sdlEvent.button.button = SDL_BUTTON_LMASK;
+    else if (event->button() == Qt::MidButton)
+        sdlEvent.button.button = SDL_BUTTON_MMASK;
     QPoint position = event->pos();
     sdlEvent.button.x = position.x();
     sdlEvent.button.y = position.y();
-    SDL_PushEvent(&sdlEvent);*/
+    SDL_PushEvent(&sdlEvent);
 
 
     Urho3D::VariantMap map;
@@ -166,20 +166,19 @@ void RenderWidget::mouseReleaseEvent(QMouseEvent* event)
 
     _lastMousePos = event->pos();
 
-    /*SDL_Event sdlEvent;
+    SDL_Event sdlEvent;
     sdlEvent.type = SDL_MOUSEBUTTONUP;
     sdlEvent.button.state = SDL_RELEASED;
-    if(event->buttons() & Qt::LeftButton)
+    if (event->button() == Qt::LeftButton)
         sdlEvent.button.button = SDL_BUTTON_LMASK;
-    if(event->buttons() & Qt::RightButton)
+    else if (event->button() == Qt::RightButton)
         sdlEvent.button.button = SDL_BUTTON_RMASK;
-    if(event->buttons() & Qt::MiddleButton)
-        sdlEvent.button.button = SDL_BUTTON_LMASK;
+    else if (event->button() == Qt::MidButton)
+        sdlEvent.button.button = SDL_BUTTON_MMASK;
     QPoint position = event->pos();
     sdlEvent.button.x = position.x();
     sdlEvent.button.y = position.y();
-    SDL_PushEvent(&sdlEvent);*/
-
+    SDL_PushEvent(&sdlEvent);
 
     Urho3D::VariantMap map;
     map[Urho3D::MouseButtonUp::P_BUTTON] = event->button();
