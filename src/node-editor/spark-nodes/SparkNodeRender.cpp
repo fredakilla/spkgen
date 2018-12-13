@@ -73,6 +73,26 @@ void DrawDebugBox(const BoundingBox& box, const Matrix3x4& transform, const Colo
     debugDraw->AddLine(v3, v6, uintColor, depthTest);
 }
 
+void DrawDebugPlane(const Matrix3x4& transform, const Color& color, DebugRenderer* debugDraw, bool depthTest = true)
+{
+    const float v = 2.5f;
+
+    Vector3 v0(transform * Vector3(-v, 0.0f,  v));
+    Vector3 v1(transform * Vector3( v, 0.0f,  v));
+    Vector3 v2(transform * Vector3( v, 0.0f, -v));
+    Vector3 v3(transform * Vector3(-v, 0.0f, -v));
+    Vector3 v4(transform * Vector3(0.0f, 0.0f, 0.0f));   // origin
+    Vector3 v5(transform * Vector3(0.0f,-1.0f, 0.0f));   // normal down
+
+    unsigned uintColor = color.ToUInt();
+
+    debugDraw->AddLine(v0, v1, uintColor, depthTest);
+    debugDraw->AddLine(v1, v2, uintColor, depthTest);
+    debugDraw->AddLine(v2, v3, uintColor, depthTest);
+    debugDraw->AddLine(v3, v0, uintColor, depthTest);
+    debugDraw->AddLine(v4, v5, uintColor, depthTest);
+}
+
 void DrawDebugCylinder(float radius, float halfHeight, const Matrix3x4& matrix, const Color& color, DebugRenderer* debugDraw, bool depthTest = true)
 {
     const Vector3& position = matrix.Translation();
@@ -124,8 +144,19 @@ void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone, Urho3D::Share
     {
         const SPK::Plane* plane = dynamic_cast<SPK::Plane*>(zone.get());
         assert(plane);
-        //const SPK::Vector3D normal = plane->getNormal();
-        //DebugDraw::getInstance()->drawPlane(Vector3(normal.x, normal.y, normal.z), 0.0f, Matrix::identity(), Vector3(1,1,1));*/
+
+        Vector3 normal = ToUrhoVector3(plane->getNormal());
+        normal.x_ = -normal.x_;
+        normal.z_ = -normal.z_;
+
+        Quaternion rot;
+        rot.FromRotationTo(normal, Vector3(0,1,0));
+
+        Matrix3x4 matrix;
+        matrix.SetTranslation(ToUrhoVector3(pos));
+        matrix.SetRotation(rot.RotationMatrix());
+
+        DrawDebugPlane(matrix, Color::WHITE, debugDraw);
     }
     else if(zone->getClassName() == "Box")
     {
