@@ -1,5 +1,4 @@
 #include "BaseRenderer.h"
-#include "helpers/Events.h"
 #include "../UrhoDevice.h"
 
 #include <Urho3D/Urho3DAll.h>
