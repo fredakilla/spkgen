@@ -85,7 +85,7 @@ void MainWindow::createWidgets()
 
     // make some connections
     connect(_renderView, &RenderWidget::signalResized, this, &MainWindow::onRenderViewResized);
-    connect(_pageList, &PageList::signalPageAdded, this, &MainWindow::onNewPage);
+    connect(_pageList, &PageList::signalPageAdded, this, &MainWindow::onPageAdd);
     connect(_pageList, &PageList::signalPageSwitch, this, &MainWindow::onPageSwitch);
 }
 
@@ -94,7 +94,7 @@ void MainWindow::createActions()
     _newAct = new QAction(tr("&New"), this);
     _newAct->setShortcuts(QKeySequence::New);
     _newAct->setStatusTip(tr("New"));
-    connect(_newAct, &QAction::triggered, this, &MainWindow::onNewFile);
+    connect(_newAct, &QAction::triggered, this, &MainWindow::onNewProject);
 
     _openAct = new QAction(tr("&Open"), this);
     _openAct->setShortcuts(QKeySequence::Open);
@@ -115,10 +115,12 @@ void MainWindow::createMenus()
     _fileMenu->addAction(_saveAct);
 }
 
-void MainWindow::onNewFile()
+void MainWindow::onNewProject()
 {
     //_nodeFlowScene->clearScene();
     //_nodeFlowScene->clearComments();
+    _pageList->onNewProject();
+    addDefaultPage();
 }
 
 void MainWindow::onOpen()
@@ -213,7 +215,7 @@ void MainWindow::onPageSwitch(Page* page)
     }
 }
 
-void MainWindow::onNewPage(Page* page)
+void MainWindow::onPageAdd(Page* page)
 {
     if(page)
     {

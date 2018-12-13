@@ -28,6 +28,7 @@ Q_SIGNALS:
     void signalPageSwitch(Page* page);
 
 public Q_SLOTS:
+    void onNewProject();
     void onAddPage();
     void onRemovePage();
     void onItemChanged(QListWidgetItem *item);
@@ -37,6 +38,7 @@ public Q_SLOTS:
 private:
     void _createActions();
     QListWidgetItem* _addPage(Page *page, QListWidgetItem *parent=nullptr);
+    void _clearAll();
 
     std::shared_ptr<DataModelRegistry> _sparkNodesRegistry;
     QList<Page*> _nodeFlowScenes;

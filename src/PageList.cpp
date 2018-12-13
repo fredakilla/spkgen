@@ -73,6 +73,27 @@ void PageList::_createActions()
     addAction(act);
 }
 
+void PageList::_clearAll()
+{
+    // remove all items on each scene
+    Q_FOREACH (Page* page, _nodeFlowScenes)
+    {
+        page->flowScene->clearComments();
+        page->flowScene->clearScene();
+    }
+
+    // clear items in QListWidget
+    clear();
+
+    // clear flowscene list
+    _nodeFlowScenes.clear();
+}
+
+void PageList::onNewProject()
+{
+    _clearAll();
+}
+
 void PageList::onAddPage()
 {
     Page* page = new Page();
@@ -126,8 +147,7 @@ void PageList::onSortByName()
 
 void PageList::load(const QJsonObject &json)
 {
-    clear();
-    _nodeFlowScenes.clear();
+    _clearAll();
 
     QJsonArray pageArray = json["pages"].toArray();
     for (int pageIndex = 0; pageIndex < pageArray.size(); ++pageIndex)

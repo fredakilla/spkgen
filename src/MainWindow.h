@@ -19,12 +19,12 @@ public:
     ~MainWindow();
 
 private Q_SLOTS:
-    void onNewFile();
+    void onNewProject();
     void onOpen();
     void onSave();
     void onRenderViewResized(int width, int height);
     void onPageSwitch(Page* page);
-    void onNewPage(Page* page);
+    void onPageAdd(Page* page);
 
 private:
     void shutdown();
