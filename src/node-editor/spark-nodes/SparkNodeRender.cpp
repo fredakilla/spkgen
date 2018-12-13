@@ -158,6 +158,13 @@ void createDebugGeomteriesFromZone(const SPK::Ref<SPK::Zone> zone, Urho3D::Share
         float radius = cylinder->getRadius();
 
         Quaternion rot;
+        Vector3 start = ToUrhoVector3(axis);
+        start.y_ = start.y_;
+        start.z_ = -start.z_;
+        start.x_ = -start.x_;
+        Vector3 end = ToUrhoVector3(cylinder->getTransformUp());
+        rot.FromRotationTo(start, end);
+
         Matrix3x4 matrix;
         matrix.SetTranslation(ToUrhoVector3(pos));
         matrix.SetRotation(rot.RotationMatrix());
