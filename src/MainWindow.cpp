@@ -66,6 +66,7 @@ void MainWindow::createWidgets()
     _nodeFlowView->setWindowTitle("Node-based flow editor");
     _nodeFlowView->show();
     _nodeFlowView->scale(0.9, 0.9);
+    _nodeFlowView->setScene(nullptr);
     setCentralWidget(_nodeFlowView);
 
     // Create path editor
@@ -117,8 +118,6 @@ void MainWindow::createMenus()
 
 void MainWindow::onNewProject()
 {
-    //_nodeFlowScene->clearScene();
-    //_nodeFlowScene->clearComments();
     _pageList->onNewProject();
     addDefaultPage();
 }
