@@ -139,6 +139,7 @@ protected:
         return modelJson;
     }
 
+public:
     void restore(QJsonObject const &p) override
     {
         if(_paramWidget)

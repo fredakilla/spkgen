@@ -19,6 +19,7 @@
 #include "../spark-nodes/spark-nodes.h"
 #include "../../UrhoDevice.h"
 
+using QtNodes::NodeDataModel;
 
 CustomFlowScene::CustomFlowScene(std::shared_ptr<DataModelRegistry> registry, QObject * parent) :
     FlowScene(registry, parent)
@@ -90,23 +91,17 @@ void CustomFlowScene::_pasteNode()
         auto type = registry().create(nodeType);
         if (type)
         {
+            // create node from same type
             QtNodes::Node& node = createNode(std::move(type));
-            //node.restore(jsonObject);
+
+            // set new pos at current mouse pos
             node.nodeGraphicsObject().setPos(_mousePos);
+
+            // copy parameters
+            BaseNode* baseNode = static_cast<BaseNode*>(node.nodeDataModel());
+            baseNode->restore(model);
         }
     }
-
-/*
-    createNode()
-
-    QtNodes::Node* node = new
-
-     /*QJsonObject json;
-
-    QtNodes::Node* node;
-    node->restore(json);*/
-
-    //QtNodes::Node* node = createNode();*/
 }
 
 void CustomFlowScene::keyPressEvent(QKeyEvent *event)
