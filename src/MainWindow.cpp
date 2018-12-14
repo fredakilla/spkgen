@@ -21,6 +21,8 @@
 #include "node-editor/spark-nodes/SparkNodesRegistry.h"
 
 
+static QString EDITOR_CAPTION = "Spkgen";
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
@@ -28,6 +30,7 @@ MainWindow::MainWindow(QWidget* parent)
     createWidgets();
     createActions();
     addDefaultPage();
+    setCurrentFile("");
 
     // create render view
     UrhoDevice::getInstance()->createRenderWindow((void*)_renderView->winId());
@@ -42,6 +45,32 @@ MainWindow::~MainWindow()
     //delete _viewportContainer;
     //delete _dockView;
     //delete _dockNodeFlowView;
+}
+
+void MainWindow::setCurrentFile(const QString &filePath)
+{
+    QString filePathFinal = filePath;
+
+    if (filePathFinal != "")
+    {
+        QFile file(filePathFinal+".orig");
+        if (file.open(QIODevice::ReadOnly))
+        {
+            filePathFinal = QString(file.readLine());
+            file.close();
+        }
+    }
+
+    _currentFile = filePathFinal;
+    setWindowModified(false);
+
+    // update recent files list in settings
+    if (filePathFinal != "")
+    {
+        setWindowTitle(EDITOR_CAPTION+" - ["+filePathFinal+"[*]]");
+    }
+    else
+        setWindowTitle(EDITOR_CAPTION+" - [NewSpkgenProject.flow[*]]");
 }
 
 void MainWindow::createWidgets()
@@ -122,6 +151,7 @@ void MainWindow::onNewProject()
 {
     _pageList->onNewProject();
     addDefaultPage();
+    setCurrentFile("");
 }
 
 void MainWindow::onOpen()
@@ -148,8 +178,7 @@ void MainWindow::onOpen()
     nullSystem.reset();
     UrhoDevice::getInstance()->setCurentParticleSystem(nullSystem);
 
-    // keep current file
-    _currentFile.setFileName(fileName);
+    setCurrentFile(fileName);
 }
 
 void MainWindow::onSaveAs()
@@ -173,18 +202,28 @@ void MainWindow::onSaveAs()
             QJsonDocument saveDoc(json);
             file.write(saveDoc.toJson());
         }
+
+        setCurrentFile(fileName);
     }
 }
 
 void MainWindow::onSave()
 {
-    if (_currentFile.exists() && _currentFile.isWritable())
+    if (!_currentFile.isEmpty())
     {
-        QJsonObject json;
-        _pageList->save(json);
+        QFile file(_currentFile);
+        if (file.open(QIODevice::WriteOnly))
+        {
+            QJsonObject json;
+            _pageList->save(json);
 
-        QJsonDocument saveDoc(json);
-        _currentFile.write(saveDoc.toJson());
+            QJsonDocument saveDoc(json);
+            file.write(saveDoc.toJson());
+        }
+    }
+    else
+    {
+        onSaveAs();
     }
 }
 

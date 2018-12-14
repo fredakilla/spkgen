@@ -33,13 +33,14 @@ private:
     void createActions();
     void createMenus();
     void addDefaultPage();
+    void setCurrentFile(const QString &filePath);
     void closeEvent(QCloseEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
 
 
     // GUI stuff
 
-    QFile _currentFile;
+    QString _currentFile;
     QMenu* _fileMenu;
     FlowView* _nodeFlowView;
     QWidget* _viewportContainer;
