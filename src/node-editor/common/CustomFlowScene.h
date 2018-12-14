@@ -65,6 +65,8 @@ protected:
 private:
     void _initialize();
     eCommentItem* _addComment(const QPointF &pos);
+    void _copyNode();
+    void _pasteNode();
 
 private:
     QGraphicsItemLayer* _commentLayer;

@@ -12,6 +12,9 @@
 #include <QtCore/QJsonObject>
 #include <QtCore/QJsonArray>
 #include <QDebug>
+#include <QApplication>
+#include <QClipboard>
+#include <QMimeData>
 
 #include "../spark-nodes/spark-nodes.h"
 #include "../../UrhoDevice.h"
@@ -46,6 +49,66 @@ void CustomFlowScene::_initialize()
     connect(this, &FlowScene::nodeCreated, this, &CustomFlowScene::initNode);
 }
 
+void CustomFlowScene::_copyNode()
+{
+    QGraphicsItem* item = itemAt(_mousePos, QTransform());
+    if (item)
+    {
+        QtNodes::NodeGraphicsObject* graphicsNode = dynamic_cast<QtNodes::NodeGraphicsObject*>(item);
+        if (graphicsNode)
+        {
+            QtNodes::Node& node = graphicsNode->node();
+
+            QJsonObject json = node.save();
+
+            QJsonDocument doc(json);
+            QByteArray bytes = doc.toJson();
+
+            QClipboard *clipboard = QApplication::clipboard();
+            QMimeData *mimeData = new QMimeData;
+            mimeData->setText(bytes);
+            clipboard->setMimeData(mimeData);
+        }
+    }
+}
+
+void CustomFlowScene::_pasteNode()
+{
+    const QClipboard *clipboard = QApplication::clipboard();
+    const QMimeData *mimeData = clipboard->mimeData();
+
+    QString text = mimeData->text();
+
+    QJsonDocument doc = QJsonDocument::fromJson(text.toLocal8Bit());
+    QJsonObject jsonObject = doc.object();
+
+    if (jsonObject.contains("model"))
+    {
+        QJsonObject model = jsonObject["model"].toObject();
+        QString nodeType = model["name"].toString();
+
+        auto type = registry().create(nodeType);
+        if (type)
+        {
+            QtNodes::Node& node = createNode(std::move(type));
+            //node.restore(jsonObject);
+            node.nodeGraphicsObject().setPos(_mousePos);
+        }
+    }
+
+/*
+    createNode()
+
+    QtNodes::Node* node = new
+
+     /*QJsonObject json;
+
+    QtNodes::Node* node;
+    node->restore(json);*/
+
+    //QtNodes::Node* node = createNode();*/
+}
+
 void CustomFlowScene::keyPressEvent(QKeyEvent *event)
 {
     // if a comment is being editing bypass event
@@ -62,6 +125,14 @@ void CustomFlowScene::keyPressEvent(QKeyEvent *event)
     {
     case Qt::Key_O:
         _addComment(_mousePos);
+        break;
+
+    case Qt::Key_C:
+        _copyNode();
+        break;
+
+    case Qt::Key_V:
+        _pasteNode();
         break;
     }
 
