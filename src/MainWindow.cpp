@@ -93,8 +93,8 @@ void MainWindow::createWidgets()
     _nodeFlowView = new FlowView(this);
     _nodeFlowView->setWindowTitle("Node-based flow editor");
     _nodeFlowView->show();
-    _nodeFlowView->scale(0.9, 0.9);
     _nodeFlowView->setScene(nullptr);
+    resetFlowViewTransform();
     setCentralWidget(_nodeFlowView);
 
     // Create path editor
@@ -116,6 +116,14 @@ void MainWindow::createWidgets()
     connect(_renderView, &RenderWidget::signalResized, this, &MainWindow::onRenderViewResized);
     connect(_pageList, &PageList::signalPageAdded, this, &MainWindow::onPageAdd);
     connect(_pageList, &PageList::signalPageSwitch, this, &MainWindow::onPageSwitch);
+}
+
+void MainWindow::resetFlowViewTransform()
+{
+    Q_ASSERT(_nodeFlowView);
+    _nodeFlowView->resetTransform();
+    _nodeFlowView->scale(0.8, 0.8);
+    _nodeFlowView->centerOn(0,0);
 }
 
 void MainWindow::createActions()
@@ -152,6 +160,7 @@ void MainWindow::onNewProject()
     _pageList->onNewProject();
     addDefaultPage();
     setCurrentFile("");
+    resetFlowViewTransform();
 }
 
 void MainWindow::onOpen()
@@ -169,16 +178,20 @@ void MainWindow::onOpen()
     if (!file.open(QIODevice::ReadOnly))
         return;
 
+    // load file content and populates pages list
     QByteArray fileData = file.readAll();
-
     QJsonDocument loadDoc(QJsonDocument::fromJson(fileData));
     _pageList->load(loadDoc.object());
 
+    // don't show any spark system when loading a file
     SPK::Ref<SPK::System> nullSystem;
     nullSystem.reset();
     UrhoDevice::getInstance()->setCurentParticleSystem(nullSystem);
 
+    // keep track of current file name
     setCurrentFile(fileName);
+
+    resetFlowViewTransform();
 }
 
 void MainWindow::onSaveAs()
@@ -198,7 +211,6 @@ void MainWindow::onSaveAs()
         {
             QJsonObject json;
             _pageList->save(json);
-
             QJsonDocument saveDoc(json);
             file.write(saveDoc.toJson());
         }
@@ -216,7 +228,6 @@ void MainWindow::onSave()
         {
             QJsonObject json;
             _pageList->save(json);
-
             QJsonDocument saveDoc(json);
             file.write(saveDoc.toJson());
         }
@@ -271,6 +282,7 @@ void MainWindow::onPageSwitch(Page* page)
     if(page)
     {
         _nodeFlowView->setScene(page->flowScene);
+        _nodeFlowView->centerOn(0,0);
     }
 }
 

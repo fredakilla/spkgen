@@ -37,6 +37,8 @@ CustomFlowScene::~CustomFlowScene()
 
 void CustomFlowScene::_initialize()
 {
+    setSceneRect(-100000, -100000, 100000, 100000);
+
     _mousePos = QPoint(0,0);
     _commentLayer = new QGraphicsItemLayer();
 
