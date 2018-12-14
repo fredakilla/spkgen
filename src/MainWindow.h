@@ -21,6 +21,7 @@ public:
 private Q_SLOTS:
     void onNewProject();
     void onOpen();
+    void onSaveAs();
     void onSave();
     void onRenderViewResized(int width, int height);
     void onPageSwitch(Page* page);
@@ -38,11 +39,8 @@ private:
 
     // GUI stuff
 
+    QFile _currentFile;
     QMenu* _fileMenu;
-    QAction* _newAct;
-    QAction* _openAct;
-    QAction* _saveAct;
-
     FlowView* _nodeFlowView;
     QWidget* _viewportContainer;
     RenderWidget* _renderView;

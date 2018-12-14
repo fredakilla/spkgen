@@ -280,8 +280,11 @@ void SparkNodeRender::setCurentParticleSystem(SPK::Ref<SPK::System> sparkSystem)
 {
     if (sparkSystem == 0)
     {
-        _sparkNode->RemoveAllComponents();
-        _sparkNode->Remove();
+        if (_sparkNode)
+        {
+            _sparkNode->RemoveAllComponents();
+            _sparkNode->Remove();
+        }
         return;
     }
 

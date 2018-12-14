@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget* parent)
     //setNodeStyle();
     createWidgets();
     createActions();
-    createMenus();
     addDefaultPage();
 
     // create render view
@@ -92,28 +91,31 @@ void MainWindow::createWidgets()
 
 void MainWindow::createActions()
 {
-    _newAct = new QAction(tr("&New"), this);
-    _newAct->setShortcuts(QKeySequence::New);
-    _newAct->setStatusTip(tr("New"));
-    connect(_newAct, &QAction::triggered, this, &MainWindow::onNewProject);
-
-    _openAct = new QAction(tr("&Open"), this);
-    _openAct->setShortcuts(QKeySequence::Open);
-    _openAct->setStatusTip(tr("Open"));
-    connect(_openAct, &QAction::triggered, this, &MainWindow::onOpen);
-
-    _saveAct = new QAction(tr("&Save"), this);
-    _saveAct->setShortcuts(QKeySequence::Save);
-    _saveAct->setStatusTip(tr("Save"));
-    connect(_saveAct, &QAction::triggered, this, &MainWindow::onSave);
-}
-
-void MainWindow::createMenus()
-{
     _fileMenu = menuBar()->addMenu(tr("&File"));
-    _fileMenu->addAction(_newAct);
-    _fileMenu->addAction(_openAct);
-    _fileMenu->addAction(_saveAct);
+
+    QAction* action;
+    action = new QAction(tr("&New"), this);
+    action->setShortcuts(QKeySequence::New);
+    action->setStatusTip(tr("New"));
+    connect(action, &QAction::triggered, this, &MainWindow::onNewProject);
+    _fileMenu->addAction(action);
+
+    action = new QAction(tr("&Open"), this);
+    action->setShortcuts(QKeySequence::Open);
+    action->setStatusTip(tr("Open"));
+    connect(action, &QAction::triggered, this, &MainWindow::onOpen);
+    _fileMenu->addAction(action);
+
+    action = new QAction(tr("&Save as"), this);
+    action->setStatusTip(tr("Save as"));
+    connect(action, &QAction::triggered, this, &MainWindow::onSaveAs);
+    _fileMenu->addAction(action);
+
+    action = new QAction(tr("&Save"), this);
+    action->setShortcuts(QKeySequence::Save);
+    action->setStatusTip(tr("Save"));
+    connect(action, &QAction::triggered, this, &MainWindow::onSave);
+    _fileMenu->addAction(action);
 }
 
 void MainWindow::onNewProject()
@@ -145,9 +147,12 @@ void MainWindow::onOpen()
     SPK::Ref<SPK::System> nullSystem;
     nullSystem.reset();
     UrhoDevice::getInstance()->setCurentParticleSystem(nullSystem);
+
+    // keep current file
+    _currentFile.setFileName(fileName);
 }
 
-void MainWindow::onSave()
+void MainWindow::onSaveAs()
 {
     QString fileName = QFileDialog::getSaveFileName(nullptr,
                                          tr("Open Flow Scene"),
@@ -168,6 +173,18 @@ void MainWindow::onSave()
             QJsonDocument saveDoc(json);
             file.write(saveDoc.toJson());
         }
+    }
+}
+
+void MainWindow::onSave()
+{
+    if (_currentFile.exists() && _currentFile.isWritable())
+    {
+        QJsonObject json;
+        _pageList->save(json);
+
+        QJsonDocument saveDoc(json);
+        _currentFile.write(saveDoc.toJson());
     }
 }
 
