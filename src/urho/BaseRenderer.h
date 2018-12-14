@@ -40,6 +40,7 @@ protected:
     Urho3D::SharedPtr<Urho3D::Viewport> _viewport;
     CameraController* _cameraController;
     GridGeometry _grid;
+    bool _showDebugShapes;
 };
 
 

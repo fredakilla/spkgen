@@ -15,8 +15,6 @@ public:
 private:
     void handleUpdate(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
-    //! show debug shapes in effects
-    bool _isShowDebug;
     Urho3D::SharedPtr<Urho3D::Node> _sparkNode;
 };
 

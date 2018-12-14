@@ -164,6 +164,9 @@ void PageList::load(const QJsonObject &json)
         page->flowScene->load(pageJson);
         item(lastIndex)->setText(page->flowScene->getName());
     }
+
+    // select first page
+    setCurrentRow(0);
 }
 
 void PageList::save(QJsonObject &json)

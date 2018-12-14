@@ -126,7 +126,7 @@ void MainWindow::onOpen()
 {
     QString fileName = QFileDialog::getOpenFileName(nullptr,
                                          tr("Open Flow Scene"),
-                                         QDir::homePath(),
+                                         QDir::currentPath(),
                                          tr("Flow Scene Files (*.flow)"));
 
     if (!QFileInfo::exists(fileName))
@@ -141,13 +141,17 @@ void MainWindow::onOpen()
 
     QJsonDocument loadDoc(QJsonDocument::fromJson(fileData));
     _pageList->load(loadDoc.object());
+
+    SPK::Ref<SPK::System> nullSystem;
+    nullSystem.reset();
+    UrhoDevice::getInstance()->setCurentParticleSystem(nullSystem);
 }
 
 void MainWindow::onSave()
 {
     QString fileName = QFileDialog::getSaveFileName(nullptr,
                                          tr("Open Flow Scene"),
-                                         QDir::homePath(),
+                                         QDir::currentPath(),
                                          tr("Flow Scene Files (*.flow)"));
 
     if (!fileName.isEmpty())

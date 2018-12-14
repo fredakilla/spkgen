@@ -5,6 +5,7 @@
 
 BaseRenderer3D::BaseRenderer3D() :
     Urho3D::Object(UrhoDevice::gUrhoContext)
+  , _showDebugShapes(true)
 {
     _scene = new Scene(UrhoDevice::gUrhoContext);
     _scene->CreateComponent<Octree>();

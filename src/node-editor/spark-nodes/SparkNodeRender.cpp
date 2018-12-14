@@ -271,15 +271,20 @@ void drawDebugShapes(Urho3D::SparkParticle* spark, Urho3D::SharedPtr<Urho3D::Deb
 
 SparkNodeRender::SparkNodeRender() :
     BaseRenderer3D(),
-    _isShowDebug(true),
     _sparkNode(nullptr)
 {
-    if(_isShowDebug)
-        SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(SparkNodeRender, handleUpdate));
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(SparkNodeRender, handleUpdate));
 }
 
 void SparkNodeRender::setCurentParticleSystem(SPK::Ref<SPK::System> sparkSystem)
 {
+    if (sparkSystem == 0)
+    {
+        _sparkNode->RemoveAllComponents();
+        _sparkNode->Remove();
+        return;
+    }
+
     Urho3D::Node* node = _scene->GetChild("SparkNode");
     if(node)
         _scene->RemoveChild(node);
@@ -298,7 +303,7 @@ void SparkNodeRender::setCurentParticleSystem(SPK::Ref<SPK::System> sparkSystem)
 
 void SparkNodeRender::handleUpdate(StringHash eventType, VariantMap& eventData)
 {
-    if (_sparkNode)
+    if (_sparkNode && _showDebugShapes)
     {
         Urho3D::SparkParticle* spk = _sparkNode->GetComponent<Urho3D::SparkParticle>();
         if (spk)
