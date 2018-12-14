@@ -37,7 +37,7 @@ eCommentItem::eCommentItem(QGraphicsItem* parent) :
     opt.setTabStop(10);
     document()->setDefaultTextOption(opt);
 
-    setFont(QFont("Helvetica", 8, QFont::Normal));
+    setFont(QFont("Helvetica", 12, QFont::Normal));
 
     _init();
 

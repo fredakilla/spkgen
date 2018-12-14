@@ -26,88 +26,88 @@
             "comments": [
                 {
                     "backcolor": "#fcaf3e",
-                    "height": 48.33333333333328,
+                    "height": 44.583333333333286,
                     "mode": 0,
                     "position": {
-                        "x": -201.48148148148152,
-                        "y": 248.37962962962962
+                        "x": -202.73148148148152,
+                        "y": 247.12962962962956
                     },
                     "text": "Minimal nodes to build an effect",
                     "textcolor": "#000000",
-                    "width": 274.00000000000006
+                    "width": 259.00000000000006
                 },
                 {
                     "backcolor": "#c8c8c8",
-                    "height": 72,
+                    "height": 96,
                     "mode": 0,
                     "position": {
-                        "x": -712.037037037037,
-                        "y": -422.3611111111111
+                        "x": -848.287037037037,
+                        "y": -448.6111111111111
                     },
-                    "text": "Every spark effect need one renderer to define how to draw particles.\n\nHere it's a QuadRenderer, a simple textured quad mesh that\nalways facing up the camera by default.",
+                    "text": "Every spark effect need a renderer to define how to draw particles.\n\nHere it's a QuadRenderer, a simple textured quad mesh that\nalways facing up the camera by default.",
                     "textcolor": "#000000",
-                    "width": 355.578125
+                    "width": 508.4375
                 },
                 {
                     "backcolor": "#c8c8c8",
-                    "height": 59,
+                    "height": 77,
                     "mode": 0,
                     "position": {
-                        "x": -718.148148148148,
-                        "y": 9.120370370370324
+                        "x": -803.148148148148,
+                        "y": 315.3703703703703
                     },
                     "text": "Particles need an emitter to be spawned.\n\nHere, a random emitter that emit particles in random directions",
                     "textcolor": "#000000",
-                    "width": 323.984375
+                    "width": 462.46875
                 },
                 {
                     "backcolor": "#c8c8c8",
-                    "height": 137,
+                    "height": 191,
                     "mode": 0,
                     "position": {
-                        "x": -247.40740740740728,
-                        "y": -299.39814814814815
+                        "x": -238.65740740740728,
+                        "y": -361.89814814814815
                     },
                     "text": "Particles are organized by groups.\n\nEach group need :\n- 1 renderer\n- 1 or multiples emitters\n- 0 or 1 colors interpolator\n- 0 or 1 params interpolator\n- 0 or multiple modifiers\n",
                     "textcolor": "#000000",
-                    "width": 258.41087962962956
+                    "width": 262.609375
                 },
                 {
                     "backcolor": "#c8c8c8",
-                    "height": 102.62962962962962,
+                    "height": 134,
                     "mode": 0,
                     "position": {
-                        "x": 148.8888888888889,
-                        "y": -170.69444444444434
+                        "x": 120.13888888888891,
+                        "y": -211.94444444444434
                     },
                     "text": "A system is the final result of an effect.\n\nIt can have 1 or multiples groups.\n\nAn effect can be exported here using \nthe \"Run export\" button",
                     "textcolor": "#000000",
-                    "width": 239.8396990740741
+                    "width": 292.453125
                 },
                 {
                     "backcolor": "#ef2929",
-                    "height": 35,
+                    "height": 40.25,
                     "mode": 0,
                     "position": {
-                        "x": 149.99999999999994,
-                        "y": 128.75
+                        "x": 126.24999999999994,
+                        "y": 126.25
                     },
-                    "text": "Double-click on the node above to see result",
+                    "text": "Double-click on this node to see result.",
                     "textcolor": "#000000",
-                    "width": 236.765625
+                    "width": 300.515625
                 }
             ],
             "connections": [
                 {
                     "in_id": "{a0e680d7-0683-4a22-b377-58ac27b29101}",
-                    "in_index": 1,
-                    "out_id": "{ef7f12b3-17bf-429d-8d2d-c4b4e8f4ec81}",
+                    "in_index": 0,
+                    "out_id": "{acc0c7fa-208c-44e1-b878-ab63e4ef4d61}",
                     "out_index": 0
                 },
                 {
                     "in_id": "{a0e680d7-0683-4a22-b377-58ac27b29101}",
-                    "in_index": 0,
-                    "out_id": "{acc0c7fa-208c-44e1-b878-ab63e4ef4d61}",
+                    "in_index": 1,
+                    "out_id": "{ef7f12b3-17bf-429d-8d2d-c4b4e8f4ec81}",
                     "out_index": 0
                 },
                 {
@@ -118,30 +118,6 @@
                 }
             ],
             "nodes": [
-                {
-                    "id": "{c9296c02-00f8-4c40-9901-229d1e6189e3}",
-                    "model": {
-                        "name": "System",
-                        "parameters": [
-                            {
-                                "1": "System"
-                            },
-                            {
-                                "2": true
-                            },
-                            {
-                                "18": "SparkSystem.xml"
-                            },
-                            {
-                                "17": "Run export"
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": 127.40740740740745,
-                        "y": -46.62037037037021
-                    }
-                },
                 {
                     "id": "{ef7f12b3-17bf-429d-8d2d-c4b4e8f4ec81}",
                     "model": {
@@ -176,6 +152,63 @@
                     "position": {
                         "x": -717.4074074074074,
                         "y": 89.30555555555566
+                    }
+                },
+                {
+                    "id": "{c9296c02-00f8-4c40-9901-229d1e6189e3}",
+                    "model": {
+                        "name": "System",
+                        "parameters": [
+                            {
+                                "1": "System"
+                            },
+                            {
+                                "2": true
+                            },
+                            {
+                                "18": "SparkSystem.xml"
+                            },
+                            {
+                                "17": "Run export"
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": 127.40740740740745,
+                        "y": -46.62037037037021
+                    }
+                },
+                {
+                    "id": "{a0e680d7-0683-4a22-b377-58ac27b29101}",
+                    "model": {
+                        "name": "Group",
+                        "parameters": [
+                            {
+                                "9": 100
+                            },
+                            {
+                                "6": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            {
+                                "2": false
+                            },
+                            {
+                                "5": 1
+                            },
+                            {
+                                "5": 0
+                            },
+                            {
+                                "2": false
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -276.4814814814814,
+                        "y": -119.21296296296305
                     }
                 },
                 {
@@ -216,39 +249,6 @@
                         "x": -734.8148148148148,
                         "y": -328.6574074074074
                     }
-                },
-                {
-                    "id": "{a0e680d7-0683-4a22-b377-58ac27b29101}",
-                    "model": {
-                        "name": "Group",
-                        "parameters": [
-                            {
-                                "9": 100
-                            },
-                            {
-                                "6": [
-                                    1,
-                                    1
-                                ]
-                            },
-                            {
-                                "2": false
-                            },
-                            {
-                                "5": 1
-                            },
-                            {
-                                "5": 0
-                            },
-                            {
-                                "2": false
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -281.4814814814814,
-                        "y": -139.21296296296305
-                    }
                 }
             ]
         },
@@ -257,6 +257,12 @@
             "comments": [
             ],
             "connections": [
+                {
+                    "in_id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
+                    "in_index": 1,
+                    "out_id": "{3f2b2a37-71c4-4279-8cc2-0d662ca58c7f}",
+                    "out_index": 0
+                },
                 {
                     "in_id": "{3f2b2a37-71c4-4279-8cc2-0d662ca58c7f}",
                     "in_index": 0,
@@ -270,12 +276,6 @@
                     "out_index": 0
                 },
                 {
-                    "in_id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
-                    "in_index": 1,
-                    "out_id": "{3f2b2a37-71c4-4279-8cc2-0d662ca58c7f}",
-                    "out_index": 0
-                },
-                {
                     "in_id": "{8c1f1668-e8b6-48b3-98ea-1beb363e17ec}",
                     "in_index": 0,
                     "out_id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
@@ -283,30 +283,6 @@
                 }
             ],
             "nodes": [
-                {
-                    "id": "{8c1f1668-e8b6-48b3-98ea-1beb363e17ec}",
-                    "model": {
-                        "name": "System",
-                        "parameters": [
-                            {
-                                "1": "System"
-                            },
-                            {
-                                "2": true
-                            },
-                            {
-                                "18": "SparkSystem.xml"
-                            },
-                            {
-                                "17": "Run export"
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": 299.44444444444434,
-                        "y": -51.94444444444457
-                    }
-                },
                 {
                     "id": "{3f2b2a37-71c4-4279-8cc2-0d662ca58c7f}",
                     "model": {
@@ -344,6 +320,30 @@
                     }
                 },
                 {
+                    "id": "{8c1f1668-e8b6-48b3-98ea-1beb363e17ec}",
+                    "model": {
+                        "name": "System",
+                        "parameters": [
+                            {
+                                "1": "System"
+                            },
+                            {
+                                "2": true
+                            },
+                            {
+                                "18": "SparkSystem.xml"
+                            },
+                            {
+                                "17": "Run export"
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": 299.44444444444434,
+                        "y": -51.94444444444457
+                    }
+                },
+                {
                     "id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
                     "model": {
                         "name": "Group",
@@ -374,6 +374,31 @@
                     "position": {
                         "x": -79.44444444444434,
                         "y": -151.94444444444457
+                    }
+                },
+                {
+                    "id": "{dfc7f6a6-4046-4d09-acd7-717be99ca708}",
+                    "model": {
+                        "name": "PointZone",
+                        "parameters": [
+                            {
+                                "1": "PointZone"
+                            },
+                            {
+                                "2": false
+                            },
+                            {
+                                "7": [
+                                    0,
+                                    -0.5899999737739563,
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -796.1111111111109,
+                        "y": 43.611111111111086
                     }
                 },
                 {
@@ -413,31 +438,6 @@
                     "position": {
                         "x": -507.2222222222222,
                         "y": -371.94444444444446
-                    }
-                },
-                {
-                    "id": "{dfc7f6a6-4046-4d09-acd7-717be99ca708}",
-                    "model": {
-                        "name": "PointZone",
-                        "parameters": [
-                            {
-                                "1": "PointZone"
-                            },
-                            {
-                                "2": false
-                            },
-                            {
-                                "7": [
-                                    0,
-                                    0,
-                                    0
-                                ]
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -796.1111111111109,
-                        "y": 43.611111111111086
                     }
                 }
             ]
