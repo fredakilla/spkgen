@@ -67,6 +67,14 @@ void CustomFlowScene::_copyNode()
             jsonArray.append(node.save());
         }
 
+        eCommentItem* comment = dynamic_cast<eCommentItem*>(item);
+        if (comment)
+        {
+            QJsonObject jsonComment;
+            jsonComment["comment"] = comment->save();
+            jsonArray.append(jsonComment);
+        }
+
         json["SpkgenCopy"] = jsonArray;
     }
 
@@ -108,6 +116,16 @@ void CustomFlowScene::_pasteNode()
                 minx = eMin(minx, point.x());
                 miny = eMin(miny, point.y());
             }
+
+            if (obj.contains("comment"))
+            {
+                QJsonObject commentJson = obj["comment"].toObject();
+                QJsonObject pos = commentJson["position"].toObject();
+                QPointF point(pos["x"].toDouble(), pos["y"].toDouble());
+
+                minx = eMin(minx, point.x());
+                miny = eMin(miny, point.y());
+            }
         }
         QPointF minPos(minx, miny);
 
@@ -141,6 +159,21 @@ void CustomFlowScene::_pasteNode()
                     BaseNode* baseNode = static_cast<BaseNode*>(node.nodeDataModel());
                     baseNode->restore(model);
                 }
+            }
+
+            // obj is a comment ?
+            if (obj.contains("comment"))
+            {
+                QJsonObject jsonComment = obj["comment"].toObject();
+
+                QJsonObject pos = jsonComment["position"].toObject();
+                QPointF point(pos["x"].toDouble(), pos["y"].toDouble());
+
+                QPointF newPos = point + (_mousePos - minPos);
+
+                eCommentItem* commentItem = _addComment(newPos);
+                commentItem->restore(jsonComment);
+                commentItem->setPos(newPos);
             }
         }
     }
