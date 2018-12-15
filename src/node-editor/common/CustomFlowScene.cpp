@@ -64,15 +64,18 @@ void CustomFlowScene::_copyNode()
         if (graphicsNode)
         {
             QtNodes::Node& node = graphicsNode->node();
-            jsonArray.append(node.save());
+
+            QJsonObject json;
+            json["node"] = node.save();
+            jsonArray.append(json);
         }
 
         eCommentItem* comment = dynamic_cast<eCommentItem*>(item);
         if (comment)
         {
-            QJsonObject jsonComment;
-            jsonComment["comment"] = comment->save();
-            jsonArray.append(jsonComment);
+            QJsonObject json;
+            json["comment"] = comment->save();
+            jsonArray.append(json);
         }
 
         json["SpkgenCopy"] = jsonArray;
@@ -108,24 +111,19 @@ void CustomFlowScene::_pasteNode()
         for (int i=0; i<objectList.size(); ++i)
         {
             QJsonObject obj = objectList[i].toObject();
-            if (obj.contains("model"))
-            {
-                QJsonObject pos = obj["position"].toObject();
-                QPointF point(pos["x"].toDouble(), pos["y"].toDouble());
 
-                minx = eMin(minx, point.x());
-                miny = eMin(miny, point.y());
-            }
+            QJsonObject jsonItem;
+            if (obj.contains("node"))
+                jsonItem = obj["node"].toObject();
+            else if (obj.contains("comment"))
+                jsonItem = obj["comment"].toObject();
 
-            if (obj.contains("comment"))
-            {
-                QJsonObject commentJson = obj["comment"].toObject();
-                QJsonObject pos = commentJson["position"].toObject();
-                QPointF point(pos["x"].toDouble(), pos["y"].toDouble());
+            QJsonObject pos = jsonItem["position"].toObject();
+            QPointF point(pos["x"].toDouble(), pos["y"].toDouble());
 
-                minx = eMin(minx, point.x());
-                miny = eMin(miny, point.y());
-            }
+            minx = eMin(minx, point.x());
+            miny = eMin(miny, point.y());
+
         }
         QPointF minPos(minx, miny);
 
@@ -135,12 +133,14 @@ void CustomFlowScene::_pasteNode()
             QJsonObject obj = objectList[i].toObject();
 
             // obj is a node ?
-            if (obj.contains("model"))
+            if (obj.contains("node"))
             {
-                QJsonObject model = obj["model"].toObject();
+                QJsonObject jsonNode = obj["node"].toObject();
+
+                QJsonObject model = jsonNode["model"].toObject();
                 QString nodeType = model["name"].toString();
 
-                QJsonObject pos = obj["position"].toObject();
+                QJsonObject pos = jsonNode["position"].toObject();
                 QPointF point(pos["x"].toDouble(), pos["y"].toDouble());
 
                 // get node type from registry
@@ -184,16 +184,20 @@ void CustomFlowScene::_cutNode()
     // copy selected nodes
     _copyNode();
 
-    // delete selected nodes
+    // delete selected items
     QList<QGraphicsItem*> selection =  selectedItems();
     Q_FOREACH(QGraphicsItem* item, selection)
     {
+        // nodes
         QtNodes::NodeGraphicsObject* graphicsNode = dynamic_cast<QtNodes::NodeGraphicsObject*>(item);
         if (graphicsNode)
         {
             QtNodes::Node& node = graphicsNode->node();
             removeNode(node);
         }
+
+        // comments
+        deleteSelectedComments();
     }
 }
 
