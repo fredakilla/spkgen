@@ -67,6 +67,7 @@ private:
     eCommentItem* _addComment(const QPointF &pos);
     void _copyNode();
     void _pasteNode();
+    void _cutNode();
 
 private:
     QGraphicsItemLayer* _commentLayer;

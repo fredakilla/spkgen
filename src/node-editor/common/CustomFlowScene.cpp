@@ -104,6 +104,24 @@ void CustomFlowScene::_pasteNode()
     }
 }
 
+void CustomFlowScene::_cutNode()
+{
+    // copy node
+    _copyNode();
+
+    // delete node
+    QGraphicsItem* item = itemAt(_mousePos, QTransform());
+    if (item)
+    {
+        QtNodes::NodeGraphicsObject* graphicsNode = dynamic_cast<QtNodes::NodeGraphicsObject*>(item);
+        if (graphicsNode)
+        {
+            QtNodes::Node& node = graphicsNode->node();
+            removeNode(node);
+        }
+    }
+}
+
 void CustomFlowScene::keyPressEvent(QKeyEvent *event)
 {
     // if a comment is being editing bypass event
@@ -128,6 +146,10 @@ void CustomFlowScene::keyPressEvent(QKeyEvent *event)
 
     case Qt::Key_V:
         _pasteNode();
+        break;
+
+    case Qt::Key_X:
+        _cutNode();
         break;
     }
 
