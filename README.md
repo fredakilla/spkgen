@@ -27,7 +27,7 @@ TODO
 - [x] multiple scenes managment
 - [x] comments items on node view
 - [ ] set styles
-- [ ] add shortcuts on node view : copy/paste nodes, repeat last created node,...
+- [x] add shortcuts on node view : copy/paste/cut nodes
 - [ ] add samples and tutorials (WIP)
 
 ## Build
