@@ -15,6 +15,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
+#include <QDebug>
 
 #include "../spark-nodes/spark-nodes.h"
 #include "../../UrhoDevice.h"
@@ -52,66 +53,90 @@ void CustomFlowScene::_initialize()
 
 void CustomFlowScene::_copyNode()
 {
-    QGraphicsItem* item = itemAt(_mousePos, QTransform());
-    if (item)
+    QList<QGraphicsItem*> selection =  selectedItems();
+
+    QJsonObject json;
+    QJsonArray jsonArray;
+
+    Q_FOREACH(QGraphicsItem* item, selection)
     {
         QtNodes::NodeGraphicsObject* graphicsNode = dynamic_cast<QtNodes::NodeGraphicsObject*>(item);
         if (graphicsNode)
         {
             QtNodes::Node& node = graphicsNode->node();
-
-            QJsonObject json = node.save();
-
-            QJsonDocument doc(json);
-            QByteArray bytes = doc.toJson();
-
-            QClipboard *clipboard = QApplication::clipboard();
-            QMimeData *mimeData = new QMimeData;
-            mimeData->setText(bytes);
-            clipboard->setMimeData(mimeData);
+            jsonArray.append(node.save());
         }
+
+        json["SpkgenCopy"] = jsonArray;
     }
+
+    QJsonDocument doc(json);
+    QByteArray bytes = doc.toJson();
+
+    QClipboard* clipboard = QApplication::clipboard();
+    QMimeData* mimeData = new QMimeData;
+    mimeData->setText(bytes);
+    clipboard->setMimeData(mimeData);
 }
 
 void CustomFlowScene::_pasteNode()
 {
-    const QClipboard *clipboard = QApplication::clipboard();
-    const QMimeData *mimeData = clipboard->mimeData();
+    // read clipboard
+    const QClipboard* clipboard = QApplication::clipboard();
+    const QMimeData* mimeData = clipboard->mimeData();
 
+    // parse clipboard content to json
     QString text = mimeData->text();
-
     QJsonDocument doc = QJsonDocument::fromJson(text.toLocal8Bit());
     QJsonObject jsonObject = doc.object();
 
-    if (jsonObject.contains("model"))
+    if (jsonObject.contains("SpkgenCopy"))
     {
-        QJsonObject model = jsonObject["model"].toObject();
-        QString nodeType = model["name"].toString();
-
-        auto type = registry().create(nodeType);
-        if (type)
+        // iterate through all json objects
+        QJsonArray objectList = jsonObject["SpkgenCopy"].toArray();
+        for (int i=0; i<objectList.size(); ++i)
         {
-            // create node from same type
-            QtNodes::Node& node = createNode(std::move(type));
+            QJsonObject obj = objectList[i].toObject();
 
-            // set new pos at current mouse pos
-            node.nodeGraphicsObject().setPos(_mousePos);
+            // obj is a node ?
+            if (obj.contains("model"))
+            {
+                QJsonObject model = obj["model"].toObject();
+                QString nodeType = model["name"].toString();
 
-            // copy parameters
-            BaseNode* baseNode = static_cast<BaseNode*>(node.nodeDataModel());
-            baseNode->restore(model);
+                QJsonObject pos = obj["position"].toObject();
+                QPointF point(pos["x"].toDouble(), pos["y"].toDouble());
+
+                // get node type from registry
+                auto type = registry().create(nodeType);
+
+                if (type)
+                {
+                    // create node of same type
+                    QtNodes::Node& node = createNode(std::move(type));
+
+                    // TODO: fix new position
+                    // set new pos using current mouse pos
+                    QPointF newPos = point + _mousePos;
+                    node.nodeGraphicsObject().setPos(newPos);
+
+                    // copy node's parameters
+                    BaseNode* baseNode = static_cast<BaseNode*>(node.nodeDataModel());
+                    baseNode->restore(model);
+                }
+            }
         }
     }
 }
 
 void CustomFlowScene::_cutNode()
 {
-    // copy node
+    // copy selected nodes
     _copyNode();
 
-    // delete node
-    QGraphicsItem* item = itemAt(_mousePos, QTransform());
-    if (item)
+    // delete selected nodes
+    QList<QGraphicsItem*> selection =  selectedItems();
+    Q_FOREACH(QGraphicsItem* item, selection)
     {
         QtNodes::NodeGraphicsObject* graphicsNode = dynamic_cast<QtNodes::NodeGraphicsObject*>(item);
         if (graphicsNode)
