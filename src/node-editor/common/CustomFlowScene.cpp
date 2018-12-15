@@ -92,8 +92,26 @@ void CustomFlowScene::_pasteNode()
 
     if (jsonObject.contains("SpkgenCopy"))
     {
-        // iterate through all json objects
         QJsonArray objectList = jsonObject["SpkgenCopy"].toArray();
+
+        // get smallest position for nodes
+        double minx = eS32_MAX;
+        double miny = eS32_MAX;
+        for (int i=0; i<objectList.size(); ++i)
+        {
+            QJsonObject obj = objectList[i].toObject();
+            if (obj.contains("model"))
+            {
+                QJsonObject pos = obj["position"].toObject();
+                QPointF point(pos["x"].toDouble(), pos["y"].toDouble());
+
+                minx = eMin(minx, point.x());
+                miny = eMin(miny, point.y());
+            }
+        }
+        QPointF minPos(minx, miny);
+
+        // iterate through all json objects
         for (int i=0; i<objectList.size(); ++i)
         {
             QJsonObject obj = objectList[i].toObject();
@@ -115,10 +133,9 @@ void CustomFlowScene::_pasteNode()
                     // create node of same type
                     QtNodes::Node& node = createNode(std::move(type));
 
-                    // TODO: fix new position
-                    // set new pos using current mouse pos
-                    QPointF newPos = point + _mousePos;
-                    node.nodeGraphicsObject().setPos(newPos);
+                    // set new pos using current mouse pos and min pos
+                    QPointF newPos = _mousePos - minPos;
+                    node.nodeGraphicsObject().setPos(point + newPos);
 
                     // copy node's parameters
                     BaseNode* baseNode = static_cast<BaseNode*>(node.nodeDataModel());
