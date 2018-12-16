@@ -16,6 +16,7 @@
 #include <QClipboard>
 #include <QMimeData>
 #include <QDebug>
+#include <unordered_map>
 
 #include "../spark-nodes/spark-nodes.h"
 #include "../../UrhoDevice.h"
@@ -70,6 +71,16 @@ void CustomFlowScene::_copyNode()
             jsonArray.append(json);
         }
 
+        QtNodes::ConnectionGraphicsObject* graphicsConnection = dynamic_cast<QtNodes::ConnectionGraphicsObject*>(item);
+        if (graphicsConnection)
+        {
+            QtNodes::Connection& connection = graphicsConnection->connection();
+
+            QJsonObject json;
+            json["connection"] = connection.save();
+            jsonArray.append(json);
+        }
+
         eCommentItem* comment = dynamic_cast<eCommentItem*>(item);
         if (comment)
         {
@@ -80,6 +91,7 @@ void CustomFlowScene::_copyNode()
 
         json["SpkgenCopy"] = jsonArray;
     }
+
 
     QJsonDocument doc(json);
     QByteArray bytes = doc.toJson();
@@ -100,6 +112,10 @@ void CustomFlowScene::_pasteNode()
     QString text = mimeData->text();
     QJsonDocument doc = QJsonDocument::fromJson(text.toLocal8Bit());
     QJsonObject jsonObject = doc.object();
+
+    // map old id to new nodes (used to recreate connections to new nodes)
+    std::unordered_map<QUuid, Node*> nodesIdMap;
+
 
     if (jsonObject.contains("SpkgenCopy"))
     {
@@ -127,6 +143,7 @@ void CustomFlowScene::_pasteNode()
         }
         QPointF minPos(minx, miny);
 
+
         // iterate through all json objects
         for (int i=0; i<objectList.size(); ++i)
         {
@@ -137,6 +154,7 @@ void CustomFlowScene::_pasteNode()
             {
                 QJsonObject jsonNode = obj["node"].toObject();
 
+                QUuid oldId = jsonNode["id"].toString();
                 QJsonObject model = jsonNode["model"].toObject();
                 QString nodeType = model["name"].toString();
 
@@ -150,6 +168,9 @@ void CustomFlowScene::_pasteNode()
                 {
                     // create node of same type
                     QtNodes::Node& node = createNode(std::move(type));
+
+                    // store for this new node its old id
+                    nodesIdMap[oldId] = &node;
 
                     // set new pos using current mouse pos and min pos
                     QPointF newPos = _mousePos - minPos;
@@ -176,6 +197,41 @@ void CustomFlowScene::_pasteNode()
                 commentItem->setPos(newPos);
             }
         }
+
+
+        // second iteration, create connections once all nodes are created
+        for (int i=0; i<objectList.size(); ++i)
+        {
+            QJsonObject obj = objectList[i].toObject();
+
+            // obj is a connection ?
+            if (obj.contains("connection"))
+            {
+                QJsonObject jsonConnection = obj["connection"].toObject();
+
+                QUuid inId = jsonConnection["in_id"].toString();
+                PortIndex inIndex = jsonConnection["in_index"].toInt();
+                QUuid outId = jsonConnection["out_id"].toString();
+                PortIndex outIndex = jsonConnection["out_index"].toInt();
+
+                std::unordered_map<QUuid, Node*>::const_iterator n1 = nodesIdMap.find(inId);
+                std::unordered_map<QUuid, Node*>::const_iterator n2 = nodesIdMap.find(outId);
+
+                if (n1 == nodesIdMap.end() || n2 == nodesIdMap.end())
+                {
+                    Q_ASSERT(0);
+                }
+                else
+                {
+                    auto const &nodeIn = n1->second;
+                    auto const &nodeOut = n2->second;
+
+                    createConnection(*nodeIn, inIndex, *nodeOut, outIndex);
+                }
+            }
+        }
+
+
     }
 }
 
@@ -194,6 +250,14 @@ void CustomFlowScene::_cutNode()
         {
             QtNodes::Node& node = graphicsNode->node();
             removeNode(node);
+        }
+
+        // connections
+        QtNodes::ConnectionGraphicsObject* graphicsConnection = dynamic_cast<QtNodes::ConnectionGraphicsObject*>(item);
+        if (graphicsConnection)
+        {
+            QtNodes::Connection& connection = graphicsConnection->connection();
+            deleteConnection(connection);
         }
 
         // comments
