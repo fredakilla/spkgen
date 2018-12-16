@@ -56,9 +56,9 @@ NodeSparkGroup::NodeSparkGroup()
 {
     IN_PORT(ENC_RENDERER, "renderer");
     IN_PORT(ENC_EMITTER, "emitters");
-    IN_PORT(ENC_COLORINTERPOLATOR, "colors");
-    IN_PORT(ENC_PARAMINTERPOLATOR, "params");
     IN_PORT(ENC_MODIFIER, "modifiers");
+    IN_PORT(ENC_COLORINTERPOLATOR, "colors");
+    IN_PORT(ENC_PARAMINTERPOLATOR, "params");    
     OUT_PORT(ENC_GROUP, "group");
 
     //createBaseObjectParams("Group");
@@ -74,9 +74,9 @@ void NodeSparkGroup::process()
 {
     const unsigned int INPUT_RENDERER_INDEX = 0;
     const unsigned int INPUT_EMITTERS_INDEX = 1;
-    const unsigned int INPUT_COLORINTERPOLATOR_INDEX = 2;
-    const unsigned int INPUT_PARAMSINTERPOLATOR_INDEX = 3;
-    const unsigned int INPUT_MODIFIERS_INDEX = 4;
+    const unsigned int INPUT_MODIFIERS_INDEX = 2;
+    const unsigned int INPUT_COLORINTERPOLATOR_INDEX = 3;
+    const unsigned int INPUT_PARAMSINTERPOLATOR_INDEX = 4;
 
     // get parameters
     eInt capacity = getParameter("Capacity")->getValueAsInt();
