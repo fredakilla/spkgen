@@ -241,6 +241,19 @@ void NodeSparkSystem::onParameterChanged()
 // quad renderer node
 //--------------------------------------------------------------------------------------------
 
+
+
+SPK::OrientationPreset ORIENTATION_PRESET_MAP[] =
+{
+    (SPK::OrientationPreset)PACK_ORIENTATION(SPK::LOCK_LOOK,SPK::LOOK_CAMERA_PLANE,SPK::UP_CAMERA),		/**< Particles are oriented towards the camera plane (the most common) */
+    (SPK::OrientationPreset)PACK_ORIENTATION(SPK::LOCK_LOOK,SPK::LOOK_CAMERA_POINT,SPK::UP_CAMERA),		/**< Particles are oriented towards the camera point (better effect but more expensive) */
+    (SPK::OrientationPreset)PACK_ORIENTATION(SPK::LOCK_UP,SPK::LOOK_CAMERA_PLANE,SPK::UP_DIRECTION),	/**< Particles are oriented function of their direction and try to look to the camera */
+    (SPK::OrientationPreset)PACK_ORIENTATION(SPK::LOCK_UP,SPK::LOOK_CAMERA_POINT,SPK::LOOK_AXIS),		/**< Particles can only rotate around an axis and try to look to the camera */
+    (SPK::OrientationPreset)PACK_ORIENTATION(SPK::LOCK_LOOK,SPK::LOOK_POINT,SPK::UP_CAMERA),			/**< Particles are oriented towards a point in the universe */
+    (SPK::OrientationPreset)PACK_ORIENTATION(SPK::LOCK_LOOK,SPK::LOOK_AXIS,SPK::UP_AXIS),				/**< Particles have a fixed orientation in the universe */
+};
+
+
 NodeSparkQuadRenderer::NodeSparkQuadRenderer()
 {
     OUT_PORT(ENC_RENDERER, "renderer");
@@ -256,6 +269,8 @@ NodeSparkQuadRenderer::NodeSparkQuadRenderer()
                               "|AROUND_AXIS"
                               "|TOWARDS_POINT"
                               "|FIXED_ORIENTATION", 0);
+    PARAM_FXYZ("LookVector", 0.0f, eF32_MAX, 0.0f, 1.0f, 0.0f);
+    PARAM_FXYZ("UpVector", 0.0f, eF32_MAX, 0.0f, 1.0f, 0.0f);
 }
 
 void NodeSparkQuadRenderer::process()
@@ -265,7 +280,9 @@ void NodeSparkQuadRenderer::process()
     std::string textureFile(getParameter("Texture")->getValueAsString().toStdString());
     eIXY atlasDimensions = (getParameter("AtlasDimension")->getValueAsIXY());
     eFXY scale = getParameter("Scale")->getValueAsFXY();
-    SPK::OrientationPreset orientation = SPK::OrientationPreset(getParameter("Orientation")->getValueAsEnum());
+    SPK::OrientationPreset orientation = ORIENTATION_PRESET_MAP[getParameter("Orientation")->getValueAsEnum()];
+    eFXYZ lookVector = getParameter("LookVector")->getValueAsFXYZ();
+    eFXYZ upVector = getParameter("UpVector")->getValueAsFXYZ();
 
 
     Urho3D::FileSystem* fileSystem = UrhoDevice::gUrhoContext->GetSubsystem<Urho3D::FileSystem>();
@@ -301,6 +318,8 @@ void NodeSparkQuadRenderer::process()
     renderer->setMaterial(material);
     renderer->setAtlasDimensions(atlasDimensions.x, atlasDimensions.y);
     renderer->setOrientation(orientation);
+    renderer->lookVector = ToSpkVector3D(lookVector);
+    renderer->upVector = ToSpkVector3D(upVector);
 
     _renderer.reset();
     _renderer = renderer;
