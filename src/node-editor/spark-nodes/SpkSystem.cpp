@@ -270,7 +270,7 @@ NodeSparkQuadRenderer::NodeSparkQuadRenderer()
                               "|TOWARDS_POINT"
                               "|FIXED_ORIENTATION", 0);
     PARAM_FXYZ("LookVector", 0.0f, eF32_MAX, 0.0f, 1.0f, 0.0f);
-    PARAM_FXYZ("UpVector", 0.0f, eF32_MAX, 0.0f, 1.0f, 0.0f);
+    PARAM_FXYZ("UpVector", 0.0f, eF32_MAX, 1.0f, 0.0f, 0.0f);
 }
 
 void NodeSparkQuadRenderer::process()
