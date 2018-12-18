@@ -14,6 +14,7 @@ void NodeSparkEmitterBase::createBaseEmitterParams(eString name, bool shared)
     PARAM_IXY("Tank", -1, 10000, -1, -1);
     PARAM_FLOAT("Flow", -1, eF32_MAX, 25);
     PARAM_FXY("Force", eF32_MIN, eF32_MAX, 1.0f, 1.0f);
+    PARAM_BOOL("FullZone", eTRUE);
 }
 
 void NodeSparkEmitterBase::setBaseEmitterParams(SPK::Ref<SPK::Emitter> emitter)
@@ -25,6 +26,7 @@ void NodeSparkEmitterBase::setBaseEmitterParams(SPK::Ref<SPK::Emitter> emitter)
         eIXY tank = getParameter("Tank")->baseValue.get<eIXY>();
         eF32 flow = getParameter("Flow")->baseValue.get<eF32>();
         eFXY force = getParameter("Force")->baseValue.get<eFXY>();
+        bool useFullZone = getParameter("FullZone")->baseValue.get<bool>();
 
         // check parameters entries
         float minTank = tank.x;
@@ -41,6 +43,7 @@ void NodeSparkEmitterBase::setBaseEmitterParams(SPK::Ref<SPK::Emitter> emitter)
         emitter->setTank(minTank, maxTank);
         emitter->setFlow(flow);
         emitter->setForce(force.x, force.y);
+        emitter->setUseFullZone(useFullZone);
 
         // set base SPKObject parameters
         setBaseObjectParams(emitter);

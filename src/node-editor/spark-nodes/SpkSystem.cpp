@@ -62,12 +62,14 @@ NodeSparkGroup::NodeSparkGroup()
     OUT_PORT(ENC_GROUP, "group");
 
     //createBaseObjectParams("Group");
-    PARAM_INT("Capacity", 1, 500000, 100);
+    PARAM_INT("Capacity", 1, 500000, 1000);
     PARAM_FXY("Lifetime", 0.000001, eF32_MAX, 1.0f, 1.0f);
     PARAM_BOOL("Immortal", false);
     PARAM_FLOAT("GraphicalRadius", 0, eF32_MAX, 1.0f);
     PARAM_FLOAT("PhysicalRadius", 0, eF32_MAX, 0.0f);
     PARAM_BOOL("Sorted", false);
+    PARAM_BOOL("DistanceCompute", false);
+    PARAM_BOOL("Still", false);
 }
 
 void NodeSparkGroup::process()
@@ -85,6 +87,8 @@ void NodeSparkGroup::process()
     eF32 graphicalRadius = getParameter("GraphicalRadius")->getValueAsFloat();
     eF32 physicalRadius = getParameter("PhysicalRadius")->getValueAsFloat();
     bool sorted = getParameter("Sorted")->getValueAsBool();
+    bool distanceCompute = getParameter("DistanceCompute")->getValueAsBool();
+    bool still = getParameter("Still")->getValueAsBool();
 
     // create new group
     SPK::Ref<SPK::Group> group = SPK::Group::create(capacity);
@@ -94,6 +98,8 @@ void NodeSparkGroup::process()
     group->setGraphicalRadius(graphicalRadius);
     group->setPhysicalRadius(physicalRadius);
     group->enableSorting(sorted);
+    group->setStill(still);
+    group->enableDistanceComputation(distanceCompute);
 
     // set renderer
     std::shared_ptr<NodeDataSparkRenderer> inRenderer = getInput<NodeDataSparkRenderer>(INPUT_RENDERER_INDEX);
@@ -168,6 +174,12 @@ NodeSparkSystem::NodeSparkSystem()
 
     PARAM_STRING("Name", "System");
     PARAM_BOOL("Initialized", eTRUE);
+    PARAM_BOOL("EnableAABB", eFALSE);
+    PARAM_ENUM("StepMode", "Real|Constant|Adaptive", 0);
+    PARAM_BOOL("UseClampStep", eFALSE);
+    PARAM_FLOAT("ClampStep", 0.001f, eF32_MAX, 1.0f);
+    PARAM_FLOAT("ConstantStep", 0.001f, eF32_MAX, 0.25f);
+    PARAM_FXY("StepRange", 0.001f, eF32_MAX, 0.25f, 1.0f);
     PARAM_FILESAVE("Export", "SparkSystem.xml");
     PARAM_BUTTON("Action", "Run export");
 
@@ -206,9 +218,31 @@ void NodeSparkSystem::process()
 {
     QString name = getParameter("Name")->getValueAsString();
     bool initialized = getParameter("Initialized")->getValueAsBool();
+    bool enableAABB = getParameter("EnableAABB")->getValueAsBool();
+    bool useClampStep = getParameter("UseClampStep")->getValueAsBool();
+    float clampStep = getParameter("ClampStep")->getValueAsFloat();
+    float constantStep = getParameter("ConstantStep")->getValueAsFloat();
+    eFXY stepRange = getParameter("StepRange")->getValueAsFXY();
+    SPK::StepMode stepMode = SPK::StepMode(getParameter("StepMode")->getValueAsEnum());
+
 
     SPK::Ref<SPK::System> system = SPK::System::create(initialized);
     system->setName(name.toStdString());
+    system->enableAABBComputation(enableAABB);
+
+    system->setClampStep(useClampStep, clampStep);
+    switch (stepMode)
+    {
+    case SPK::StepMode::STEP_MODE_REAL:
+        system->useRealStep();
+        break;
+    case SPK::StepMode::STEP_MODE_CONSTANT:
+        system->useConstantStep(constantStep);
+        break;
+    case SPK::StepMode::STEP_MODE_ADAPTIVE:
+        system->useAdaptiveStep(stepRange.x, stepRange.y);
+        break;
+    }
 
     // add groups
     std::shared_ptr<NodeDataSparkGroupList> in0 = getInput<NodeDataSparkGroupList>(0);
@@ -263,6 +297,7 @@ NodeSparkQuadRenderer::NodeSparkQuadRenderer()
     PARAM_FILE("Texture", "Data/Textures/Flare.dds");
     PARAM_IXY("AtlasDimension", 1, 1000, 1, 1);
     PARAM_FXY("Scale", 0.0f, eF32_MAX, 1.0f, 1.0f);
+    PARAM_FLOAT("AlphaThreshold", 0.0f, 1.0f, 0.0f);
     PARAM_ENUM("Orientation", "CAMERA_PLANE_ALIGNED"
                               "|CAMERA_POINT_ALIGNED"
                               "|DIRECTION_ALIGNED"
@@ -283,6 +318,7 @@ void NodeSparkQuadRenderer::process()
     SPK::OrientationPreset orientation = ORIENTATION_PRESET_MAP[getParameter("Orientation")->getValueAsEnum()];
     eFXYZ lookVector = getParameter("LookVector")->getValueAsFXYZ();
     eFXYZ upVector = getParameter("UpVector")->getValueAsFXYZ();
+    float alphaThreshold = getParameter("AlphaThreshold")->getValueAsFloat();
 
 
     Urho3D::FileSystem* fileSystem = UrhoDevice::gUrhoContext->GetSubsystem<Urho3D::FileSystem>();
@@ -320,6 +356,7 @@ void NodeSparkQuadRenderer::process()
     renderer->setOrientation(orientation);
     renderer->lookVector = ToSpkVector3D(lookVector);
     renderer->upVector = ToSpkVector3D(upVector);
+    renderer->setAlphaTestThreshold(alphaThreshold);
 
     _renderer.reset();
     _renderer = renderer;
@@ -351,8 +388,8 @@ NodeSparkTest::NodeSparkTest()
     PARAM_IXYZ("ixyz", -5, 5, 1, 2, 3);
     PARAM_IXYZW("ixyzw", -5, 5, 1, 2, 3, 4);
     PARAM_ENUM("enum", "enum1|enum2|enum3|num4|enum5", 1);
-    PARAM_FILE("file", "res/data/textures");
-    PARAM_FILESAVE("file", "res/data/textures");
+    PARAM_FILE("load", "res/data/textures");
+    PARAM_FILESAVE("save", "res/data/textures");
     PARAM_FLAGS("flags", "flag1|flag2|flag3|flag4|flag5", 2)
     PARAM_RGBA("rgba", 100, 50, 50, 255);
     PARAM_BUTTON("button", "Simple Button");
