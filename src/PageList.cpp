@@ -23,7 +23,7 @@ PageList::PageList(QWidget* parent) :
 
 QSize PageList::sizeHint() const
 {
-    return QSize(150, 0);
+    return QSize(250, 0);
 }
 
 void PageList::mousePressEvent(QMouseEvent* event)
