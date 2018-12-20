@@ -243,8 +243,6 @@ void ParamWidget::createParamTrackEditXYZW(Parameter* p, QHBoxLayout* hbl)
     connect(trackEdit4, &eParamTrackEdit::onParameterChanged, _node, &BaseNode::onParameterChanged);
 }
 
-
-
 void ParamWidget::save(QJsonObject& json)
 {
     QJsonArray paraArray;
@@ -255,7 +253,9 @@ void ParamWidget::save(QJsonObject& json)
 
         QJsonObject param;
 
-        QString key = QString::number(p->type);
+        param["name"] = p->name;
+        param["type"] = p->type;
+
         switch(p->type)
         {
         case EPT_NONE:
@@ -265,26 +265,26 @@ void ParamWidget::save(QJsonObject& json)
         case EPT_STRING:
         case EPT_FILE:
         case EPT_FILESAVE:
-            param[key] = p->getValueAsString();
+            param["value"] = p->getValueAsString();
             break;
         case EPT_BOOL:
-            param[key] = p->getValueAsBool();
+            param["value"] = p->getValueAsBool();
             break;
         case EPT_FLAGS:
-            param[key] = p->getValueAsFlags();
+            param["value"] = p->getValueAsFlags();
             break;
         case EPT_ENUM:
-            param[key] = p->getValueAsEnum();
+            param["value"] = p->getValueAsEnum();
             break;
         case EPT_FLOAT:
-            param[key] = p->getValueAsFloat();
+            param["value"] = p->getValueAsFloat();
             break;
         case EPT_FXY:
         {
             QJsonArray valuArray;
             valuArray.append((float)p->getValueAsFXY().x);
             valuArray.append((float)p->getValueAsFXY().y);
-            param[key] = valuArray;
+            param["value"] = valuArray;
         }
             break;
         case EPT_FXYZ:
@@ -293,7 +293,7 @@ void ParamWidget::save(QJsonObject& json)
             valuArray.append((float)p->getValueAsFXYZ().x);
             valuArray.append((float)p->getValueAsFXYZ().y);
             valuArray.append((float)p->getValueAsFXYZ().z);
-            param[key] = valuArray;
+            param["value"] = valuArray;
         }
             break;
         case EPT_FXYZW:
@@ -303,18 +303,18 @@ void ParamWidget::save(QJsonObject& json)
             valuArray.append((float)p->getValueAsFXYZW().y);
             valuArray.append((float)p->getValueAsFXYZW().z);
             valuArray.append((float)p->getValueAsFXYZW().w);
-            param[key] = valuArray;
+            param["value"] = valuArray;
         }
             break;
         case EPT_INT:
-            param[key] = p->getValueAsInt();
+            param["value"] = p->getValueAsInt();
             break;
         case EPT_IXY:
         {
             QJsonArray valuArray;
             valuArray.append((int)p->getValueAsIXY().x);
             valuArray.append((int)p->getValueAsIXY().y);
-            param[key] = valuArray;
+            param["value"] = valuArray;
         }
             break;
         case EPT_IXYZ:
@@ -323,7 +323,7 @@ void ParamWidget::save(QJsonObject& json)
             valuArray.append((int)p->getValueAsIXYZ().x);
             valuArray.append((int)p->getValueAsIXYZ().y);
             valuArray.append((int)p->getValueAsIXYZ().z);
-            param[key] = valuArray;
+            param["value"] = valuArray;
         }
             break;
         case EPT_IXYZW:
@@ -333,7 +333,7 @@ void ParamWidget::save(QJsonObject& json)
             valuArray.append((int)p->getValueAsIXYZW().y);
             valuArray.append((int)p->getValueAsIXYZW().z);
             valuArray.append((int)p->getValueAsIXYZW().w);
-            param[key] = valuArray;
+            param["value"] = valuArray;
         }
             break;
         case EPT_TEXT:
@@ -347,7 +347,7 @@ void ParamWidget::save(QJsonObject& json)
             valuArray.append((int)p->getValueAsColor().g);
             valuArray.append((int)p->getValueAsColor().b);
             valuArray.append((int)p->getValueAsColor().a);
-            param[key] = valuArray;
+            param["value"] = valuArray;
         }
             break;
 
@@ -377,10 +377,15 @@ void ParamWidget::restore(QJsonObject const &json)
         if(paraObject.size() == 0)
             continue;
 
-        QString paraTypeString = paraObject.keys().at(0);
-        ParamType type = (ParamType)paraTypeString.toUInt();
+        QString name = paraObject["name"].toString();
+        ParamType type = (ParamType)paraObject["type"].toInt();
 
-        Parameter* p = _node->getParameter(paraIndex);
+        Parameter* p = _node->getParameter(name);
+
+        // if current parameter was not found (added parameter between file save/load)
+        // go to next, this new parameter will be loaded with default values
+        if (p == nullptr)
+            continue;
 
         switch(type)
         {
@@ -391,23 +396,23 @@ void ParamWidget::restore(QJsonObject const &json)
         case EPT_STRING:
         case EPT_FILE:
         case EPT_FILESAVE:
-            p->baseValue = paraObject.begin().value().toString();
+            p->baseValue = paraObject["value"].toString();
             break;
         case EPT_BOOL:
-            p->baseValue = (bool)paraObject.begin().value().toBool();
+            p->baseValue = (bool)paraObject["value"].toBool();
             break;
         case EPT_FLAGS:
-            p->baseValue = (unsigned char)paraObject.begin().value().toInt();
+            p->baseValue = (unsigned char)paraObject["value"].toInt();
             break;
         case EPT_ENUM:
-            p->baseValue = (int)paraObject.begin().value().toInt();
+            p->baseValue = (int)paraObject["value"].toInt();
             break;
         case EPT_FLOAT:
-            p->baseValue = (float)paraObject.begin().value().toDouble();
+            p->baseValue = (float)paraObject["value"].toDouble();
             break;
         case EPT_FXY:
         {
-            const QJsonArray valueArray = paraObject.begin().value().toArray();
+            const QJsonArray valueArray = paraObject["value"].toArray();
             float x = (float)valueArray.at(0).toDouble();
             float y = (float)valueArray.at(1).toDouble();
             p->baseValue = eFXY(x,y);
@@ -415,7 +420,7 @@ void ParamWidget::restore(QJsonObject const &json)
             break;
         case EPT_FXYZ:
         {
-            const QJsonArray valueArray = paraObject.begin().value().toArray();
+            const QJsonArray valueArray = paraObject["value"].toArray();
             float x = (float)valueArray.at(0).toDouble();
             float y = (float)valueArray.at(1).toDouble();
             float z = (float)valueArray.at(2).toDouble();
@@ -424,7 +429,7 @@ void ParamWidget::restore(QJsonObject const &json)
             break;
         case EPT_FXYZW:
         {
-            const QJsonArray valueArray = paraObject.begin().value().toArray();
+            const QJsonArray valueArray = paraObject["value"].toArray();
             float x = (float)valueArray.at(0).toDouble();
             float y = (float)valueArray.at(1).toDouble();
             float z = (float)valueArray.at(2).toDouble();
@@ -433,11 +438,11 @@ void ParamWidget::restore(QJsonObject const &json)
         }
             break;
         case EPT_INT:
-            p->baseValue = (int)paraObject.begin().value().toInt();
+            p->baseValue = (int)paraObject["value"].toInt();
             break;
         case EPT_IXY:
         {
-            const QJsonArray valueArray = paraObject.begin().value().toArray();
+            const QJsonArray valueArray = paraObject["value"].toArray();
             int x = valueArray.at(0).toInt();
             int y = valueArray.at(1).toInt();
             p->baseValue = eIXY(x,y);
@@ -445,7 +450,7 @@ void ParamWidget::restore(QJsonObject const &json)
             break;
         case EPT_IXYZ:
         {
-            const QJsonArray valueArray = paraObject.begin().value().toArray();
+            const QJsonArray valueArray = paraObject["value"].toArray();
             int x = valueArray.at(0).toInt();
             int y = valueArray.at(1).toInt();
             int z = valueArray.at(2).toInt();
@@ -454,7 +459,7 @@ void ParamWidget::restore(QJsonObject const &json)
             break;
         case EPT_IXYZW:
         {
-            const QJsonArray valueArray = paraObject.begin().value().toArray();
+            const QJsonArray valueArray = paraObject["value"].toArray();
             int x = valueArray.at(0).toInt();
             int y = valueArray.at(1).toInt();
             int z = valueArray.at(2).toInt();
@@ -468,7 +473,7 @@ void ParamWidget::restore(QJsonObject const &json)
             break;
         case EPT_RGBA:
         {
-            const QJsonArray valueArray = paraObject.begin().value().toArray();
+            const QJsonArray valueArray = paraObject["value"].toArray();
             int r = valueArray.at(0).toInt();
             int g = valueArray.at(1).toInt();
             int b = valueArray.at(2).toInt();

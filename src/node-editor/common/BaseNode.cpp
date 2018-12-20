@@ -86,7 +86,7 @@ Parameter* BaseNode::getParameter(const QString name)
             return p;
     }
 
-    qFatal("FATAL error : Parameter '%s' does not exists in '%s' Node",
+    qWarning("Warning : Parameter '%s' does not exists in '%s' Node",
            name.toStdString().c_str(),
            this->Name().toStdString().c_str()
            );
