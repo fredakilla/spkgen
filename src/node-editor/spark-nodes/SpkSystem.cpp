@@ -296,7 +296,7 @@ NodeSparkQuadRenderer::NodeSparkQuadRenderer()
     PARAM_FILE("Material", "Data/Materials/Particle.xml");
     PARAM_FILE("Texture", "Data/Textures/Flare.dds");
     PARAM_IXY("AtlasDimension", 1, 1000, 1, 1);
-    PARAM_FXY("Scale", 0.0f, eF32_MAX, 1.0f, 1.0f);
+    PARAM_FXY("Scale", 0.0f, eF32_MAX, 0.25f, 0.25f);
     PARAM_FLOAT("AlphaThreshold", 0.0f, 1.0f, 0.0f);
     PARAM_ENUM("Orientation", "CAMERA_PLANE_ALIGNED"
                               "|CAMERA_POINT_ALIGNED"
