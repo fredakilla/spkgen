@@ -304,14 +304,18 @@ void eFileFrame::_onSelectLocally()
     QString filename;
 
     if (_type == Type::OPEN)
-        filename = QFileDialog::getOpenFileName(nullptr, tr("Load File"), ".", tr("all files (*.*)"));
+    {
+        filename = QFileDialog::getOpenFileName(nullptr, tr("Load File"), QDir::currentPath(), tr("all files (*.*)"));
+        QFileInfo fileInfo(filename);
+        QDir::setCurrent(fileInfo.path());
+    }
     else
         filename = QFileDialog::getSaveFileName(nullptr, tr("Save File"), ".", tr("all files (*.*)"));
 
     if(!filename.isEmpty())
     {
         QDir dir;
-        QString relativePath = dir.relativeFilePath(filename);
+        QString relativePath = dir.absoluteFilePath(filename);
 
         m_lineEdit->setText(relativePath);
         m_param.setChanged();

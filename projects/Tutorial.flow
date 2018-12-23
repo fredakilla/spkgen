@@ -131,137 +131,6 @@
             ],
             "nodes": [
                 {
-                    "id": "{a0e680d7-0683-4a22-b377-58ac27b29101}",
-                    "model": {
-                        "name": "Group",
-                        "parameters": [
-                            {
-                                "name": "Capacity",
-                                "type": 9,
-                                "value": 1000
-                            },
-                            {
-                                "name": "Lifetime",
-                                "type": 6,
-                                "value": [
-                                    1,
-                                    1
-                                ]
-                            },
-                            {
-                                "name": "Immortal",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "GraphicalRadius",
-                                "type": 5,
-                                "value": 1
-                            },
-                            {
-                                "name": "PhysicalRadius",
-                                "type": 5,
-                                "value": 0
-                            },
-                            {
-                                "name": "Sorted",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "DistanceCompute",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "Still",
-                                "type": 2,
-                                "value": false
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -276.4814814814814,
-                        "y": -119.21296296296305
-                    }
-                },
-                {
-                    "id": "{acc0c7fa-208c-44e1-b878-ab63e4ef4d61}",
-                    "model": {
-                        "name": "QuadRenderer",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "Renderer"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "Material",
-                                "type": 13,
-                                "value": "Data/Materials/Particle.xml"
-                            },
-                            {
-                                "name": "Texture",
-                                "type": 13,
-                                "value": "Data/Textures/Flare.dds"
-                            },
-                            {
-                                "name": "AtlasDimension",
-                                "type": 10,
-                                "value": [
-                                    1,
-                                    1
-                                ]
-                            },
-                            {
-                                "name": "Scale",
-                                "type": 6,
-                                "value": [
-                                    0.25,
-                                    0.25
-                                ]
-                            },
-                            {
-                                "name": "AlphaThreshold",
-                                "type": 5,
-                                "value": 0
-                            },
-                            {
-                                "name": "Orientation",
-                                "type": 4,
-                                "value": 0
-                            },
-                            {
-                                "name": "LookVector",
-                                "type": 7,
-                                "value": [
-                                    0,
-                                    1,
-                                    0
-                                ]
-                            },
-                            {
-                                "name": "UpVector",
-                                "type": 7,
-                                "value": [
-                                    1,
-                                    0,
-                                    0
-                                ]
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -734.8148148148148,
-                        "y": -328.6574074074074
-                    }
-                },
-                {
                     "id": "{c9296c02-00f8-4c40-9901-229d1e6189e3}",
                     "model": {
                         "name": "System",
@@ -378,6 +247,137 @@
                         "x": -717.4074074074074,
                         "y": 89.30555555555566
                     }
+                },
+                {
+                    "id": "{acc0c7fa-208c-44e1-b878-ab63e4ef4d61}",
+                    "model": {
+                        "name": "QuadRenderer",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "Renderer"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Material",
+                                "type": 13,
+                                "value": "Data/Materials/Particle.xml"
+                            },
+                            {
+                                "name": "Texture",
+                                "type": 13,
+                                "value": "Data/Textures/Flare.dds"
+                            },
+                            {
+                                "name": "AtlasDimension",
+                                "type": 10,
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            {
+                                "name": "Scale",
+                                "type": 6,
+                                "value": [
+                                    0.25,
+                                    0.25
+                                ]
+                            },
+                            {
+                                "name": "AlphaThreshold",
+                                "type": 5,
+                                "value": 0
+                            },
+                            {
+                                "name": "Orientation",
+                                "type": 4,
+                                "value": 0
+                            },
+                            {
+                                "name": "LookVector",
+                                "type": 7,
+                                "value": [
+                                    0,
+                                    1,
+                                    0
+                                ]
+                            },
+                            {
+                                "name": "UpVector",
+                                "type": 7,
+                                "value": [
+                                    1,
+                                    0,
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -734.8148148148148,
+                        "y": -328.6574074074074
+                    }
+                },
+                {
+                    "id": "{a0e680d7-0683-4a22-b377-58ac27b29101}",
+                    "model": {
+                        "name": "Group",
+                        "parameters": [
+                            {
+                                "name": "Capacity",
+                                "type": 9,
+                                "value": 1000
+                            },
+                            {
+                                "name": "Lifetime",
+                                "type": 6,
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            {
+                                "name": "Immortal",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "GraphicalRadius",
+                                "type": 5,
+                                "value": 1
+                            },
+                            {
+                                "name": "PhysicalRadius",
+                                "type": 5,
+                                "value": 0
+                            },
+                            {
+                                "name": "Sorted",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "DistanceCompute",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Still",
+                                "type": 2,
+                                "value": false
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -276.4814814814814,
+                        "y": -119.21296296296305
+                    }
                 }
             ]
         },
@@ -387,21 +387,9 @@
             ],
             "connections": [
                 {
-                    "in_id": "{3810be5e-4153-4f8f-90ed-aa848fd7eaa8}",
-                    "in_index": 1,
-                    "out_id": "{4699fa4b-bb44-444b-b483-6007091b0845}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{f3b790fa-c68b-48c7-bfe2-7816b9dcea63}",
-                    "in_index": 1,
-                    "out_id": "{f69470b4-7bca-43cb-935b-009007c9c391}",
-                    "out_index": 0
-                },
-                {
                     "in_id": "{f69470b4-7bca-43cb-935b-009007c9c391}",
-                    "in_index": 0,
-                    "out_id": "{615ec42a-64ff-492f-9296-db6391286f35}",
+                    "in_index": 4,
+                    "out_id": "{7c91081a-60ef-4230-8946-539ca67f4987}",
                     "out_index": 0
                 },
                 {
@@ -417,21 +405,9 @@
                     "out_index": 0
                 },
                 {
-                    "in_id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
-                    "in_index": 4,
-                    "out_id": "{970c79f9-bb9b-4b26-8409-a7fa2f530c8d}",
-                    "out_index": 0
-                },
-                {
                     "in_id": "{7c91081a-60ef-4230-8946-539ca67f4987}",
                     "in_index": 0,
                     "out_id": "{84836c3b-2af0-49ed-9f52-f3863718db1a}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
-                    "in_index": 1,
-                    "out_id": "{31790dd2-5790-4872-82b5-a0303c88df83}",
                     "out_index": 0
                 },
                 {
@@ -441,9 +417,9 @@
                     "out_index": 0
                 },
                 {
-                    "in_id": "{f3b790fa-c68b-48c7-bfe2-7816b9dcea63}",
-                    "in_index": 0,
-                    "out_id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
+                    "in_id": "{f69470b4-7bca-43cb-935b-009007c9c391}",
+                    "in_index": 3,
+                    "out_id": "{0ea92fbf-1ef1-4775-9635-050fdc5c862b}",
                     "out_index": 0
                 },
                 {
@@ -453,15 +429,27 @@
                     "out_index": 0
                 },
                 {
-                    "in_id": "{ddfcb822-45fc-4012-a0be-3188314edc9a}",
-                    "in_index": 0,
-                    "out_id": "{a945a54d-3339-4783-a093-eb1e269b953d}",
+                    "in_id": "{f69470b4-7bca-43cb-935b-009007c9c391}",
+                    "in_index": 1,
+                    "out_id": "{ddfcb822-45fc-4012-a0be-3188314edc9a}",
                     "out_index": 0
                 },
                 {
                     "in_id": "{f69470b4-7bca-43cb-935b-009007c9c391}",
-                    "in_index": 1,
-                    "out_id": "{ddfcb822-45fc-4012-a0be-3188314edc9a}",
+                    "in_index": 0,
+                    "out_id": "{615ec42a-64ff-492f-9296-db6391286f35}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
+                    "in_index": 4,
+                    "out_id": "{970c79f9-bb9b-4b26-8409-a7fa2f530c8d}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{ddfcb822-45fc-4012-a0be-3188314edc9a}",
+                    "in_index": 0,
+                    "out_id": "{a945a54d-3339-4783-a093-eb1e269b953d}",
                     "out_index": 0
                 },
                 {
@@ -471,27 +459,9 @@
                     "out_index": 0
                 },
                 {
-                    "in_id": "{3810be5e-4153-4f8f-90ed-aa848fd7eaa8}",
-                    "in_index": 0,
-                    "out_id": "{fe9d56c8-4a3a-4027-a909-163232f8dd56}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{4699fa4b-bb44-444b-b483-6007091b0845}",
-                    "in_index": 0,
-                    "out_id": "{2aaa7d1e-9e0f-4d7e-b5b4-f25d41d8f66b}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{f69470b4-7bca-43cb-935b-009007c9c391}",
-                    "in_index": 3,
-                    "out_id": "{0ea92fbf-1ef1-4775-9635-050fdc5c862b}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{f69470b4-7bca-43cb-935b-009007c9c391}",
-                    "in_index": 4,
-                    "out_id": "{7c91081a-60ef-4230-8946-539ca67f4987}",
+                    "in_id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
+                    "in_index": 1,
+                    "out_id": "{31790dd2-5790-4872-82b5-a0303c88df83}",
                     "out_index": 0
                 },
                 {
@@ -499,18 +469,48 @@
                     "in_index": 3,
                     "out_id": "{3668818c-1f9a-4a96-adfb-c54e0ef05fd0}",
                     "out_index": 0
+                },
+                {
+                    "in_id": "{f3b790fa-c68b-48c7-bfe2-7816b9dcea63}",
+                    "in_index": 0,
+                    "out_id": "{5ba24c0c-ef6d-4435-9ff7-9569b31dcd6d}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{3810be5e-4153-4f8f-90ed-aa848fd7eaa8}",
+                    "in_index": 0,
+                    "out_id": "{fe9d56c8-4a3a-4027-a909-163232f8dd56}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{f3b790fa-c68b-48c7-bfe2-7816b9dcea63}",
+                    "in_index": 1,
+                    "out_id": "{f69470b4-7bca-43cb-935b-009007c9c391}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{3810be5e-4153-4f8f-90ed-aa848fd7eaa8}",
+                    "in_index": 1,
+                    "out_id": "{4699fa4b-bb44-444b-b483-6007091b0845}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{4699fa4b-bb44-444b-b483-6007091b0845}",
+                    "in_index": 0,
+                    "out_id": "{2aaa7d1e-9e0f-4d7e-b5b4-f25d41d8f66b}",
+                    "out_index": 0
                 }
             ],
             "nodes": [
                 {
-                    "id": "{dfc7f6a6-4046-4d09-acd7-717be99ca708}",
+                    "id": "{6dfe85d5-43aa-4a78-8554-84189d002003}",
                     "model": {
-                        "name": "PointZone",
+                        "name": "ParamInitializerRandom",
                         "parameters": [
                             {
                                 "name": "Name",
                                 "type": 1,
-                                "value": "PointZone"
+                                "value": "ParamInitializerRandom"
                             },
                             {
                                 "name": "Shared",
@@ -518,162 +518,14 @@
                                 "value": false
                             },
                             {
-                                "name": "Position",
-                                "type": 7,
-                                "value": [
-                                    0,
-                                    0.4399999976158142,
-                                    0
-                                ]
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -744.0739111111108,
-                        "y": -762.1208888888888
-                    }
-                },
-                {
-                    "id": "{3810be5e-4153-4f8f-90ed-aa848fd7eaa8}",
-                    "model": {
-                        "name": "Modifiers"
-                    },
-                    "position": {
-                        "x": -370.3627999999999,
-                        "y": -462.13200000000006
-                    }
-                },
-                {
-                    "id": "{3668818c-1f9a-4a96-adfb-c54e0ef05fd0}",
-                    "model": {
-                        "name": "ColorInterpolator",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "ColorInterpolator"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "BirthColor",
-                                "type": 16,
-                                "value": [
-                                    114,
-                                    159,
-                                    207,
-                                    38
-                                ]
-                            },
-                            {
-                                "name": "DeathColor",
-                                "type": 16,
-                                "value": [
-                                    52,
-                                    101,
-                                    164,
-                                    243
-                                ]
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -832.7627999999995,
-                        "y": 210.5180000000001
-                    }
-                },
-                {
-                    "id": "{8c1f1668-e8b6-48b3-98ea-1beb363e17ec}",
-                    "model": {
-                        "name": "System",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "System"
-                            },
-                            {
-                                "name": "Initialized",
-                                "type": 2,
-                                "value": true
-                            },
-                            {
-                                "name": "EnableAABB",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "StepMode",
-                                "type": 4,
-                                "value": 0
-                            },
-                            {
-                                "name": "UseClampStep",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "ClampStep",
-                                "type": 5,
-                                "value": 1
-                            },
-                            {
-                                "name": "ConstantStep",
-                                "type": 5,
-                                "value": 0.25
-                            },
-                            {
-                                "name": "StepRange",
-                                "type": 6,
-                                "value": [
-                                    0.25,
-                                    1
-                                ]
-                            },
-                            {
-                                "name": "Export",
-                                "type": 18,
-                                "value": "SparkSystem.xml"
-                            },
-                            {
-                                "name": "Action",
-                                "type": 17,
-                                "value": "Run export"
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": 1762.024444444444,
-                        "y": 93.6255555555554
-                    }
-                },
-                {
-                    "id": "{970c79f9-bb9b-4b26-8409-a7fa2f530c8d}",
-                    "model": {
-                        "name": "ParamInterpolator",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "ParamInterpolator"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "BirthValue",
+                                "name": "MinValue",
                                 "type": 5,
                                 "value": 0
                             },
                             {
-                                "name": "DeathValue",
+                                "name": "MaxValue",
                                 "type": 5,
-                                "value": 1
+                                "value": 360
                             },
                             {
                                 "name": "Param",
@@ -683,19 +535,19 @@
                         ]
                     },
                     "position": {
-                        "x": -889.5127999999999,
-                        "y": -40.831999999999994
+                        "x": 143.24999999999994,
+                        "y": 1535.2499999999998
                     }
                 },
                 {
-                    "id": "{31790dd2-5790-4872-82b5-a0303c88df83}",
+                    "id": "{fe9d56c8-4a3a-4027-a909-163232f8dd56}",
                     "model": {
-                        "name": "SphericEmitter",
+                        "name": "Gravity",
                         "parameters": [
                             {
                                 "name": "Name",
                                 "type": 1,
-                                "value": "SphericEmit"
+                                "value": "Gravity"
                             },
                             {
                                 "name": "Shared",
@@ -703,58 +555,66 @@
                                 "value": false
                             },
                             {
-                                "name": "Active",
+                                "name": "LocalToSystem",
                                 "type": 2,
                                 "value": true
                             },
                             {
-                                "name": "Tank",
-                                "type": 10,
-                                "value": [
-                                    -1,
-                                    -1
-                                ]
-                            },
-                            {
-                                "name": "Flow",
-                                "type": 5,
-                                "value": 300
-                            },
-                            {
-                                "name": "Force",
-                                "type": 6,
-                                "value": [
-                                    2.5,
-                                    2.5
-                                ]
-                            },
-                            {
-                                "name": "FullZone",
-                                "type": 2,
-                                "value": true
-                            },
-                            {
-                                "name": "Direction",
+                                "name": "Gravity",
                                 "type": 7,
                                 "value": [
                                     0,
-                                    1,
+                                    -3.450000047683716,
                                     0
-                                ]
-                            },
-                            {
-                                "name": "Angles",
-                                "type": 6,
-                                "value": [
-                                    0.125,
-                                    0.125
                                 ]
                             }
                         ]
                     },
                     "position": {
-                        "x": -401.9999999999999,
-                        "y": -817.4999999999999
+                        "x": -824.8128,
+                        "y": -536.3319999999999
+                    }
+                },
+                {
+                    "id": "{4699fa4b-bb44-444b-b483-6007091b0845}",
+                    "model": {
+                        "name": "Obstacle",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "Obstacle"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "LocalToSystem",
+                                "type": 2,
+                                "value": true
+                            },
+                            {
+                                "name": "BouncingRatio",
+                                "type": 5,
+                                "value": 0.33000001311302185
+                            },
+                            {
+                                "name": "Friction",
+                                "type": 5,
+                                "value": 1
+                            },
+                            {
+                                "name": "ZoneTest",
+                                "type": 4,
+                                "value": 2
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -825.9627999999998,
+                        "y": -351.2319999999998
                     }
                 },
                 {
@@ -813,99 +673,14 @@
                     }
                 },
                 {
-                    "id": "{84836c3b-2af0-49ed-9f52-f3863718db1a}",
+                    "id": "{31790dd2-5790-4872-82b5-a0303c88df83}",
                     "model": {
-                        "name": "ParamInterpolator",
+                        "name": "SphericEmitter",
                         "parameters": [
                             {
                                 "name": "Name",
                                 "type": 1,
-                                "value": "ParamInterpolator"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "BirthValue",
-                                "type": 5,
-                                "value": 1
-                            },
-                            {
-                                "name": "DeathValue",
-                                "type": 5,
-                                "value": 1
-                            },
-                            {
-                                "name": "Param",
-                                "type": 4,
-                                "value": 1
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": 141.69119999999958,
-                        "y": 1329.4507999999998
-                    }
-                },
-                {
-                    "id": "{a945a54d-3339-4783-a093-eb1e269b953d}",
-                    "model": {
-                        "name": "RingZone",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "RingZone"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "Position",
-                                "type": 7,
-                                "value": [
-                                    0,
-                                    0.009999999776482582,
-                                    0
-                                ]
-                            },
-                            {
-                                "name": "Radius",
-                                "type": 6,
-                                "value": [
-                                    0,
-                                    1
-                                ]
-                            },
-                            {
-                                "name": "Normal",
-                                "type": 7,
-                                "value": [
-                                    0,
-                                    1,
-                                    0
-                                ]
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -321.2935999999998,
-                        "y": 810.846
-                    }
-                },
-                {
-                    "id": "{ddfcb822-45fc-4012-a0be-3188314edc9a}",
-                    "model": {
-                        "name": "NormalEmitter",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "NormalEmit"
+                                "value": "SphericEmit"
                             },
                             {
                                 "name": "Shared",
@@ -928,14 +703,14 @@
                             {
                                 "name": "Flow",
                                 "type": 5,
-                                "value": 25
+                                "value": 700
                             },
                             {
                                 "name": "Force",
                                 "type": 6,
                                 "value": [
-                                    0,
-                                    0
+                                    2.3499999046325684,
+                                    2.680000066757202
                                 ]
                             },
                             {
@@ -944,98 +719,27 @@
                                 "value": true
                             },
                             {
-                                "name": "InvertedNormals",
-                                "type": 2,
-                                "value": false
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": 105.81440000000009,
-                        "y": 771.5
-                    }
-                },
-                {
-                    "id": "{7c91081a-60ef-4230-8946-539ca67f4987}",
-                    "model": {
-                        "name": "Params"
-                    },
-                    "position": {
-                        "x": 560.9999999999999,
-                        "y": 1364.9999999999998
-                    }
-                },
-                {
-                    "id": "{6dfe85d5-43aa-4a78-8554-84189d002003}",
-                    "model": {
-                        "name": "ParamInitializerRandom",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "ParamInitializerRandom"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "MinValue",
-                                "type": 5,
-                                "value": 0
-                            },
-                            {
-                                "name": "MaxValue",
-                                "type": 5,
-                                "value": 2
-                            },
-                            {
-                                "name": "Param",
-                                "type": 4,
-                                "value": 2
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": 176.99999999999994,
-                        "y": 1553.9999999999998
-                    }
-                },
-                {
-                    "id": "{fe9d56c8-4a3a-4027-a909-163232f8dd56}",
-                    "model": {
-                        "name": "Gravity",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "Gravity"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "LocalToSystem",
-                                "type": 2,
-                                "value": true
-                            },
-                            {
-                                "name": "Gravity",
+                                "name": "Direction",
                                 "type": 7,
                                 "value": [
                                     0,
-                                    -3.450000047683716,
+                                    1,
                                     0
+                                ]
+                            },
+                            {
+                                "name": "Angles",
+                                "type": 6,
+                                "value": [
+                                    0.125,
+                                    0.125
                                 ]
                             }
                         ]
                     },
                     "position": {
-                        "x": -824.8128,
-                        "y": -536.3319999999999
+                        "x": -409.4999999999999,
+                        "y": -817.4999999999999
                     }
                 },
                 {
@@ -1170,48 +874,6 @@
                     }
                 },
                 {
-                    "id": "{4699fa4b-bb44-444b-b483-6007091b0845}",
-                    "model": {
-                        "name": "Obstacle",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "Obstacle"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "LocalToSystem",
-                                "type": 2,
-                                "value": true
-                            },
-                            {
-                                "name": "BouncingRatio",
-                                "type": 5,
-                                "value": 0.33000001311302185
-                            },
-                            {
-                                "name": "Friction",
-                                "type": 5,
-                                "value": 1
-                            },
-                            {
-                                "name": "ZoneTest",
-                                "type": 4,
-                                "value": 2
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -825.9627999999998,
-                        "y": -351.2319999999998
-                    }
-                },
-                {
                     "id": "{0ea92fbf-1ef1-4775-9635-050fdc5c862b}",
                     "model": {
                         "name": "ColorInterpolator",
@@ -1233,7 +895,7 @@
                                     114,
                                     159,
                                     207,
-                                    76
+                                    182
                                 ]
                             },
                             {
@@ -1243,7 +905,7 @@
                                     100,
                                     255,
                                     255,
-                                    33
+                                    0
                                 ]
                             }
                         ]
@@ -1261,82 +923,6 @@
                     "position": {
                         "x": 1559.9999999999995,
                         "y": 75.17999999999999
-                    }
-                },
-                {
-                    "id": "{a45ac675-de8f-4c93-ba37-24b0df4da9e5}",
-                    "model": {
-                        "name": "QuadRenderer",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "Renderer"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "Material",
-                                "type": 13,
-                                "value": "Data/Spark/Materials/SparkParticleAddAlpha.xml"
-                            },
-                            {
-                                "name": "Texture",
-                                "type": 13,
-                                "value": "Data/Spark/Textures/Static/Liquids/lavaliquid.png"
-                            },
-                            {
-                                "name": "AtlasDimension",
-                                "type": 10,
-                                "value": [
-                                    1,
-                                    1
-                                ]
-                            },
-                            {
-                                "name": "Scale",
-                                "type": 6,
-                                "value": [
-                                    0.10000000149011612,
-                                    0.10000000149011612
-                                ]
-                            },
-                            {
-                                "name": "AlphaThreshold",
-                                "type": 5,
-                                "value": 0
-                            },
-                            {
-                                "name": "Orientation",
-                                "type": 4,
-                                "value": 0
-                            },
-                            {
-                                "name": "LookVector",
-                                "type": 7,
-                                "value": [
-                                    0,
-                                    1,
-                                    0
-                                ]
-                            },
-                            {
-                                "name": "UpVector",
-                                "type": 7,
-                                "value": [
-                                    1,
-                                    0,
-                                    0
-                                ]
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -570.3662222222222,
-                        "y": -1240.5720444444444
                     }
                 },
                 {
@@ -1378,139 +964,85 @@
                         "x": -1139.9627999999998,
                         "y": -319.68199999999996
                     }
-                }
-            ]
-        },
-        {
-            "Name": "Vortex",
-            "comments": [
-            ],
-            "connections": [
-                {
-                    "in_id": "{ead096fe-45ac-4e32-a105-dccf1516937a}",
-                    "in_index": 0,
-                    "out_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
-                    "out_index": 0
                 },
                 {
-                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
-                    "in_index": 1,
-                    "out_id": "{92806503-398a-48a6-946b-a2e945a139f0}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
-                    "in_index": 2,
-                    "out_id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{f22b31eb-8b20-4110-9e35-f6e1088ef225}",
-                    "in_index": 0,
-                    "out_id": "{b82825c0-4090-4e93-8859-87f6ea40b1ee}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{92806503-398a-48a6-946b-a2e945a139f0}",
-                    "in_index": 0,
-                    "out_id": "{221f0e12-8703-4061-be3d-41deda6429f1}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
-                    "in_index": 0,
-                    "out_id": "{9b20447a-0724-45bb-ab1c-f06047087cfa}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
-                    "in_index": 3,
-                    "out_id": "{d1cbfd67-c85e-4703-80d5-2199fd76ae02}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
-                    "in_index": 2,
-                    "out_id": "{f22b31eb-8b20-4110-9e35-f6e1088ef225}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
-                    "in_index": 1,
-                    "out_id": "{0ab571ee-2c35-4d20-9f59-d05578767ce3}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
-                    "in_index": 0,
-                    "out_id": "{05c7c429-38b0-4d0f-9d3a-39a22b89b1ff}",
-                    "out_index": 0
-                },
-                {
-                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
-                    "in_index": 4,
-                    "out_id": "{79ea42c0-af53-4b4d-9d11-cf68c7271a16}",
-                    "out_index": 0
-                }
-            ],
-            "nodes": [
-                {
-                    "id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
+                    "id": "{a45ac675-de8f-4c93-ba37-24b0df4da9e5}",
                     "model": {
-                        "name": "Group",
+                        "name": "QuadRenderer",
                         "parameters": [
                             {
-                                "name": "Capacity",
-                                "type": 9,
-                                "value": 10000
+                                "name": "Name",
+                                "type": 1,
+                                "value": "Renderer"
                             },
                             {
-                                "name": "Lifetime",
-                                "type": 6,
-                                "value": [
-                                    1.5,
-                                    2
-                                ]
-                            },
-                            {
-                                "name": "Immortal",
+                                "name": "Shared",
                                 "type": 2,
                                 "value": false
                             },
                             {
-                                "name": "GraphicalRadius",
-                                "type": 5,
-                                "value": 1
+                                "name": "Material",
+                                "type": 13,
+                                "value": "Data/Spark/Materials/SparkParticleAddAlpha.xml"
                             },
                             {
-                                "name": "PhysicalRadius",
+                                "name": "Texture",
+                                "type": 13,
+                                "value": "Data/Spark/Textures/Static/Liquids/lavaliquid.png"
+                            },
+                            {
+                                "name": "AtlasDimension",
+                                "type": 10,
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            {
+                                "name": "Scale",
+                                "type": 6,
+                                "value": [
+                                    0.15000000596046448,
+                                    0.15000000596046448
+                                ]
+                            },
+                            {
+                                "name": "AlphaThreshold",
                                 "type": 5,
                                 "value": 0
                             },
                             {
-                                "name": "Sorted",
-                                "type": 2,
-                                "value": false
+                                "name": "Orientation",
+                                "type": 4,
+                                "value": 0
                             },
                             {
-                                "name": "DistanceCompute",
-                                "type": 2,
-                                "value": false
+                                "name": "LookVector",
+                                "type": 7,
+                                "value": [
+                                    0,
+                                    1,
+                                    0
+                                ]
                             },
                             {
-                                "name": "Still",
-                                "type": 2,
-                                "value": false
+                                "name": "UpVector",
+                                "type": 7,
+                                "value": [
+                                    1,
+                                    0,
+                                    0
+                                ]
                             }
                         ]
                     },
                     "position": {
-                        "x": -136.5666666666665,
-                        "y": 123.64444444444437
+                        "x": -570.3662222222222,
+                        "y": -1240.5720444444444
                     }
                 },
                 {
-                    "id": "{79ea42c0-af53-4b4d-9d11-cf68c7271a16}",
+                    "id": "{970c79f9-bb9b-4b26-8409-a7fa2f530c8d}",
                     "model": {
                         "name": "ParamInterpolator",
                         "parameters": [
@@ -1532,7 +1064,7 @@
                             {
                                 "name": "DeathValue",
                                 "type": 5,
-                                "value": 20
+                                "value": 1
                             },
                             {
                                 "name": "Param",
@@ -1542,12 +1074,128 @@
                         ]
                     },
                     "position": {
-                        "x": -223.49999999999994,
-                        "y": 970.4999999999997
+                        "x": -889.5127999999999,
+                        "y": -40.831999999999994
                     }
                 },
                 {
-                    "id": "{ead096fe-45ac-4e32-a105-dccf1516937a}",
+                    "id": "{ddfcb822-45fc-4012-a0be-3188314edc9a}",
+                    "model": {
+                        "name": "NormalEmitter",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "NormalEmit"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Active",
+                                "type": 2,
+                                "value": true
+                            },
+                            {
+                                "name": "Tank",
+                                "type": 10,
+                                "value": [
+                                    -1,
+                                    -1
+                                ]
+                            },
+                            {
+                                "name": "Flow",
+                                "type": 5,
+                                "value": 25
+                            },
+                            {
+                                "name": "Force",
+                                "type": 6,
+                                "value": [
+                                    0,
+                                    0
+                                ]
+                            },
+                            {
+                                "name": "FullZone",
+                                "type": 2,
+                                "value": true
+                            },
+                            {
+                                "name": "InvertedNormals",
+                                "type": 2,
+                                "value": false
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": 105.81440000000009,
+                        "y": 771.5
+                    }
+                },
+                {
+                    "id": "{7c91081a-60ef-4230-8946-539ca67f4987}",
+                    "model": {
+                        "name": "Params"
+                    },
+                    "position": {
+                        "x": 560.9999999999999,
+                        "y": 1364.9999999999998
+                    }
+                },
+                {
+                    "id": "{a945a54d-3339-4783-a093-eb1e269b953d}",
+                    "model": {
+                        "name": "RingZone",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "RingZone"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Position",
+                                "type": 7,
+                                "value": [
+                                    0,
+                                    0.009999999776482582,
+                                    0
+                                ]
+                            },
+                            {
+                                "name": "Radius",
+                                "type": 6,
+                                "value": [
+                                    0,
+                                    1.1299999952316284
+                                ]
+                            },
+                            {
+                                "name": "Normal",
+                                "type": 7,
+                                "value": [
+                                    0,
+                                    1,
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -321.2935999999998,
+                        "y": 810.846
+                    }
+                },
+                {
+                    "id": "{8c1f1668-e8b6-48b3-98ea-1beb363e17ec}",
                     "model": {
                         "name": "System",
                         "parameters": [
@@ -1607,68 +1255,12 @@
                         ]
                     },
                     "position": {
-                        "x": 477.0822222222225,
-                        "y": 139.72703703703718
+                        "x": 1762.024444444444,
+                        "y": 93.6255555555554
                     }
                 },
                 {
-                    "id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
-                    "model": {
-                        "name": "Modifiers"
-                    },
-                    "position": {
-                        "x": -396.25,
-                        "y": 626.25
-                    }
-                },
-                {
-                    "id": "{0ab571ee-2c35-4d20-9f59-d05578767ce3}",
-                    "model": {
-                        "name": "PointMass",
-                        "parameters": [
-                            {
-                                "name": "Name",
-                                "type": 1,
-                                "value": "PointMass"
-                            },
-                            {
-                                "name": "Shared",
-                                "type": 2,
-                                "value": false
-                            },
-                            {
-                                "name": "LocalToSystem",
-                                "type": 2,
-                                "value": true
-                            },
-                            {
-                                "name": "Position",
-                                "type": 7,
-                                "value": [
-                                    0,
-                                    0,
-                                    0
-                                ]
-                            },
-                            {
-                                "name": "Mass",
-                                "type": 5,
-                                "value": 25
-                            },
-                            {
-                                "name": "Offset",
-                                "type": 5,
-                                "value": 0.009999999776482582
-                            }
-                        ]
-                    },
-                    "position": {
-                        "x": -872.5,
-                        "y": 927.5
-                    }
-                },
-                {
-                    "id": "{d1cbfd67-c85e-4703-80d5-2199fd76ae02}",
+                    "id": "{3668818c-1f9a-4a96-adfb-c54e0ef05fd0}",
                     "model": {
                         "name": "ColorInterpolator",
                         "parameters": [
@@ -1686,29 +1278,182 @@
                                 "name": "BirthColor",
                                 "type": 16,
                                 "value": [
-                                    255,
-                                    5,
-                                    0,
-                                    178
+                                    114,
+                                    159,
+                                    207,
+                                    38
                                 ]
                             },
                             {
                                 "name": "DeathColor",
                                 "type": 16,
                                 "value": [
-                                    255,
-                                    90,
-                                    0,
-                                    255
+                                    52,
+                                    101,
+                                    164,
+                                    139
                                 ]
                             }
                         ]
                     },
                     "position": {
-                        "x": -145.5,
-                        "y": 596.4999999999998
+                        "x": -832.7627999999995,
+                        "y": 210.5180000000001
                     }
                 },
+                {
+                    "id": "{3810be5e-4153-4f8f-90ed-aa848fd7eaa8}",
+                    "model": {
+                        "name": "Modifiers"
+                    },
+                    "position": {
+                        "x": -370.3627999999999,
+                        "y": -462.13200000000006
+                    }
+                },
+                {
+                    "id": "{dfc7f6a6-4046-4d09-acd7-717be99ca708}",
+                    "model": {
+                        "name": "PointZone",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "PointZone"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Position",
+                                "type": 7,
+                                "value": [
+                                    0,
+                                    0.4399999976158142,
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -744.0739111111108,
+                        "y": -762.1208888888888
+                    }
+                },
+                {
+                    "id": "{84836c3b-2af0-49ed-9f52-f3863718db1a}",
+                    "model": {
+                        "name": "ParamInterpolator",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "ParamInterpolator"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "BirthValue",
+                                "type": 5,
+                                "value": 0
+                            },
+                            {
+                                "name": "DeathValue",
+                                "type": 5,
+                                "value": 1
+                            },
+                            {
+                                "name": "Param",
+                                "type": 4,
+                                "value": 0
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": 141.69119999999958,
+                        "y": 1329.4507999999998
+                    }
+                }
+            ]
+        },
+        {
+            "Name": "Vortex",
+            "comments": [
+            ],
+            "connections": [
+                {
+                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
+                    "in_index": 3,
+                    "out_id": "{d1cbfd67-c85e-4703-80d5-2199fd76ae02}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
+                    "in_index": 2,
+                    "out_id": "{f22b31eb-8b20-4110-9e35-f6e1088ef225}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
+                    "in_index": 4,
+                    "out_id": "{79ea42c0-af53-4b4d-9d11-cf68c7271a16}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
+                    "in_index": 0,
+                    "out_id": "{05c7c429-38b0-4d0f-9d3a-39a22b89b1ff}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
+                    "in_index": 2,
+                    "out_id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{f22b31eb-8b20-4110-9e35-f6e1088ef225}",
+                    "in_index": 0,
+                    "out_id": "{b82825c0-4090-4e93-8859-87f6ea40b1ee}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
+                    "in_index": 0,
+                    "out_id": "{9b20447a-0724-45bb-ab1c-f06047087cfa}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{ead096fe-45ac-4e32-a105-dccf1516937a}",
+                    "in_index": 0,
+                    "out_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
+                    "in_index": 1,
+                    "out_id": "{0ab571ee-2c35-4d20-9f59-d05578767ce3}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
+                    "in_index": 1,
+                    "out_id": "{92806503-398a-48a6-946b-a2e945a139f0}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{92806503-398a-48a6-946b-a2e945a139f0}",
+                    "in_index": 0,
+                    "out_id": "{221f0e12-8703-4061-be3d-41deda6429f1}",
+                    "out_index": 0
+                }
+            ],
+            "nodes": [
                 {
                     "id": "{f22b31eb-8b20-4110-9e35-f6e1088ef225}",
                     "model": {
@@ -1865,6 +1610,46 @@
                     }
                 },
                 {
+                    "id": "{b82825c0-4090-4e93-8859-87f6ea40b1ee}",
+                    "model": {
+                        "name": "PlaneZone",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "PlaneZone"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Position",
+                                "type": 7,
+                                "value": [
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            {
+                                "name": "Normal",
+                                "type": 7,
+                                "value": [
+                                    0,
+                                    1,
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -1225,
+                        "y": 1157.5
+                    }
+                },
+                {
                     "id": "{9b20447a-0724-45bb-ab1c-f06047087cfa}",
                     "model": {
                         "name": "QuadRenderer",
@@ -1999,19 +1784,24 @@
                     }
                 },
                 {
-                    "id": "{b82825c0-4090-4e93-8859-87f6ea40b1ee}",
+                    "id": "{0ab571ee-2c35-4d20-9f59-d05578767ce3}",
                     "model": {
-                        "name": "PlaneZone",
+                        "name": "PointMass",
                         "parameters": [
                             {
                                 "name": "Name",
                                 "type": 1,
-                                "value": "PlaneZone"
+                                "value": "PointMass"
                             },
                             {
                                 "name": "Shared",
                                 "type": 2,
                                 "value": false
+                            },
+                            {
+                                "name": "LocalToSystem",
+                                "type": 2,
+                                "value": true
                             },
                             {
                                 "name": "Position",
@@ -2023,19 +1813,655 @@
                                 ]
                             },
                             {
-                                "name": "Normal",
+                                "name": "Mass",
+                                "type": 5,
+                                "value": 25
+                            },
+                            {
+                                "name": "Offset",
+                                "type": 5,
+                                "value": 0.009999999776482582
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -872.5,
+                        "y": 927.5
+                    }
+                },
+                {
+                    "id": "{f0a4b219-d483-4bca-a56f-71f381c7dd5c}",
+                    "model": {
+                        "name": "Modifiers"
+                    },
+                    "position": {
+                        "x": -396.25,
+                        "y": 626.25
+                    }
+                },
+                {
+                    "id": "{d1cbfd67-c85e-4703-80d5-2199fd76ae02}",
+                    "model": {
+                        "name": "ColorInterpolator",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "ColorInterpolator"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "BirthColor",
+                                "type": 16,
+                                "value": [
+                                    255,
+                                    5,
+                                    0,
+                                    178
+                                ]
+                            },
+                            {
+                                "name": "DeathColor",
+                                "type": 16,
+                                "value": [
+                                    255,
+                                    90,
+                                    0,
+                                    255
+                                ]
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -145.5,
+                        "y": 596.4999999999998
+                    }
+                },
+                {
+                    "id": "{ead096fe-45ac-4e32-a105-dccf1516937a}",
+                    "model": {
+                        "name": "System",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "System"
+                            },
+                            {
+                                "name": "Initialized",
+                                "type": 2,
+                                "value": true
+                            },
+                            {
+                                "name": "EnableAABB",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "StepMode",
+                                "type": 4,
+                                "value": 0
+                            },
+                            {
+                                "name": "UseClampStep",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "ClampStep",
+                                "type": 5,
+                                "value": 1
+                            },
+                            {
+                                "name": "ConstantStep",
+                                "type": 5,
+                                "value": 0.25
+                            },
+                            {
+                                "name": "StepRange",
+                                "type": 6,
+                                "value": [
+                                    0.25,
+                                    1
+                                ]
+                            },
+                            {
+                                "name": "Export",
+                                "type": 18,
+                                "value": "SparkSystem.xml"
+                            },
+                            {
+                                "name": "Action",
+                                "type": 17,
+                                "value": "Run export"
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": 477.0822222222225,
+                        "y": 139.72703703703718
+                    }
+                },
+                {
+                    "id": "{79ea42c0-af53-4b4d-9d11-cf68c7271a16}",
+                    "model": {
+                        "name": "ParamInterpolator",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "ParamInterpolator"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "BirthValue",
+                                "type": 5,
+                                "value": 0
+                            },
+                            {
+                                "name": "DeathValue",
+                                "type": 5,
+                                "value": 20
+                            },
+                            {
+                                "name": "Param",
+                                "type": 4,
+                                "value": 2
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -223.49999999999994,
+                        "y": 970.4999999999997
+                    }
+                },
+                {
+                    "id": "{07ba56d1-e154-4a4a-86e0-ba3911935d41}",
+                    "model": {
+                        "name": "Group",
+                        "parameters": [
+                            {
+                                "name": "Capacity",
+                                "type": 9,
+                                "value": 10000
+                            },
+                            {
+                                "name": "Lifetime",
+                                "type": 6,
+                                "value": [
+                                    1.5,
+                                    2
+                                ]
+                            },
+                            {
+                                "name": "Immortal",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "GraphicalRadius",
+                                "type": 5,
+                                "value": 1
+                            },
+                            {
+                                "name": "PhysicalRadius",
+                                "type": 5,
+                                "value": 0
+                            },
+                            {
+                                "name": "Sorted",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "DistanceCompute",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Still",
+                                "type": 2,
+                                "value": false
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -136.5666666666665,
+                        "y": 123.64444444444437
+                    }
+                }
+            ]
+        },
+        {
+            "Name": "New page",
+            "comments": [
+            ],
+            "connections": [
+                {
+                    "in_id": "{73e64260-dc2a-499c-b892-87284f7c38c1}",
+                    "in_index": 1,
+                    "out_id": "{9a2563aa-bbe7-40c1-abc8-22f381019bc2}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{95282ac8-06ea-49f9-88bc-e59c6737e4ee}",
+                    "in_index": 0,
+                    "out_id": "{2f9aabf0-93c8-47e8-993e-91920c540785}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{73e64260-dc2a-499c-b892-87284f7c38c1}",
+                    "in_index": 0,
+                    "out_id": "{b43f0f4a-91f2-499d-850d-66c4c93b65bf}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{73e64260-dc2a-499c-b892-87284f7c38c1}",
+                    "in_index": 3,
+                    "out_id": "{5b7bdc8b-8cb5-468e-9024-b1a2493663b5}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{73e64260-dc2a-499c-b892-87284f7c38c1}",
+                    "in_index": 4,
+                    "out_id": "{95282ac8-06ea-49f9-88bc-e59c6737e4ee}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{95282ac8-06ea-49f9-88bc-e59c6737e4ee}",
+                    "in_index": 1,
+                    "out_id": "{ac6edb15-3703-4f9c-b2c6-b3b4f98606b9}",
+                    "out_index": 0
+                },
+                {
+                    "in_id": "{323cb21f-4ef1-48c8-a356-e9c0fca77187}",
+                    "in_index": 0,
+                    "out_id": "{73e64260-dc2a-499c-b892-87284f7c38c1}",
+                    "out_index": 0
+                }
+            ],
+            "nodes": [
+                {
+                    "id": "{2f9aabf0-93c8-47e8-993e-91920c540785}",
+                    "model": {
+                        "name": "ParamInitializerRandom",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "ParamInitializerRandom"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "MinValue",
+                                "type": 5,
+                                "value": 0.25
+                            },
+                            {
+                                "name": "MaxValue",
+                                "type": 5,
+                                "value": 1.2000000476837158
+                            },
+                            {
+                                "name": "Param",
+                                "type": 4,
+                                "value": 0
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -993.75,
+                        "y": 415
+                    }
+                },
+                {
+                    "id": "{73e64260-dc2a-499c-b892-87284f7c38c1}",
+                    "model": {
+                        "name": "Group",
+                        "parameters": [
+                            {
+                                "name": "Capacity",
+                                "type": 9,
+                                "value": 100
+                            },
+                            {
+                                "name": "Lifetime",
+                                "type": 6,
+                                "value": [
+                                    0.009999999776482582,
+                                    0.20000000298023224
+                                ]
+                            },
+                            {
+                                "name": "Immortal",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "GraphicalRadius",
+                                "type": 5,
+                                "value": 1
+                            },
+                            {
+                                "name": "PhysicalRadius",
+                                "type": 5,
+                                "value": 0
+                            },
+                            {
+                                "name": "Sorted",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "DistanceCompute",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Still",
+                                "type": 2,
+                                "value": false
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -316.9672000000002,
+                        "y": -300.6575999999998
+                    }
+                },
+                {
+                    "id": "{323cb21f-4ef1-48c8-a356-e9c0fca77187}",
+                    "model": {
+                        "name": "System",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "System"
+                            },
+                            {
+                                "name": "Initialized",
+                                "type": 2,
+                                "value": true
+                            },
+                            {
+                                "name": "EnableAABB",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "StepMode",
+                                "type": 4,
+                                "value": 0
+                            },
+                            {
+                                "name": "UseClampStep",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "ClampStep",
+                                "type": 5,
+                                "value": 1
+                            },
+                            {
+                                "name": "ConstantStep",
+                                "type": 5,
+                                "value": 0.25
+                            },
+                            {
+                                "name": "StepRange",
+                                "type": 6,
+                                "value": [
+                                    0.25,
+                                    1
+                                ]
+                            },
+                            {
+                                "name": "Export",
+                                "type": 18,
+                                "value": "SparkSystem.xml"
+                            },
+                            {
+                                "name": "Action",
+                                "type": 17,
+                                "value": "Run export"
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": 229.13999999999987,
+                        "y": -89.45999999999997
+                    }
+                },
+                {
+                    "id": "{9a2563aa-bbe7-40c1-abc8-22f381019bc2}",
+                    "model": {
+                        "name": "RandomEmitter",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "RandomEmit"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Active",
+                                "type": 2,
+                                "value": true
+                            },
+                            {
+                                "name": "Tank",
+                                "type": 10,
+                                "value": [
+                                    -1,
+                                    -1
+                                ]
+                            },
+                            {
+                                "name": "Flow",
+                                "type": 5,
+                                "value": 100
+                            },
+                            {
+                                "name": "Force",
+                                "type": 6,
+                                "value": [
+                                    0,
+                                    0
+                                ]
+                            },
+                            {
+                                "name": "FullZone",
+                                "type": 2,
+                                "value": false
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -1054.9999999999995,
+                        "y": -130.49999999999994
+                    }
+                },
+                {
+                    "id": "{95282ac8-06ea-49f9-88bc-e59c6737e4ee}",
+                    "model": {
+                        "name": "Params"
+                    },
+                    "position": {
+                        "x": -543.3063999999999,
+                        "y": 451.32000000000016
+                    }
+                },
+                {
+                    "id": "{b43f0f4a-91f2-499d-850d-66c4c93b65bf}",
+                    "model": {
+                        "name": "QuadRenderer",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "Renderer"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "Material",
+                                "type": 13,
+                                "value": "/home/fred/Dev/spkgen/bin/Data/Spark/Materials/SparkParticleAddAlpha.xml"
+                            },
+                            {
+                                "name": "Texture",
+                                "type": 13,
+                                "value": "/home/fred/Dev/spkgen/bin/Data/Spark/Textures/Static/Electric/Electric2.png"
+                            },
+                            {
+                                "name": "AtlasDimension",
+                                "type": 10,
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            {
+                                "name": "Scale",
+                                "type": 6,
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            {
+                                "name": "AlphaThreshold",
+                                "type": 5,
+                                "value": 0
+                            },
+                            {
+                                "name": "Orientation",
+                                "type": 4,
+                                "value": 0
+                            },
+                            {
+                                "name": "LookVector",
                                 "type": 7,
                                 "value": [
                                     0,
                                     1,
                                     0
                                 ]
+                            },
+                            {
+                                "name": "UpVector",
+                                "type": 7,
+                                "value": [
+                                    1,
+                                    0,
+                                    0
+                                ]
                             }
                         ]
                     },
                     "position": {
-                        "x": -1225,
-                        "y": 1157.5
+                        "x": -1008.4171999999996,
+                        "y": -521.8075999999996
+                    }
+                },
+                {
+                    "id": "{ac6edb15-3703-4f9c-b2c6-b3b4f98606b9}",
+                    "model": {
+                        "name": "ParamInitializerRandom",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "ParamInitializerRandom"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "MinValue",
+                                "type": 5,
+                                "value": 0
+                            },
+                            {
+                                "name": "MaxValue",
+                                "type": 5,
+                                "value": 30
+                            },
+                            {
+                                "name": "Param",
+                                "type": 4,
+                                "value": 2
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -961.0563999999997,
+                        "y": 621.5700000000002
+                    }
+                },
+                {
+                    "id": "{5b7bdc8b-8cb5-468e-9024-b1a2493663b5}",
+                    "model": {
+                        "name": "ColorInterpolator",
+                        "parameters": [
+                            {
+                                "name": "Name",
+                                "type": 1,
+                                "value": "ColorInterpolator"
+                            },
+                            {
+                                "name": "Shared",
+                                "type": 2,
+                                "value": false
+                            },
+                            {
+                                "name": "BirthColor",
+                                "type": 16,
+                                "value": [
+                                    148,
+                                    203,
+                                    255,
+                                    255
+                                ]
+                            },
+                            {
+                                "name": "DeathColor",
+                                "type": 16,
+                                "value": [
+                                    141,
+                                    33,
+                                    255,
+                                    155
+                                ]
+                            }
+                        ]
+                    },
+                    "position": {
+                        "x": -1081.5375999999999,
+                        "y": 206.20320000000015
                     }
                 }
             ]
