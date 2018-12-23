@@ -128,31 +128,62 @@ void MainWindow::resetFlowViewTransform()
 
 void MainWindow::createActions()
 {
-    _fileMenu = menuBar()->addMenu(tr("&File"));
-
     QAction* action;
+
+    QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
+
     action = new QAction(tr("&New"), this);
     action->setShortcuts(QKeySequence::New);
     action->setStatusTip(tr("New"));
     connect(action, &QAction::triggered, this, &MainWindow::onNewProject);
-    _fileMenu->addAction(action);
+    fileMenu->addAction(action);
 
     action = new QAction(tr("&Open"), this);
     action->setShortcuts(QKeySequence::Open);
     action->setStatusTip(tr("Open"));
     connect(action, &QAction::triggered, this, &MainWindow::onOpen);
-    _fileMenu->addAction(action);
+    fileMenu->addAction(action);
 
     action = new QAction(tr("&Save as"), this);
     action->setStatusTip(tr("Save as"));
     connect(action, &QAction::triggered, this, &MainWindow::onSaveAs);
-    _fileMenu->addAction(action);
+    fileMenu->addAction(action);
 
     action = new QAction(tr("&Save"), this);
     action->setShortcuts(QKeySequence::Save);
     action->setStatusTip(tr("Save"));
     connect(action, &QAction::triggered, this, &MainWindow::onSave);
-    _fileMenu->addAction(action);
+    fileMenu->addAction(action);
+
+
+    QMenu* sceneMenu = menuBar()->addMenu(tr("&Scene"));
+
+    QActionGroup* showSceneGroup = new QActionGroup(this);
+
+    action = new QAction(tr("&Grid scene"), this);
+    action->setCheckable(true);
+    action->setChecked(true);
+    connect(action, &QAction::triggered, this, &MainWindow::onShowSceneGrid);
+    connect(action, &QAction::triggered, action, &QAction::setChecked);
+    sceneMenu->addAction(action);
+    showSceneGroup->addAction(action);
+
+    action = new QAction(tr("&Scene 1"), this);
+    action->setCheckable(true);
+    connect(action, &QAction::triggered, this, &MainWindow::onShowScene1);
+    connect(action, &QAction::triggered, action, &QAction::setChecked);
+    sceneMenu->addAction(action);
+    showSceneGroup->addAction(action);
+
+    sceneMenu->addSeparator();
+
+    action = new QAction(tr("Show debug shapes"), this);
+    action->setCheckable(true);
+    action->setChecked(true);
+    connect(action, &QAction::triggered, this, &MainWindow::onShowDebugShapes);
+    connect(action, &QAction::triggered, action, &QAction::setChecked);
+    sceneMenu->addAction(action);
+
 }
 
 void MainWindow::onNewProject()
@@ -300,4 +331,19 @@ void MainWindow::onPageAdd(Page* page)
         QAction* deleteAction = _nodeFlowView->deleteSelectionAction();
         connect(deleteAction, &QAction::triggered, page->flowScene, &CustomFlowScene::deleteSelectedComments);
     }
+}
+
+void MainWindow::onShowSceneGrid()
+{
+    UrhoDevice::getInstance()->setScene(0);
+}
+
+void MainWindow::onShowScene1()
+{
+    UrhoDevice::getInstance()->setScene(1);
+}
+
+void MainWindow::onShowDebugShapes(bool enabled)
+{
+    UrhoDevice::getInstance()->showDebugShapes(enabled);
 }

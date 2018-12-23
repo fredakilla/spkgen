@@ -21,6 +21,8 @@ public:
     void stop();    
     void setCurentParticleSystem(SPK::Ref<SPK::System> sparkSystem);
     void onResize(int width, int height);
+    void setScene(int index);
+    void showDebugShapes(bool enabled);
 
 private:
 

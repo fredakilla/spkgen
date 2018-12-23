@@ -25,12 +25,19 @@ void GridGeometry::HideGrid()
 {
     if (_gridgeometry != NULL)
         _gridNode->SetEnabled(false);
+    _showGrid = false;
 }
 
-void GridGeometry::ShowGrid()
+void GridGeometry::ShowGrid(Scene* scene)
 {
     if (_gridgeometry != NULL)
+    {
         _gridNode->SetEnabled(true);
+        _showGrid = true;
+
+        if (scene && scene->GetComponent<Octree>() != NULL)
+            scene->GetComponent<Octree>()->AddManualDrawable(_gridgeometry);
+    }
 }
 
 void GridGeometry::CreateGrid(Scene* scene)
@@ -53,7 +60,6 @@ void GridGeometry::CreateGrid(Scene* scene)
 
 void GridGeometry::UpdateGrid(bool updateGridGeometry)
 {
-    _showGrid ? ShowGrid() : HideGrid();
     _gridNode->SetScale(Vector3(8.0f, 8.0f, 8.0f));
 
     if (!updateGridGeometry)

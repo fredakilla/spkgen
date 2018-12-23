@@ -32,7 +32,8 @@ class BaseRenderer3D : public ISubRenderer, public Urho3D::Object
 public:
     BaseRenderer3D();
     void resize(int width, int height) override;
-    Urho3D::Scene* getScene() { return _scene; }
+    void setScene(int index);
+    void showDebugShapes(bool enabled);
 
 protected:
     Urho3D::SharedPtr<Urho3D::Scene> _scene;
@@ -41,6 +42,10 @@ protected:
     CameraController* _cameraController;
     GridGeometry _grid;
     bool _showDebugShapes;
+
+private:
+    void createScene1();
+    Urho3D::Node* _rootNodeScene1;
 };
 
 

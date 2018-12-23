@@ -10,7 +10,7 @@ class GridGeometry
 public:
     GridGeometry();    
     void HideGrid();
-    void ShowGrid();
+    void ShowGrid(Urho3D::Scene *scene);
     void CreateGrid(Urho3D::Scene *scene);
     void UpdateGrid(bool updateGridGeometry = true);
 

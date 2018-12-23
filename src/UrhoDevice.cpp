@@ -136,3 +136,19 @@ void UrhoDevice::setCurentParticleSystem(SPK::Ref<SPK::System> sparkSystem)
         _spkRenderer->setCurentParticleSystem(sparkSystem);
     }
 }
+
+void UrhoDevice::setScene(int index)
+{
+    SparkNodeRender* _spkRenderer = dynamic_cast<SparkNodeRender*>(_curentSubRenderer);
+    if(_spkRenderer)
+        _spkRenderer->setScene(index);
+}
+
+void UrhoDevice::showDebugShapes(bool enabled)
+{
+    SparkNodeRender* _spkRenderer = dynamic_cast<SparkNodeRender*>(_curentSubRenderer);
+    if(_spkRenderer)
+        _spkRenderer->showDebugShapes(enabled);
+}
+
+

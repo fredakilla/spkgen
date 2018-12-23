@@ -61,35 +61,62 @@ void Mover::Update(float timeStep)
 
 
 
-
-
-
-
-
-
+/**
+ * Renderer to preview spark effects in a 3D scene
+ */
 BaseRenderer3D::BaseRenderer3D() :
     Urho3D::Object(UrhoDevice::gUrhoContext)
   , _showDebugShapes(true)
 {
     context_->RegisterFactory<Mover>();
 
-
+    // create scene
     _scene = new Scene(UrhoDevice::gUrhoContext);
     _scene->CreateComponent<Octree>();
 
+    // create 3d grid
+    _grid.CreateGrid(_scene);
+
+    // create scene 1
+    createScene1();
+
+    // create camera
+    Node* nodeCamera = _scene->CreateChild("Camera");
+    nodeCamera->SetPosition(Vector3(0,1,-5));
+    _cameraController = nodeCamera->CreateComponent<CameraController>();
+    Camera* camera = nodeCamera->CreateComponent<Camera>();
+    camera->SetNearClip(0.1f);
+    camera->SetFarClip(1000.f);
+
+    // create viewport
+    Renderer* renderer = GetSubsystem<Renderer>();
+    _viewport = new Viewport(context_, _scene, camera);
+    renderer->SetViewport(0, _viewport);
+
+    // create debug renderer (for debug shapes)
+    _debugRenderer = new DebugRenderer(context_);
+    _scene->AddComponent(_debugRenderer, 0, LOCAL);
+
+    // show grid scene by default
+    setScene(0);
+}
+
+void BaseRenderer3D::createScene1()
+{
     ResourceCache* cache = GetSubsystem<ResourceCache>();
 
-    Scene* scene_ = _scene;
+    // Root scene node
+    _rootNodeScene1 = _scene->CreateChild("_rootNodeScene1");
 
     // Create scene node & StaticModel component for showing a static plane
-    Node* planeNode = scene_->CreateChild("Plane");
+    Node* planeNode = _rootNodeScene1->CreateChild("Plane");
     planeNode->SetScale(Vector3(100.0f, 1.0f, 100.0f));
     auto* planeObject = planeNode->CreateComponent<StaticModel>();
     planeObject->SetModel(cache->GetResource<Model>("Models/Plane.mdl"));
     planeObject->SetMaterial(cache->GetResource<Material>("Materials/StoneTiled.xml"));
 
     // Create a Zone component for ambient lighting & fog control
-    Node* zoneNode = scene_->CreateChild("Zone");
+    Node* zoneNode = _rootNodeScene1->CreateChild("Zone");
     auto* zone = zoneNode->CreateComponent<Zone>();
     zone->SetBoundingBox(BoundingBox(-1000.0f, 1000.0f));
     zone->SetAmbientColor(Color(0.7f, 0.7f, 0.7f));
@@ -98,7 +125,7 @@ BaseRenderer3D::BaseRenderer3D() :
     zone->SetFogEnd(300.0f);
 
     // Create a directional light to the world. Enable cascaded shadows on it
-    Node* lightNode = scene_->CreateChild("DirectionalLight");
+    Node* lightNode = _rootNodeScene1->CreateChild("DirectionalLight");
     lightNode->SetDirection(Vector3(0.6f, -1.0f, 0.8f));
     auto* light = lightNode->CreateComponent<Light>();
     light->SetLightType(LIGHT_DIRECTIONAL);
@@ -115,7 +142,7 @@ BaseRenderer3D::BaseRenderer3D() :
 
     for (unsigned i = 0; i < NUM_MODELS; ++i)
     {
-        Node* modelNode = scene_->CreateChild("Jill");
+        Node* modelNode = _rootNodeScene1->CreateChild("Jill");
         modelNode->SetPosition(Vector3(Random(40.0f) - 20.0f, 0.0f, Random(40.0f) - 20.0f));
         modelNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
 
@@ -143,7 +170,7 @@ BaseRenderer3D::BaseRenderer3D() :
     const unsigned NUM_OBJECTS = 200;
     for (unsigned i = 0; i < NUM_OBJECTS; ++i)
     {
-        Node* mushroomNode = scene_->CreateChild("Mushroom");
+        Node* mushroomNode = _rootNodeScene1->CreateChild("Mushroom");
         mushroomNode->SetPosition(Vector3(Random(90.0f) - 45.0f, 0.0f, Random(90.0f) - 45.0f));
         mushroomNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
         mushroomNode->SetScale(1.0f);
@@ -151,27 +178,7 @@ BaseRenderer3D::BaseRenderer3D() :
         mushroomObject->SetModel(cache->GetResource<Model>("Models/Mushroom.mdl"));
         mushroomObject->SetMaterial(cache->GetResource<Material>("Materials/Mushroom.xml"));
     }
-
-    // create camera
-    Node* nodeCamera = _scene->CreateChild("Camera");
-    nodeCamera->SetPosition(Vector3(0,1,-5));
-    _cameraController = nodeCamera->CreateComponent<CameraController>();
-    Camera* camera = nodeCamera->CreateComponent<Camera>();
-    camera->SetNearClip(0.1f);
-    camera->SetFarClip(1000.f);
-
-    // create viewport
-    Renderer* renderer = GetSubsystem<Renderer>();
-    _viewport = new Viewport(context_, _scene, camera);
-    renderer->SetViewport(0, _viewport);
-
-    _debugRenderer = new DebugRenderer(context_);
-    _scene->AddComponent(_debugRenderer, 0, LOCAL);
-
-    _grid.CreateGrid(_scene);
-    _grid.HideGrid();
 }
-
 
 void BaseRenderer3D::resize(int width, int height)
 {
@@ -179,4 +186,24 @@ void BaseRenderer3D::resize(int width, int height)
         _viewport->SetRect(IntRect(0, 0, width, height));
 }
 
+void BaseRenderer3D::setScene(int index)
+{
+    switch (index)
+    {
+    case 0:
+        _grid.ShowGrid(_scene);
+        _rootNodeScene1->SetDeepEnabled(false);
+        break;
+
+    case 1:
+        _grid.HideGrid();
+        _rootNodeScene1->SetDeepEnabled(true);
+        break;
+    }
+}
+
+void BaseRenderer3D::showDebugShapes(bool enabled)
+{
+    _showDebugShapes = enabled;
+}
 

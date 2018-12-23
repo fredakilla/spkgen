@@ -26,6 +26,9 @@ private Q_SLOTS:
     void onRenderViewResized(int width, int height);
     void onPageSwitch(Page* page);
     void onPageAdd(Page* page);
+    void onShowSceneGrid();
+    void onShowScene1();
+    void onShowDebugShapes(bool enabled);
 
 private:
     void shutdown();
@@ -42,7 +45,6 @@ private:
     // GUI stuff
 
     QString _currentFile;
-    QMenu* _fileMenu;
     FlowView* _nodeFlowView;
     QWidget* _viewportContainer;
     RenderWidget* _renderView;
