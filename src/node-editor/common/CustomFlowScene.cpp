@@ -104,6 +104,8 @@ void CustomFlowScene::_copyNode()
 
 void CustomFlowScene::_pasteNode()
 {
+    clearSelection();
+
     // read clipboard
     const QClipboard* clipboard = QApplication::clipboard();
     const QMimeData* mimeData = clipboard->mimeData();
@@ -179,6 +181,9 @@ void CustomFlowScene::_pasteNode()
                     // copy node's parameters
                     BaseNode* baseNode = static_cast<BaseNode*>(node.nodeDataModel());
                     baseNode->restore(model);
+
+                    // set selected
+                    node.nodeGraphicsObject().setSelected(true);
                 }
             }
 
@@ -195,6 +200,9 @@ void CustomFlowScene::_pasteNode()
                 eCommentItem* commentItem = _addComment(newPos);
                 commentItem->restore(jsonComment);
                 commentItem->setPos(newPos);
+
+                // set selected
+                commentItem->setSelected(true);
             }
         }
 
@@ -226,7 +234,10 @@ void CustomFlowScene::_pasteNode()
                     auto const &nodeIn = n1->second;
                     auto const &nodeOut = n2->second;
 
-                    createConnection(*nodeIn, inIndex, *nodeOut, outIndex);
+                    std::shared_ptr<QtNodes::Connection> connection = createConnection(*nodeIn, inIndex, *nodeOut, outIndex);
+
+                    // set selected
+                    connection->getConnectionGraphicsObject().setSelected(true);
                 }
             }
         }
