@@ -47,6 +47,7 @@ git submodule update
 cd 3rdparty/nodeeditor
 mkdir BUILD
 cd BUILD
+cmake ..
 make
 ```
 
